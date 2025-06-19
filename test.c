@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 13:04:00 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/18 13:09:31 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/19 13:42:05 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int main()
+int	main(void)
 {
-    return 0;
+	int	i;
+
+	i = 1;
+	printf("value of i is %d", i);
+	return (0);
 }
