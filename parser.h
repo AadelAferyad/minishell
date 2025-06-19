@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/19 18:11:43 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/19 18:17:37 by imellali         ###   ########.fr       */
+/*   Created: 2025/06/19 18:18:13 by imellali          #+#    #+#             */
+/*   Updated: 2025/06/19 18:26:56 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	main(void)
-{
-	int	i;
+#ifndef PARSER_H
+# define PARSER_H
 
-	i = 0;
-	return (0);
-}
+# include <stdlib.h>
+# include <unistd.h>
+
+#endif
