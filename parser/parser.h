@@ -6,14 +6,14 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/20 17:27:28 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/20 19:19:14 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-/* Own Libraries Included */
+/* Own Libraries */
 
 # include "../libft/libft.h"
 
@@ -27,5 +27,24 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+/* Lexer Structures */
+
+typedef struct s_tokens
+{
+	char			*value;
+	t_types			type;
+	struct s_tokens	*next;
+}					t_tokens;
+
+typedef enum s_types
+{
+	WORD,
+	PIPE,
+	R_IN,
+	R_OUT,
+	R_APPEND,
+	R_HEREDOC,
+}					t_types;
 
 #endif
