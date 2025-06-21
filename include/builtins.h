@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/20 16:23:57 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/06/20 16:30:44 by aaferyad         ###   ########.fr       */
+/*   Created: 2025/06/20 16:16:05 by aaferyad          #+#    #+#             */
+/*   Updated: 2025/06/21 13:28:45 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#ifndef BUILTINS_H
+# define BUILTINS_H
 
+# include "../libft/libft.h"
 
-int	ft_echo(char *str, int flag)
-{
-	if (!str)
-		return (1);
-	ft_puts(str);
-	if (!flag)
-		write(1, "\n", 1);
-	return (0);
-}
+int	builtin_echo(char **arg, int fd);
+
+#endif

@@ -1,13 +1,11 @@
-this is from main branch 
+#include <stdio.h>
 
 
+int	main(int ac, char **av)
+{
+	int	i;
 
-
-
-<<<<<<< HEAD
-aadel was here !
-
-this is from execution branch ...
-=======
-ismail was here !
->>>>>>> fcd3d1b (testing changes)
+	i = 0;
+	printf("%s", av[i] + 1);
+	return (0);
+}
