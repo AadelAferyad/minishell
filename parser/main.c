@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:17:44 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/20 19:19:16 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/21 13:24:53 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@ int	ft_isop(int c)
 		return (1);
 	return (0);
 }
+/**
+ * lexer - split the input string into tokens
+ *
+ * @input: the user input which is the command passed by user 
+ * 
+ * return: list that contain splitted tokens
+ */
 
 t_tokens	lexer(char *input)
 {
@@ -40,7 +47,7 @@ t_tokens	lexer(char *input)
 		/* handling double operator */
 		if (input[i + 1])
 		{
-			if (ft_iso(input[i]) == 1 && ft_isop(input[i + 1]) == 1)
+			if (ft_isop(input[i]) == 1 && ft_isop(input[i + 1]) == 1)
 			{
 				add_token();
 				i += 2;
