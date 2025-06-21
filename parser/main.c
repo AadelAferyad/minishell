@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:17:44 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/21 14:39:27 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/21 15:07:48 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void	free_list(t_tokens **head)
 	{
 		temp = *head;
 		*head = temp->next;
+		if (temp->value)
+			free(temp->value);
 		free(temp);
 	}
 	*head = NULL;
@@ -162,9 +164,20 @@ t_tokens	*lexer(char *input)
 	return (tokens);
 }
 
+void print_tokens(t_tokens *tokens)
+{
+    int i = 0;
+    while (tokens)
+    {
+        printf("value = %s,type = %u\n", tokens->value, tokens->type);
+        tokens = tokens->next;
+        i++;
+    }
+}
 int	main(void)
 {
 	char	*input;
+	t_tokens *tokens;
 	size_t	n;
 	ssize_t	nread;
 
@@ -175,7 +188,14 @@ int	main(void)
 	nread = getline(&input, &n, stdin);
 	if (nread == -1)
 		return (-1);
-	printf("Command : %s\n", input);
+	tokens = lexer(input);
+	if (!tokens)
+	{
+		free(input);
+		return -1;
+	}
+	print_tokens(tokens);
 	free(input);
+	free_list(&tokens);
 	return (0);
 }
