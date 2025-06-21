@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/20 16:18:31 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/06/20 16:39:17 by aaferyad         ###   ########.fr       */
+/*   Created: 2025/06/20 16:16:05 by aaferyad          #+#    #+#             */
+/*   Updated: 2025/06/20 16:30:58 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#ifndef BUILTINS_H
+# define BUILTINS_H
 
+# include "../libft/libft.h"
 
-int	main(int ac, char *av)
-{
-	
-	return (0);
-}
- 
+int	ft_echo(char *str, int flag);
+
+#endif

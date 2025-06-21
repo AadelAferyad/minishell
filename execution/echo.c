@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/20 16:18:31 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/06/20 16:39:17 by aaferyad         ###   ########.fr       */
+/*   Created: 2025/06/20 16:23:57 by aaferyad          #+#    #+#             */
+/*   Updated: 2025/06/20 16:30:44 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
 
-int	main(int ac, char *av)
+int	ft_echo(char *str, int flag)
 {
-	
+	if (!str)
+		return (1);
+	ft_puts(str);
+	if (!flag)
+		write(1, "\n", 1);
 	return (0);
 }
- 
