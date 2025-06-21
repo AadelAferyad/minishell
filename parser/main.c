@@ -6,11 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:17:44 by imellali          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/06/21 13:24:53 by imellali         ###   ########.fr       */
-=======
-/*   Updated: 2025/06/20 19:19:16 by imellali         ###   ########.fr       */
->>>>>>> d6d8619d1e5ad90cdf286076fd659672da49d999
+/*   Updated: 2025/06/21 13:52:53 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +25,7 @@ int	ft_isop(int c)
 		return (1);
 	return (0);
 }
-<<<<<<< HEAD
+
 /**
  * lexer - split the input string into tokens
  *
@@ -37,8 +33,6 @@ int	ft_isop(int c)
  * 
  * return: list that contain splitted tokens
  */
-=======
->>>>>>> d6d8619d1e5ad90cdf286076fd659672da49d999
 
 t_tokens	lexer(char *input)
 {
@@ -54,11 +48,7 @@ t_tokens	lexer(char *input)
 		/* handling double operator */
 		if (input[i + 1])
 		{
-<<<<<<< HEAD
 			if (ft_isop(input[i]) == 1 && ft_isop(input[i + 1]) == 1)
-=======
-			if (ft_iso(input[i]) == 1 && ft_isop(input[i + 1]) == 1)
->>>>>>> d6d8619d1e5ad90cdf286076fd659672da49d999
 			{
 				add_token();
 				i += 2;
