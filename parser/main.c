@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:17:44 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/21 15:07:48 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/21 17:40:57 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,39 @@
 
 int	ft_isspace(int c)
 {
-	if (c == ' ')
+	if (c == ' ' || c == '\t' || c == '\n')
 		return (1);
 	return (0);
 }
 
 int	ft_isop(int c)
 {
-	if (c == '|' || c == '>' || c == '<')
+	if (c == '|' || c == '>' || c == '<' || c == '\r' || c == '\v' || c == '\f')
 		return (1);
 	return (0);
 }
+
 int	ft_isdouble_op(char *input)
 {
 	if (input[0] == '<' && input[1] == '<')
 		return (1);
 	else if (input[0] == '>' && input[1] == '>')
+		return (1);
+	return (0);
+}
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] && s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (0);
+		i++;
+	}
+	if (s1[i] == '\0' && s2[i] == '\0')
 		return (1);
 	return (0);
 }
@@ -58,7 +75,7 @@ void	free_list(t_tokens **head)
  * return: pointer to the new list , NULL if failed
  */
 
-t_tokens	*create_token(t_tokens *tokens, t_types type, char *value)
+t_tokens	*create_token(t_tokens *tokens, char *value)
 {
 	t_tokens	*new_token;
 	t_tokens	*temp;
@@ -66,7 +83,6 @@ t_tokens	*create_token(t_tokens *tokens, t_types type, char *value)
 	new_token = malloc(sizeof(t_tokens));
 	if (!new_token)
 		return (NULL);
-	new_token->type = type;
 	new_token->value = ft_strdup(value);
 	if (!new_token->value)
 		return (NULL);
@@ -79,9 +95,35 @@ t_tokens	*create_token(t_tokens *tokens, t_types type, char *value)
 	temp->next = new_token;
 	return (tokens);
 }
-
 /**
- * lexer - split the input string into tokens
+ * class_tokens - it classify the raw string to its corresponding type
+ * 
+ * @tokens: pointer to tokens list
+ * 
+ * return: nothing
+ */
+
+void	class_tokens(t_tokens *tokens)
+{
+	while (tokens)
+	{
+		if (ft_strcmp(tokens->value, "|") == 1)
+			tokens->type = PIPE;
+		else if (ft_strcmp(tokens->value, "<") == 1)
+			tokens->type = R_IN;
+		else if (ft_strcmp(tokens->value, ">") == 1)
+			tokens->type = R_OUT;
+		else if (ft_strcmp(tokens->value, ">>") == 1)
+			tokens->type = R_APPEND;
+		else if (ft_strcmp(tokens->value, "<<") == 1)
+			tokens->type = R_HEREDOC;
+		else
+			tokens->type = WORD;
+		tokens = tokens->next;
+	}
+}
+/**
+ * lexer - split the input string into tokens and classifying it
  *
  * @input: the user input which is the command passed by user 
  * 
@@ -108,7 +150,7 @@ t_tokens	*lexer(char *input)
 			operator= ft_substr(input, i, 2);
 			if (!operator)
 				return (NULL);
-			tokens = create_token(tokens, OP, operator);
+			tokens = create_token(tokens, operator);
 			if (!tokens)
 			{
 				free(operator);
@@ -125,7 +167,7 @@ t_tokens	*lexer(char *input)
 			operator= ft_substr(input, i, 1);
 			if (!operator)
 				return (NULL);
-			tokens = create_token(tokens, OP, operator);
+			tokens = create_token(tokens, operator);
 			if (!tokens)
 			{
 				free(operator);
@@ -152,7 +194,7 @@ t_tokens	*lexer(char *input)
 			free_list(&tokens);
 			return (NULL);
 		}
-		tokens = create_token(tokens, WORD, word);
+		tokens = create_token(tokens, word);
 		if (!tokens)
 		{
 			free(word);
@@ -161,25 +203,29 @@ t_tokens	*lexer(char *input)
 		}
 		free(word);
 	}
+	class_tokens(tokens);
 	return (tokens);
 }
 
-void print_tokens(t_tokens *tokens)
+void	print_tokens(t_tokens *tokens)
 {
-    int i = 0;
-    while (tokens)
-    {
-        printf("value = %s,type = %u\n", tokens->value, tokens->type);
-        tokens = tokens->next;
-        i++;
-    }
+	int	i;
+
+	i = 0;
+	while (tokens)
+	{
+		printf("VALUE =  [%s]   TYPE = %u\n", tokens->value, tokens->type);
+		tokens = tokens->next;
+		i++;
+	}
 }
+
 int	main(void)
 {
-	char	*input;
-	t_tokens *tokens;
-	size_t	n;
-	ssize_t	nread;
+	char		*input;
+	t_tokens	*tokens;
+	size_t		n;
+	ssize_t		nread;
 
 	n = 444;
 	input = malloc(sizeof(char) * n);
@@ -192,7 +238,7 @@ int	main(void)
 	if (!tokens)
 	{
 		free(input);
-		return -1;
+		return (-1);
 	}
 	print_tokens(tokens);
 	free(input);

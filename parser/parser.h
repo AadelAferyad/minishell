@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/21 13:52:52 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/21 17:11:12 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,6 @@
 
 /* Lexer Structures */
 
-typedef struct s_tokens
-{
-	char			*value;
-	t_types			type;
-	struct s_tokens	*next;
-}					t_tokens;
-
 typedef enum s_types
 {
 	WORD,
@@ -46,5 +39,12 @@ typedef enum s_types
 	R_APPEND,
 	R_HEREDOC,
 }					t_types;
+
+typedef struct s_tokens
+{
+	char			*value;
+	t_types			type;
+	struct s_tokens	*next;
+}					t_tokens;
 
 #endif
