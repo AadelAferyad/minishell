@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:43:10 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/22 15:00:54 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/22 18:42:11 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	handle_double_op(char *input, int *i, t_tokens **tokens)
 		operator = ft_substr(input, *i, 2);
 		if (!operator)
 			return (-1);
-		*tokens = create_token(*tokens, operator);
+		*tokens = create_token(*tokens, operator, Q_NONE);
 		if (!*tokens)
 		{
 			free(operator);
@@ -64,7 +64,7 @@ int	handle_single_op(char *input, int *i, t_tokens **tokens)
 		operator = ft_substr(input, *i, 1);
 		if (!operator)
 			return (-1);
-		*tokens = create_token(*tokens, operator);
+		*tokens = create_token(*tokens, operator, Q_NONE);
 		if (!*tokens)
 		{
 			free(operator);
@@ -103,7 +103,7 @@ int	handle_word(char *input, int *i, t_tokens **tokens)
 		free_list(tokens);
 		return (-1);
 	}
-	*tokens = create_token(*tokens, word);
+	*tokens = create_token(*tokens, word, Q_NONE);
 	if (!*tokens)
 	{
 		free(word);

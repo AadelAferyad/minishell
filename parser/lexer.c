@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:03:54 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/22 15:00:56 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/22 18:51:14 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,18 @@ t_tokens	*lexer(char *input)
 			return (NULL);
 		if (handle_space(input, &i))
 			continue ;
+		if (input[i] == '\'')
+		{
+			if (handle_single_qt(input, &i, &tokens) == -1)
+				return (NULL);
+			continue ;
+		}
+		if (input[i] == '"')
+		{
+			if (handle_double_qt(input, &i, &tokens) == -1)
+				return (NULL);
+			continue ;
+		}
 		if (handle_word(input, &i, &tokens) == -1)
 			return (NULL);
 	}

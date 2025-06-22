@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:17:44 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/22 14:45:43 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/22 19:04:01 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static void	print_tokens(t_tokens *tokens)
 	i = 0;
 	while (tokens)
 	{
-		printf("VALUE =  [%s]   TYPE = %u\n", tokens->value, tokens->type);
+		printf("VALUE =  [%s]   TYPE = %u   QUOTE_TYPE = %u\n", tokens->value,
+			tokens->type, tokens->quote_type);
 		tokens = tokens->next;
 		i++;
 	}

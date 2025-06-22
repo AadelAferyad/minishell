@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/22 14:45:18 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/22 18:52:39 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 
 /* Lexer Structures */
 
-typedef enum s_types
+typedef enum e_types
 {
 	WORD,
 	PIPE,
@@ -40,10 +40,18 @@ typedef enum s_types
 	R_HEREDOC,
 }					t_types;
 
+typedef enum e_qtypes
+{
+	Q_NONE,
+	Q_SINGLE,
+	Q_DOUBLE,
+}					t_qtypes;
+
 typedef struct s_tokens
 {
 	char			*value;
 	t_types			type;
+	t_qtypes		quote_type;
 	struct s_tokens	*next;
 }					t_tokens;
 
@@ -52,6 +60,8 @@ typedef struct s_tokens
 t_tokens			*lexer(char *input);
 int					handle_double_op(char *input, int *i, t_tokens **tokens);
 int					handle_single_op(char *input, int *i, t_tokens **tokens);
+int					handle_single_qt(char *input, int *i, t_tokens **tokens);
+int					handle_double_qt(char *input, int *i, t_tokens **tokens);
 int					handle_word(char *input, int *i, t_tokens **tokens);
 int					handle_space(char *input, int *i);
 
@@ -67,7 +77,8 @@ int					ft_strcmp(char *s1, char *s2);
 
 /* Linked List Functions */
 
-t_tokens			*create_token(t_tokens *tokens, char *value);
+t_tokens			*create_token(t_tokens *tokens, char *value,
+						t_qtypes qtype);
 void				free_list(t_tokens **head);
 
 #endif
