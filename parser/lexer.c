@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:03:54 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/22 14:14:47 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/22 14:45:11 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static void	class_tokens(t_tokens *tokens)
 		tokens = tokens->next;
 	}
 }
+
 /**
  * lexer - split the input string into tokens and classifying it
  *
@@ -51,70 +52,23 @@ t_tokens	*lexer(char *input)
 {
 	t_tokens	*tokens;
 	int			i;
-	int			start;
-	char		*word;
-	char		*operator;
 
 	tokens = NULL;
 	i = 0;
-	if (!input)
-		return (NULL);
 	while (input[i])
 	{
-		if (input[i + 1] && ft_isdouble_op(input + i))
-		{
-			operator = ft_substr(input, i, 2);
-			if (!operator)
-				return (NULL);
-			tokens = create_token(tokens, operator);
-			if (!tokens)
-			{
-				free(operator);
-				free_list(&tokens);
-				return (NULL);
-			}
-			free(operator);
-			i += 2;
+		if (handle_double_op(input, &i, &tokens) == 1)
 			continue ;
-		}
-		if (ft_isop(input[i]))
-		{
-			operator = ft_substr(input, i, 1);
-			if (!operator)
-				return (NULL);
-			tokens = create_token(tokens, operator);
-			if (!tokens)
-			{
-				free(operator);
-				free_list(&tokens);
-				return (NULL);
-			}
-			free(operator);
-			i++;
-			continue ;
-		}
-		if (ft_isspace(input[i]))
-		{
-			i++;
-			continue ;
-		}
-		start = i;
-		while (input[i] && !ft_isop(input[i]) && !ft_isspace(input[i]))
-			i++;
-		word = ft_substr(input, start, i - start);
-		if (!word)
-		{
-			free_list(&tokens);
+		if (handle_double_op(input, &i, &tokens) == -1)
 			return (NULL);
-		}
-		tokens = create_token(tokens, word);
-		if (!tokens)
-		{
-			free(word);
-			free_list(&tokens);
+		if (handle_single_op(input, &i, &tokens) == 1)
+			continue ;
+		if (handle_single_op(input, &i, &tokens) == -1)
 			return (NULL);
-		}
-		free(word);
+		if (handle_space(input, &i))
+			continue ;
+		if (handle_word(input, &i, &tokens) == -1)
+			return (NULL);
 	}
 	class_tokens(tokens);
 	return (tokens);

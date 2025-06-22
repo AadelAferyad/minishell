@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/22 14:11:49 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/22 14:45:18 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,10 @@ typedef struct s_tokens
 /* Lexer/Tokenizer Functions */
 
 t_tokens			*lexer(char *input);
+int					handle_double_op(char *input, int *i, t_tokens **tokens);
+int					handle_single_op(char *input, int *i, t_tokens **tokens);
+int					handle_word(char *input, int *i, t_tokens **tokens);
+int					handle_space(char *input, int *i);
 
 /* Char Checks Functions*/
 
