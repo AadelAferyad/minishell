@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:03:54 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/22 14:45:11 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/22 15:00:56 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
  * class_tokens - it classify the raw string to its corresponding type
  * 
  * @tokens: pointer to tokens list
- * 
- * return: nothing
  */
 
 static void	class_tokens(t_tokens *tokens)
@@ -45,7 +43,7 @@ static void	class_tokens(t_tokens *tokens)
  *
  * @input: the user input which is the command passed by user 
  * 
- * return: list that contain splitted tokens , NULL if failed
+ * Return: list that contain splitted tokens , NULL if failed
  */
 
 t_tokens	*lexer(char *input)

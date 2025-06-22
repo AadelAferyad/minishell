@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:01:37 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/22 14:45:16 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/22 15:00:53 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	free_list(t_tokens **head)
  * @type: type of the new token
  * @value: token value
  * 
- * return: pointer to the new list , NULL if failed
+ * Return: pointer to the new list , NULL if failed
  */
 
 t_tokens	*create_token(t_tokens *tokens, char *value)

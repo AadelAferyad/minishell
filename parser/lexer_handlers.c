@@ -6,11 +6,22 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:43:10 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/22 14:45:13 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/22 15:00:54 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+
+/**
+ * handle_double_op - Handles double character operators in the input string
+ * 
+ * @input: The input string to be tokenized
+ * @i: Pointer to the current position in the input string
+ * @tokens: Double pointer to the list of tokens to be updated
+ *
+ * Return: 1 if a double operator was handled, 0 if not
+ * 			-1 on error
+ */
 
 int	handle_double_op(char *input, int *i, t_tokens **tokens)
 {
@@ -34,6 +45,15 @@ int	handle_double_op(char *input, int *i, t_tokens **tokens)
 	}
 	return (0);
 }
+/**
+ * handle_single_op - Handles single character operators in the input string
+ * @input: The input string to be tokenized
+ * @i: Pointer to the current position in the input string
+ * @tokens: Double pointer to the list of tokens to be updated
+ * 
+ * Return: 1 if a single operator was handled, 0 if not
+ * 			-1 on error
+ */
 
 int	handle_single_op(char *input, int *i, t_tokens **tokens)
 {
@@ -57,6 +77,17 @@ int	handle_single_op(char *input, int *i, t_tokens **tokens)
 	}
 	return (0);
 }
+
+/**
+ * handle_word - Handles word tokens in the input string
+ * 
+ * @input: The input string to be tokenized
+ * @i: Pointer to the current position in the input string
+ * @tokens: Double pointer to the list of tokens to be updated
+ *
+ * Return: 1 if a word was handled, 0 if not
+ *         -1 on error
+ */
 
 int	handle_word(char *input, int *i, t_tokens **tokens)
 {
@@ -82,6 +113,14 @@ int	handle_word(char *input, int *i, t_tokens **tokens)
 	free(word);
 	return (1);
 }
+
+/**
+ * handle_space - Skips whitespace characters in the input string
+ * @input: The input string to be tokenized
+ * @i: Pointer to the current position in the input string
+ *
+ * Return: 1 if whitespace skipped, 0 if not
+ */
 
 int	handle_space(char *input, int *i)
 {
