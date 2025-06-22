@@ -14,7 +14,10 @@
 # define BUILTINS_H
 
 # include "../libft/libft.h"
+# include <unistd.h>
+# include <stdlib.h>
 
 int	builtin_echo(char **arg, int fd);
+int	builtin_pwd(int fd);
 
 #endif

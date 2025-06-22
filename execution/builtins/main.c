@@ -14,14 +14,15 @@
 #include <fcntl.h>
 
 
-int	main(int ac, char **av)
+int	main(int ac, char **av, char **env)
 {
 	int	fd;
 
-	fd = open("file", O_RDWR | O_CREATE);
+	fd = 1;
+	fd = open("file", O_RDWR | O_CREAT, S_IRWXU);
 	if (fd == -1)
 		return (1);
-	builtin_echo(&av[2], fd);	
+	builtin_pwd(1);
 
 	return (0);
 }
