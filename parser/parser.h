@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/21 17:11:12 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/22 14:11:49 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,24 @@ typedef struct s_tokens
 	t_types			type;
 	struct s_tokens	*next;
 }					t_tokens;
+
+/* Lexer/Tokenizer Functions */
+
+t_tokens			*lexer(char *input);
+
+/* Char Checks Functions*/
+
+int					ft_isdouble_op(char *input);
+int					ft_isop(int c);
+int					ft_isspace(int c);
+
+/* String Manupilation Functions */
+
+int					ft_strcmp(char *s1, char *s2);
+
+/* Linked List Functions */
+
+t_tokens			*create_token(t_tokens *tokens, char *value);
+void				free_list(t_tokens **head);
 
 #endif

@@ -2,7 +2,7 @@ CC = cc
 CFLAGS = -Werror -Wall -Wextra -ggdb3
 NAME = minishell
 
-SRCS = main.c
+SRCS = main.c lexer.c char_check.c str_funcs.c list_funcs.c
 OBJS = $(SRCS:.c=.o)
 
 LIBFT_DIR = ../libft
