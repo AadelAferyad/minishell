@@ -6,11 +6,25 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 11:46:07 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/06/22 09:56:08 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/06/22 17:17:33 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <builtins.h>
+
+int	builtin_cd(char *path)
+{
+	struct stat	st;
+
+	stat(path, &st);
+	if (S_ISDIR(st.st_mode))
+	{
+		// change OLDPWD in env
+	}
+	if (chdir(path) != 0)
+	{
+	return (0);
+}
 
 /*
  * builtin_pwd - prints the fill name of the current working directory

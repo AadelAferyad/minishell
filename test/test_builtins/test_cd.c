@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.h                                         :+:      :+:    :+:   */
+/*   test_cd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/20 16:16:05 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/06/22 10:48:02 by aaferyad         ###   ########.fr       */
+/*   Created: 2025/06/22 10:03:16 by aaferyad          #+#    #+#             */
+/*   Updated: 2025/06/22 10:42:12 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTINS_H
-# define BUILTINS_H
+#include <builtins.h>
+#include <fcntl.h>
 
-# include "../libft/libft.h"
-# include <errno.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <sys/stat.h>
 
-int	builtin_echo(char **arg, int fd);
-int	builtin_pwd(int fd);
-int	builtin_cd(char *path);
+int	main(int ac, char **av, char **env)
+{
+	(void) ac;
+	(void) env;
+	/*fd = open("file", O_RDWR | O_CREAT, S_IRWXU);*/
+	/*if (fd == -1)*/
+	/*	return (1);*/
 
-#endif
+	builtin_pwd(1);
+	builtin_cd(av[1]);
+	builtin_pwd(1);
+	return (0);
+}
