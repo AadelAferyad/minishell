@@ -48,9 +48,12 @@ void	*safe_malloc(unsigned int size)
 	void	*ptr;
 
 	ptr = malloc(size);
-	if (!ptr)
-		return (NULL);
-	add_node(ptr);
+	if (!add_node(ptr) || !ptr)
+	{
+		free_collector_all();
+		ft_putstr_fd(errno, 2);
+		exit(1);
+	}
 	return (ptr);
 }
 
