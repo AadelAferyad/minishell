@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/23 16:00:00 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/23 16:36:14 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ int					handle_single_qt(char *input, int *i, t_tokens **tokens);
 int					handle_double_qt(char *input, int *i, t_tokens **tokens);
 int					handle_word(char *input, int *i, t_tokens **tokens);
 int					handle_space(char *input, int *i);
-char				*extract_word(char *input, int start, int end,
-						t_tokens **tokens);
 
 /* Char Checks Functions*/
 
@@ -76,6 +74,8 @@ int					ft_isspace(int c);
 /* String Manupilation Functions */
 
 int					ft_strcmp(char *s1, char *s2);
+char				*extracting_word(char *input, int start, int end,
+						t_tokens **tokens);
 
 /* Linked List Functions */
 

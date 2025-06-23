@@ -6,13 +6,13 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 18:16:13 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/23 16:00:49 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/23 16:28:13 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-char	*extract_word(char *input, int start, int end, t_tokens **tokens)
+char	*extracting_word(char *input, int start, int end, t_tokens **tokens)
 {
 	char	*word;
 
@@ -25,7 +25,7 @@ char	*extract_word(char *input, int start, int end, t_tokens **tokens)
 	return (word);
 }
 
-static int	handle_quote_token(char *word, t_tokens **tokens, t_qtypes qtype)
+static int	creating_token(char *word, t_tokens **tokens, t_qtypes qtype)
 {
 	*tokens = create_token(*tokens, word, qtype);
 	if (!*tokens)
@@ -50,14 +50,14 @@ static int	handle_quote(char *input, int *i, t_tokens **tokens, char quote)
 		end++;
 	if (input[end] != quote)
 		return (-1);
-	word = extract_word(input, start, end, tokens);
+	word = extracting_word(input, start, end, tokens);
 	if (!word)
 		return (-1);
 	if (quote == '"')
 		qtype = Q_DOUBLE;
 	else
 		qtype = Q_SINGLE;
-	if (handle_quote_token(word, tokens, qtype) == -1)
+	if (creating_token(word, tokens, qtype) == -1)
 		return (-1);
 	*i = end + 1;
 	free(word);

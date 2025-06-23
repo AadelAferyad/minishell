@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:03:54 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/23 16:21:16 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/23 16:32:41 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,12 @@ static void	class_tokens(t_tokens *tokens)
 	}
 }
 
+static t_tokens	*cleanup(t_tokens **tokens)
+{
+	free_list(tokens);
+	return (NULL);
+}
+
 /**
  * lexer - split the input string into tokens and classifying it
  *
@@ -94,19 +100,16 @@ t_tokens	*lexer(char *input)
 		if (flag == 1)
 			continue ;
 		if (flag == -1)
-			return (NULL);
+			return (cleanup(&tokens));
 		if (handle_space(input, &i))
 			continue ;
 		flag = lexer_helper_qt(input, &i, &tokens);
 		if (flag == 1)
 			continue ;
 		if (flag == -1)
-		{
-			free_list(&tokens);
-			return (NULL);
-		}
+			return (cleanup(&tokens));
 		if (handle_word(input, &i, &tokens) == -1)
-			return (NULL);
+			return (cleanup(&tokens));
 	}
 	class_tokens(tokens);
 	return (tokens);

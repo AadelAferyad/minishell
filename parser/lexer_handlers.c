@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:43:10 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/23 15:59:38 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/23 16:27:47 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	handle_word(char *input, int *i, t_tokens **tokens)
 	start = *i;
 	while (input[*i] && !ft_isop(input[*i]) && !ft_isspace(input[*i]))
 		(*i)++;
-	word = extract_word(input, start, *i, tokens);
+	word = extracting_word(input, start, *i, tokens);
 	if (!word)
 		return (-1);
 	*tokens = create_token(*tokens, word, Q_NONE);
