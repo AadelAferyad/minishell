@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:43:10 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/22 18:42:11 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/23 15:59:38 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,9 @@ int	handle_word(char *input, int *i, t_tokens **tokens)
 	start = *i;
 	while (input[*i] && !ft_isop(input[*i]) && !ft_isspace(input[*i]))
 		(*i)++;
-	word = ft_substr(input, start, *i - start);
+	word = extract_word(input, start, *i, tokens);
 	if (!word)
-	{
-		free_list(tokens);
 		return (-1);
-	}
 	*tokens = create_token(*tokens, word, Q_NONE);
 	if (!*tokens)
 	{
@@ -116,6 +113,7 @@ int	handle_word(char *input, int *i, t_tokens **tokens)
 
 /**
  * handle_space - Skips whitespace characters in the input string
+ * 
  * @input: The input string to be tokenized
  * @i: Pointer to the current position in the input string
  *

@@ -6,11 +6,45 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:03:54 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/22 18:51:14 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/23 16:21:16 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+
+static int	lexer_helper_op(char *input, int *i, t_tokens **tokens)
+{
+	int	flag;
+
+	flag = handle_double_op(input, i, tokens);
+	if (flag == 1)
+		return (1);
+	if (flag == -1)
+		return (-1);
+	flag = handle_single_op(input, i, tokens);
+	if (flag == 1)
+		return (1);
+	if (flag == -1)
+		return (-1);
+	return (0);
+}
+
+static int	lexer_helper_qt(char *input, int *i, t_tokens **tokens)
+{
+	if (input[*i] == '\'')
+	{
+		if (handle_single_qt(input, i, tokens) == -1)
+			return (-1);
+		return (1);
+	}
+	if (input[*i] == '"')
+	{
+		if (handle_double_qt(input, i, tokens) == -1)
+			return (-1);
+		return (1);
+	}
+	return (0);
+}
 
 /**
  * class_tokens - it classify the raw string to its corresponding type
@@ -50,32 +84,26 @@ t_tokens	*lexer(char *input)
 {
 	t_tokens	*tokens;
 	int			i;
+	int			flag;
 
 	tokens = NULL;
 	i = 0;
 	while (input[i])
 	{
-		if (handle_double_op(input, &i, &tokens) == 1)
+		flag = lexer_helper_op(input, &i, &tokens);
+		if (flag == 1)
 			continue ;
-		if (handle_double_op(input, &i, &tokens) == -1)
-			return (NULL);
-		if (handle_single_op(input, &i, &tokens) == 1)
-			continue ;
-		if (handle_single_op(input, &i, &tokens) == -1)
+		if (flag == -1)
 			return (NULL);
 		if (handle_space(input, &i))
 			continue ;
-		if (input[i] == '\'')
-		{
-			if (handle_single_qt(input, &i, &tokens) == -1)
-				return (NULL);
+		flag = lexer_helper_qt(input, &i, &tokens);
+		if (flag == 1)
 			continue ;
-		}
-		if (input[i] == '"')
+		if (flag == -1)
 		{
-			if (handle_double_qt(input, &i, &tokens) == -1)
-				return (NULL);
-			continue ;
+			free_list(&tokens);
+			return (NULL);
 		}
 		if (handle_word(input, &i, &tokens) == -1)
 			return (NULL);
