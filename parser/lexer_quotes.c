@@ -6,24 +6,11 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 18:16:13 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/23 16:28:13 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/24 11:33:58 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-char	*extracting_word(char *input, int start, int end, t_tokens **tokens)
-{
-	char	*word;
-
-	word = ft_substr(input, start, end - start);
-	if (!word)
-	{
-		free_list(tokens);
-		return (NULL);
-	}
-	return (word);
-}
 
 static int	creating_token(char *word, t_tokens **tokens, t_qtypes qtype)
 {
