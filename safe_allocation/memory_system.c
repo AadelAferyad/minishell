@@ -6,17 +6,15 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 11:35:02 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/06/22 17:14:28 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/06/24 11:54:38 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <collector.h>
+#include <execution.h>
 
-collector	*head;
-
-collector	*create_node()
+t_collector	*create_node()
 {
-	return (malloc(sizeof(collector)));
+	return (malloc(sizeof(t_collector)));
 }
 
 /*
@@ -24,23 +22,24 @@ collector	*create_node()
  * @add: void pointer holds address of memory to be added to the collector
  * */
 
-collector	*add_node(void *add)
+t_collector	*add_node(void *add)
 {
-	collector	*node;
+	t_collector	*node;
 
 	node = create_node();
 	if (!node)
 		return (NULL);
-	node->next = head;
+	node->flag = 0;
+	node->next = g_structs.collector;
 	node->data = add;
-	head = node;
+	g_structs.collector = node;
 	return (node);
 }
 
 /*
  * safe_mallloc - allocate size of bytes and keep track of all the allocated memory on linked list
  * @size: size of bytes to be allocated
- * Return: returns allocated address generec pointer
+ * Return: returns allocated address generic pointer
  * */
 
 void	*safe_malloc(unsigned int size)
@@ -51,7 +50,7 @@ void	*safe_malloc(unsigned int size)
 	if (!add_node(ptr) || !ptr)
 	{
 		free_collector_all();
-		ft_putstr_fd(errno, 2);
+		strerror(errno);
 		exit(1);
 	}
 	return (ptr);
@@ -64,17 +63,17 @@ void	*safe_malloc(unsigned int size)
 
 void	free_collector_one(void *add)
 {
-	collector	*tmp;
-	collector	*prev;
+	t_collector	*tmp;
+	t_collector	*prev;
 
-	tmp = head;
+	tmp = g_structs.collector;
 	prev = tmp;
 	while (tmp)
 	{
 		if (tmp->data == add)
 		{
-			if (head == tmp)
-				head = tmp->next;
+			if (g_structs.collector == tmp)
+				g_structs.collector = tmp->next;
 			else
 				prev->next = tmp->next;
 			free(tmp->data);
@@ -92,8 +91,10 @@ void	free_collector_one(void *add)
 
 void	free_collector_all(void)
 {
-	collector	*tmp;
+	t_collector	*tmp;
+	t_collector	*head;
 
+	head = g_structs.collector;
 	while (head)
 	{
 		tmp = head->next;

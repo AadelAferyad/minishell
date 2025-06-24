@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 11:13:01 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/06/22 17:12:25 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/06/24 11:51:39 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,17 @@
 # include "../libft/libft.h"
 # include <errno.h>
 # include <unistd.h>
+# include <string.h>
 # include <stdlib.h>
 # include <stdio.h>
+# include <stdbool.h>
 
 typedef struct memory_system_managment
 {
-	unsigned int	size;
-	void	*data;
+	bool					flag;
+	void					*data;
 	struct memory_system_managment	*next;
-} collector;
-
-extern collector	*head;
+}	t_collector;
 
 void	*safe_malloc(unsigned int size);
 void	free_collector_one(void *add);
