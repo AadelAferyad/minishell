@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/20 19:19:14 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/23 16:36:14 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,7 @@
 
 /* Lexer Structures */
 
-typedef struct s_tokens
-{
-	char			*value;
-	t_types			type;
-	struct s_tokens	*next;
-}					t_tokens;
-
-typedef enum s_types
+typedef enum e_types
 {
 	WORD,
 	PIPE,
@@ -46,5 +39,48 @@ typedef enum s_types
 	R_APPEND,
 	R_HEREDOC,
 }					t_types;
+
+typedef enum e_qtypes
+{
+	Q_NONE,
+	Q_SINGLE,
+	Q_DOUBLE,
+}					t_qtypes;
+
+typedef struct s_tokens
+{
+	char			*value;
+	t_types			type;
+	t_qtypes		quote_type;
+	struct s_tokens	*next;
+}					t_tokens;
+
+/* Lexer/Tokenizer Functions */
+
+t_tokens			*lexer(char *input);
+int					handle_double_op(char *input, int *i, t_tokens **tokens);
+int					handle_single_op(char *input, int *i, t_tokens **tokens);
+int					handle_single_qt(char *input, int *i, t_tokens **tokens);
+int					handle_double_qt(char *input, int *i, t_tokens **tokens);
+int					handle_word(char *input, int *i, t_tokens **tokens);
+int					handle_space(char *input, int *i);
+
+/* Char Checks Functions*/
+
+int					ft_isdouble_op(char *input);
+int					ft_isop(int c);
+int					ft_isspace(int c);
+
+/* String Manupilation Functions */
+
+int					ft_strcmp(char *s1, char *s2);
+char				*extracting_word(char *input, int start, int end,
+						t_tokens **tokens);
+
+/* Linked List Functions */
+
+t_tokens			*create_token(t_tokens *tokens, char *value,
+						t_qtypes qtype);
+void				free_list(t_tokens **head);
 
 #endif
