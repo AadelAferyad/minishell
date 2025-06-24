@@ -31,6 +31,7 @@ typedef struct memory_system_managment
 void	*safe_malloc(unsigned int size);
 void	free_collector_one(void *add);
 void	free_collector_all(void);
+t_collector	*add_node(void *add);
 
 #endif
 
