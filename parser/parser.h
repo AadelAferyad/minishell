@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/25 16:16:03 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:22:11 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ char				*safe_substr(char *s, unsigned int start, size_t len);
 
 t_tokens			*create_token(t_tokens *tokens, char *value,
 						t_qtypes qtype);
-t_collector			*add_node(void *add);
 void				free_list(t_tokens **head);
 
 #endif

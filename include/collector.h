@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   collector.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 11:13:01 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/06/24 11:51:39 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:21:38 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,6 @@ typedef struct memory_system_managment
 void	*safe_malloc(unsigned int size);
 void	free_collector_one(void *add);
 void	free_collector_all(void);
+t_collector	*add_node(void *add);
 
 #endif
-
-
-
-
