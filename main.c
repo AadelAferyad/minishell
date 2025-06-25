@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -45,6 +44,7 @@ int	main(int ac, char **av, char **env)
 	ft_strlcpy(s1, "allah s1\n", 9);
 	ft_putstr_fd(s, 1);
 	ft_putstr_fd(s1, 1);
+	char *b = ft_strdup("hello");
 	free_collector_all();	
 	return (0);
 }

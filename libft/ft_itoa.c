@@ -75,7 +75,7 @@ char	*ft_itoa(int n)
 		nb = -nb;
 	}
 	len = ft_count_nbr(nb);
-	str = malloc(sizeof(char) * (len + sign + 1));
+	str = safe_malloc(sizeof(char) * (len + sign + 1));
 	if (!str)
 		return (NULL);
 	ft_fill(str, nb, len, sign);
