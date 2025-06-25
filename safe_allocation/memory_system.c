@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   memory_system.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 11:35:02 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/06/24 11:54:38 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:12:05 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,5 +102,6 @@ void	free_collector_all(void)
 		free(head);
 		head = tmp;
 	}
+	g_structs.collector = NULL;
 }
 
