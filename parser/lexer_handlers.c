@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_handlers.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:43:10 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/23 16:27:47 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:06:42 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,17 @@ int	handle_double_op(char *input, int *i, t_tokens **tokens)
 
 	if (input[*i + 1] && ft_isdouble_op(input + *i))
 	{
-		operator = ft_substr(input, *i, 2);
+		operator = safe_substr(input, *i, 2);
 		if (!operator)
 			return (-1);
 		*tokens = create_token(*tokens, operator, Q_NONE);
 		if (!*tokens)
 		{
-			free(operator);
-			free_list(tokens);
+			free_collector_one(operator);
+			free_collector_all();
 			return (-1);
 		}
-		free(operator);
+		free_collector_one(operator);
 		*i += 2;
 		return (1);
 	}
@@ -61,17 +61,17 @@ int	handle_single_op(char *input, int *i, t_tokens **tokens)
 
 	if (ft_isop(input[*i]))
 	{
-		operator = ft_substr(input, *i, 1);
+		operator = safe_substr(input, *i, 1);
 		if (!operator)
 			return (-1);
 		*tokens = create_token(*tokens, operator, Q_NONE);
 		if (!*tokens)
 		{
-			free(operator);
-			free_list(tokens);
+			free_collector_one(operator);
+			free_collector_all();
 			return (-1);
 		}
-		free(operator);
+		free_collector_one(operator);
 		(*i)++;
 		return (1);
 	}
@@ -97,17 +97,17 @@ int	handle_word(char *input, int *i, t_tokens **tokens)
 	start = *i;
 	while (input[*i] && !ft_isop(input[*i]) && !ft_isspace(input[*i]))
 		(*i)++;
-	word = extracting_word(input, start, *i, tokens);
+	word = extracting_word(input, start, *i);
 	if (!word)
 		return (-1);
 	*tokens = create_token(*tokens, word, Q_NONE);
 	if (!*tokens)
 	{
-		free(word);
-		free_list(tokens);
+		free_collector_one(word);
+		free_collector_all();
 		return (-1);
 	}
-	free(word);
+	free_collector_one(word);
 	return (1);
 }
 

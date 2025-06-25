@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_funcs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:01:37 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/23 16:21:19 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:03:47 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	free_list(t_tokens **head)
 		temp = *head;
 		*head = temp->next;
 		if (temp->value)
-			free(temp->value);
-		free(temp);
+			free_collector_one(temp->value);
+		free_collector_one(temp);
 	}
 	*head = NULL;
 }
@@ -42,13 +42,13 @@ t_tokens	*create_token(t_tokens *tokens, char *value, t_qtypes qtype)
 	t_tokens	*token;
 	t_tokens	*temp;
 
-	token = malloc(sizeof(t_tokens));
+	token = safe_malloc(sizeof(t_tokens));
 	if (!token)
 		return (NULL);
-	token->value = ft_strdup(value);
+	token->value = safe_strdup(value);
 	if (!token->value)
 	{
-		free(token);
+		free_collector_all();
 		return (NULL);
 	}
 	token->quote_type = qtype;

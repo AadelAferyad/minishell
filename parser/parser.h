@@ -3,29 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/23 16:36:14 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:16:03 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-/* Own Libraries */
+/* Own Headers */
 
 # include "../libft/libft.h"
+# include <execution.h>
 
 /* Functions's libraries */
 
-# include <fcntl.h>
-# include <readline/history.h>
 # include <readline/readline.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <sys/stat.h>
-# include <sys/wait.h>
 # include <unistd.h>
 
 /* Lexer Structures */
@@ -74,13 +71,15 @@ int					ft_isspace(int c);
 /* String Manupilation Functions */
 
 int					ft_strcmp(char *s1, char *s2);
-char				*extracting_word(char *input, int start, int end,
-						t_tokens **tokens);
+char				*extracting_word(char *input, int start, int end);
+char				*safe_strdup(char *s);
+char				*safe_substr(char *s, unsigned int start, size_t len);
 
 /* Linked List Functions */
 
 t_tokens			*create_token(t_tokens *tokens, char *value,
 						t_qtypes qtype);
+t_collector			*add_node(void *add);
 void				free_list(t_tokens **head);
 
 #endif

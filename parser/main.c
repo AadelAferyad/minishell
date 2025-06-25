@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:17:44 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/23 16:35:23 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:12:58 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+
+t_global	g_structs;
 
 static void	print_tokens(t_tokens *tokens)
 {
@@ -34,7 +36,7 @@ int	main(void)
 	ssize_t		nread;
 
 	n = 444;
-	input = malloc(sizeof(char) * n);
+	input = safe_malloc(sizeof(char) * n);
 	if (!input)
 		return (-1);
 	nread = getline(&input, &n, stdin);
@@ -43,11 +45,10 @@ int	main(void)
 	tokens = lexer(input);
 	if (!tokens)
 	{
-		free(input);
+		free_collector_all();
 		return (-1);
 	}
 	print_tokens(tokens);
-	free(input);
-	free_list(&tokens);
+	free_collector_all();
 	return (0);
 }

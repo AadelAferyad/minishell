@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:03:54 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/23 16:32:41 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:12:03 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ static void	class_tokens(t_tokens *tokens)
 	}
 }
 
-static t_tokens	*cleanup(t_tokens **tokens)
+static t_tokens	*cleanup(void)
 {
-	free_list(tokens);
+	free_collector_all();
 	return (NULL);
 }
 
@@ -100,16 +100,16 @@ t_tokens	*lexer(char *input)
 		if (flag == 1)
 			continue ;
 		if (flag == -1)
-			return (cleanup(&tokens));
+			return (cleanup());
 		if (handle_space(input, &i))
 			continue ;
 		flag = lexer_helper_qt(input, &i, &tokens);
 		if (flag == 1)
 			continue ;
 		if (flag == -1)
-			return (cleanup(&tokens));
+			return (cleanup());
 		if (handle_word(input, &i, &tokens) == -1)
-			return (cleanup(&tokens));
+			return (cleanup());
 	}
 	class_tokens(tokens);
 	return (tokens);

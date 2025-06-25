@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   str_funcs.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:01:42 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/24 11:32:43 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:19:25 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,37 @@ int	ft_strcmp(char *s1, char *s2)
 	return (0);
 }
 
-char	*extracting_word(char *input, int start, int end, t_tokens **tokens)
+char	*extracting_word(char *input, int start, int end)
 {
 	char	*word;
 
-	word = ft_substr(input, start, end - start);
+	word = safe_substr(input, start, end - start);
 	if (!word)
 	{
-		free_list(tokens);
+		free_collector_all();
 		return (NULL);
 	}
+	return (word);
+}
+
+char	*safe_strdup(char *s)
+{
+	char	*word;
+
+	word = ft_strdup(s);
+	if (!word)
+		return (NULL);
+	add_node(word);
+	return (word);
+}
+
+char	*safe_substr(char *s, unsigned int start, size_t len)
+{
+	char	*word;
+
+	word = ft_substr(s, start, len);
+	if (!word)
+		return (NULL);
+	add_node(word);
 	return (word);
 }
