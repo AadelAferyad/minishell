@@ -20,7 +20,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	msize = nmemb * size;
 	if (nmemb && msize / nmemb != size)
 		return (NULL);
-	ptr = malloc(msize);
+	ptr = safe_malloc(msize);
 	if (!ptr)
 		return (NULL);
 	ft_bzero(ptr, msize);

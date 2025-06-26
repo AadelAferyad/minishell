@@ -92,7 +92,7 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	words = ft_count_words(s, c);
-	grid = malloc(sizeof(char *) * (words + 1));
+	grid = safe_malloc(sizeof(char *) * (words + 1));
 	if (!grid)
 		return (NULL);
 	if (ft_split_healper(s, c, grid))
