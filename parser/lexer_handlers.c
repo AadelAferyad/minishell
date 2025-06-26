@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_handlers.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:43:10 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/25 16:06:42 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/26 14:18:42 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	handle_double_op(char *input, int *i, t_tokens **tokens)
 
 	if (input[*i + 1] && ft_isdouble_op(input + *i))
 	{
-		operator = safe_substr(input, *i, 2);
+		operator = ft_substr(input, *i, 2);
 		if (!operator)
 			return (-1);
 		*tokens = create_token(*tokens, operator, Q_NONE);
@@ -61,7 +61,7 @@ int	handle_single_op(char *input, int *i, t_tokens **tokens)
 
 	if (ft_isop(input[*i]))
 	{
-		operator = safe_substr(input, *i, 1);
+		operator = ft_substr(input, *i, 1);
 		if (!operator)
 			return (-1);
 		*tokens = create_token(*tokens, operator, Q_NONE);

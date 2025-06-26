@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_funcs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:01:37 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/25 16:03:47 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/26 14:18:45 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_tokens	*create_token(t_tokens *tokens, char *value, t_qtypes qtype)
 	token = safe_malloc(sizeof(t_tokens));
 	if (!token)
 		return (NULL);
-	token->value = safe_strdup(value);
+	token->value = ft_strdup(value);
 	if (!token->value)
 	{
 		free_collector_all();

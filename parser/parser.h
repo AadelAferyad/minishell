@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/25 16:22:11 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/26 14:18:52 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <readline/readline.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <unistd.h>
+# include <unistd.h>	
 
 /* Lexer Structures */
 
@@ -72,8 +72,6 @@ int					ft_isspace(int c);
 
 int					ft_strcmp(char *s1, char *s2);
 char				*extracting_word(char *input, int start, int end);
-char				*safe_strdup(char *s);
-char				*safe_substr(char *s, unsigned int start, size_t len);
 
 /* Linked List Functions */
 
