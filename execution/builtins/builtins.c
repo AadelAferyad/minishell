@@ -6,11 +6,45 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 11:46:07 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/06/22 17:17:33 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:33:50 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <builtins.h>
+#include <execution.h>
+
+void	builtin_env(int fd)
+{
+	t_env	*tmp;
+
+	tmp = g_structs.env;
+	while (tmp)
+	{
+		ft_putstr_fd(tmp->key, fd);
+		ft_putchar_fd('=', fd);
+		ft_putstr_fd(tmp->value, fd);
+		ft_putchar_fd('\n', fd);
+		tmp = tmp->next;
+	}
+}
+
+static void	change_pwd(void)
+{
+	t_env	*tmp;
+
+	tmp = g_structs.env;
+	while (tmp)
+	{
+		if (!ft_strncmp(tmp->key, "OLDPWD", 6))
+		{
+			free_collector_one(tmp->value);
+			tmp->value = getcwd(NULL, 0);
+			add_node(tmp->value);
+			return ;
+		}
+		tmp = tmp->next;
+	}
+	ft_putstr_fd("NOt found OLDPWD\n", 1);
+}
 
 int	builtin_cd(char *path)
 {
@@ -20,9 +54,14 @@ int	builtin_cd(char *path)
 	if (S_ISDIR(st.st_mode))
 	{
 		// change OLDPWD in env
+		ft_putstr_fd("entered func for changing old pwd!\n", 1);
+		change_pwd();
 	}
 	if (chdir(path) != 0)
 	{
+		ft_putstr_fd(strerror(errno), 2);
+		ft_putchar_fd('\n', 2);
+	}
 	return (0);
 }
 
