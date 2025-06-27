@@ -102,5 +102,5 @@ void	free_collector_all(void)
 		free(head);
 		head = tmp;
 	}
+	g_structs.collector = NULL;
 }
-
