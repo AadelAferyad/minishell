@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/26 14:18:52 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/27 13:18:01 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@
 # include <readline/readline.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <unistd.h>	
+# include <unistd.h>
 
-/* Lexer Structures */
+/* Parser Structures */
 
 typedef enum e_types
 {
@@ -51,6 +51,20 @@ typedef struct s_tokens
 	t_qtypes		quote_type;
 	struct s_tokens	*next;
 }					t_tokens;
+
+typedef struct s_reds
+{
+	t_types			type;
+	char			*flag;
+	struct s_reds	*next;
+}					t_reds;
+
+typedef struct s_cmd
+{
+	char			**args;
+	t_reds			*reds;
+	struct s_cmd	*next;
+}					t_cmd;
 
 /* Lexer/Tokenizer Functions */
 
