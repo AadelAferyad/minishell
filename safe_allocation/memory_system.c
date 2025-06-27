@@ -104,4 +104,3 @@ void	free_collector_all(void)
 	}
 	g_structs.collector = NULL;
 }
-

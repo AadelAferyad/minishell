@@ -23,12 +23,19 @@ int	main(int ac, char **av, char **env)
 	g_structs.env = NULL;
 
 	(void) ac;
-	(void) av;
 	create_env(env);
 	while ((buffer = readline("$shell: ")))
 	{
 		if (strncmp(buffer, "cd", 2) == 0)
-			builtin_cd(&buffer[3]);
+		{
+
+			/*
+			 * cd dsadsa
+			 * */
+			if (!buffer[2])
+				continue;
+			builtin_cd(buffer + 3);
+		}
 		else if (strncmp(buffer, "pwd", 3) == 0)
 			builtin_pwd(1);
 		else if (strncmp(buffer, "env", 3) == 0)
@@ -37,6 +44,8 @@ int	main(int ac, char **av, char **env)
 			ft_putstr_fd("unknown cmd\n", 1);
 
 	}
+	builtin_echo(av[1], 1)
+	ft_putstr_fd("Exiting shell\n", 1);
 	free_collector_all();	
 	return (0);
 }

@@ -27,14 +27,14 @@ void	builtin_env(int fd)
 	}
 }
 
-static void	change_pwd(void)
+static void	change_pwd(char *s, int len)
 {
 	t_env	*tmp;
 
 	tmp = g_structs.env;
 	while (tmp)
 	{
-		if (!ft_strncmp(tmp->key, "OLDPWD", 6))
+		if (!ft_strncmp(tmp->key, s, len))
 		{
 			free_collector_one(tmp->value);
 			tmp->value = getcwd(NULL, 0);
@@ -50,18 +50,18 @@ int	builtin_cd(char *path)
 {
 	struct stat	st;
 
+	if (!path || !path[0])
+		return (0);
 	stat(path, &st);
 	if (S_ISDIR(st.st_mode))
-	{
-		// change OLDPWD in env
-		ft_putstr_fd("entered func for changing old pwd!\n", 1);
-		change_pwd();
-	}
+		change_pwd("OLDPWD", 6);
 	if (chdir(path) != 0)
 	{
 		ft_putstr_fd(strerror(errno), 2);
 		ft_putchar_fd('\n', 2);
 	}
+	else
+		change_pwd("PWD", 3);
 	return (0);
 }
 
