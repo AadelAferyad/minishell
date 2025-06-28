@@ -16,7 +16,8 @@
 /* Own Headers */
 
 # include "../libft/libft.h"
-# include <execution.h>
+/*# include <execution.h>*/
+# include <collector.h>
 
 /* Functions's libraries */
 
