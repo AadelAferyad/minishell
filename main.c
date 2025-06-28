@@ -17,35 +17,23 @@ t_global	g_structs;
 
 int	main(int ac, char **av, char **env)
 {
-
-	char	*buffer;
+	t_cmd	*cmd;
 	g_structs.collector = NULL;
 	g_structs.env = NULL;
+	g_structs.cmd = NULL;
 
-	(void) ac;
 	create_env(env);
-	while ((buffer = readline("$shell: ")))
-	{
-		if (strncmp(buffer, "cd", 2) == 0)
-		{
+	g_structs.cmd = safe_malloc(sizeof(t_cmd));
+	cmd = g_structs.cmd;
+	cmd->next = NULL;
 
-			/*
-			 * cd dsadsa
-			 * */
-			if (!buffer[2])
-				continue;
-			builtin_cd(buffer + 3);
-		}
-		else if (strncmp(buffer, "pwd", 3) == 0)
-			builtin_pwd(1);
-		else if (strncmp(buffer, "env", 3) == 0)
-			builtin_env(1);
-		else
-			ft_putstr_fd("unknown cmd\n", 1);
-
-	}
-	builtin_echo(av[1], 1)
-	ft_putstr_fd("Exiting shell\n", 1);
+	cmd->args = safe_malloc(sizeof(char *) * 5);
+	cmd->args[0] = ft_strdup("libft/");
+	cmd->args[1] = ft_strdup("..");
+	cmd->args[2] = NULL;
+	(void) ac;
+	(void) av;
+	execution();
 	free_collector_all();	
 	return (0);
 }

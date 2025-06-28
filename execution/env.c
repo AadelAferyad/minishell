@@ -36,6 +36,43 @@ static void	trim(char *s)
 	tmp->next = node;
 }
 
+int	list_len()
+{
+	unsigned int	i;
+	t_env	*tmp;
+
+	i = 0;
+	tmp = g_structs.env;
+	while (tmp)
+	{
+		tmp = tmp->next;
+		i++;
+	}
+	return (i);
+}
+
+char	**create_env_arr()
+{
+	char	**arr;
+	char	*buff;
+	t_env	*tmp;
+	int	i;
+
+	tmp = g_structs.env;
+	arr = safe_malloc(sizeof(char *) * (list_len() + 1));
+	i = 0;
+	while (tmp)
+	{
+		buff = ft_strjoin(tmp->key, "=");
+		arr[i] = ft_strjoin(buff, tmp->value);
+		free_collector_one(buff);
+		tmp = tmp->next;
+		i++;
+	}
+	arr[i] = NULL;
+	return (arr);
+}
+
 void	create_env(char **env)
 {
 	int	i;

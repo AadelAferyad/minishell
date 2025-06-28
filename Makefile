@@ -11,7 +11,7 @@ src_libft := libft/ft_atoi.c libft/ft_bzero.c libft/ft_calloc.c libft/ft_isalnum
 
 src_collector := safe_allocation/memory_system.c
 
-src_builtins := execution/env.c execution/builtins/builtins.c
+src_builtins := execution/env.c execution/builtins/builtins.c execution/execution.c
 
 all: $(NAME)
 

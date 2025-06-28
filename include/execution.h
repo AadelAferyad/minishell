@@ -14,7 +14,10 @@
 # define EXECUTION_H
 
 # include <builtins.h>
+# include <sys/wait.h>
+# include <sys/types.h>
 # include <collector.h>
+# include "../parser/parser.h"
 
 typedef struct	environment
 {
@@ -26,12 +29,14 @@ typedef struct	environment
 typedef struct golobal_struct
 {
 	t_collector	*collector;
-	/*t_parser	*parser;*/
-	t_env		*env;
+	t_env	*env;
+	t_cmd	*cmd;
 }	t_global;
 
 extern t_global	g_structs;
 
+void	execution();
 void	create_env(char **env);
+char	**create_env_arr();
 
 #endif

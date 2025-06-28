@@ -48,7 +48,7 @@ static void	ft_collector(char **grid)
 	i = 0;
 	while (grid[i])
 	{
-		free(grid[i]);
+		free_collector_one(grid[i]);
 		grid[i] = NULL;
 		i++;
 	}
@@ -97,7 +97,7 @@ char	**ft_split(char const *s, char c)
 		return (NULL);
 	if (ft_split_healper(s, c, grid))
 	{
-		free(grid);
+		free_collector_one(grid);
 		return (NULL);
 	}
 	return (grid);
