@@ -28,11 +28,9 @@ int	main(int ac, char **av, char **env)
 	cmd->next = NULL;
 
 	cmd->args = safe_malloc(sizeof(char *) * 5);
-	cmd->args[0] = ft_strdup("libft/");
-	cmd->args[1] = ft_strdup("..");
-	cmd->args[2] = NULL;
+	cmd->args[0] = ft_strdup(av[1]);
+	cmd->args[1] = NULL;
 	(void) ac;
-	(void) av;
 	execution();
 	free_collector_all();	
 	return (0);
