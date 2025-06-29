@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:01:37 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/26 14:18:45 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/29 05:44:46 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,39 @@ t_tokens	*create_token(t_tokens *tokens, char *value, t_qtypes qtype)
 		temp = temp->next;
 	temp->next = token;
 	return (tokens);
+}
+
+t_cmd	*add_cmd(t_cmd *head, t_cmd *new_cmd)
+{
+	t_cmd	*current;
+
+	if (!head)
+		return (new_cmd);
+	current = head;
+	while (current->next)
+		current = current->next;
+	current->next = new_cmd;
+	return (head);
+}
+
+t_reds	*add_redir(t_reds *head, t_types type, char *flag)
+{
+	t_reds	*redir;
+	t_reds	*current;
+
+	redir = ft_calloc(1, sizeof(t_reds));
+	if (!redir)
+		return (NULL);
+	redir->type = type;
+	redir->flag = ft_strdup(flag);
+	if (!redir->flag)
+		return (NULL);
+	redir->next = NULL;
+	if (!head)
+		return (redir);
+	current = head;
+	while (current->next)
+		current = current->next;
+	current->next = redir;
+	return (head);
 }
