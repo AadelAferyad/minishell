@@ -147,13 +147,21 @@ void	execute(char *full_path, char **args)
 	if (wstatus == 12)
 		ft_putstr_fd("works", 1);
 }
+
+void	redirections_out(char *file)
+{
+	open(file, );
+	dup2();
+}
+
 void	execute_redirections(t_reds *redirections)
 {
 	int	save;
 
 	while (redirectios)
 	{
-
+		if (redirections->type == R_OUT)
+			redirections_out();
 		redirections = redirections->next;
 	}
 }
