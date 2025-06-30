@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:17:44 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/29 05:44:03 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/30 17:10:27 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,9 @@ int	main(void)
 	char		*input;
 	t_tokens	*tokens;
 	t_cmd		*cmds;
-	size_t		n;
-	ssize_t		nread;
 
-	n = 444;
-	input = safe_malloc(sizeof(char) * n);
+	input = readline("marvel$> ");
 	if (!input)
-		return (-1);
-	nread = getline(&input, &n, stdin);
-	if (nread == -1)
 	{
 		free_collector_all();
 		return (-1);

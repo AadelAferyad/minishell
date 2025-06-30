@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 05:10:43 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/29 05:44:48 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/30 17:41:47 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	count_args(t_tokens *current)
 	count = 0;
 	while (current && !is_pipe(current->value))
 	{
-		if (get_redir_type(current->value) != -1)
+		if (check_redir_type(current->value) != -1)
 		{
 			if (!current->next || is_pipe(current->next->value))
 				return (count);
@@ -34,53 +34,88 @@ static int	count_args(t_tokens *current)
 	return (count);
 }
 
+/**
+ * init_cmd - Initializes a command structure by filling its arguments and
+ *            redirection fields from a token list
+ * 
+ * @cur: Pointer to the current position in the tokens list
+ * @cmd: Pointer to the t_cmd struct to be filled
+ * @count: Number of arguments to expect
+ * @i: Pointer to the index for inserting arguments into cmd->args
+ *
+ * Return: 0 on success, -1 on error
+ */
+static int	init_cmd(t_tokens **cur, t_cmd *cmd, int count, int *i)
+{
+	int	redir_type;
+
+	while (*cur && !is_pipe((*cur)->value))
+	{
+		redir_type = check_redir_type((*cur)->value);
+		if (redir_type != -1)
+		{
+			if (!(*cur)->next || is_pipe((*cur)->next->value))
+			{
+				syntax_error("newline");
+				free_collector_one(cmd);
+				return (-1);
+			}
+			cmd->reds = add_redir(cmd->reds, redir_type, (*cur)->next->value);
+			*cur = (*cur)->next->next;
+		}
+		else
+		{
+			if (*i < count)
+				cmd->args[(*i)++] = ft_strdup((*cur)->value);
+			*cur = (*cur)->next;
+		}
+	}
+	return (0);
+}
+
+/**
+ * parse_one - Parses a single command segment from a token list
+ * 
+ * @current: Pointer to the current position in the tokens list. Updated to
+ *           point past the parsed command (to the next pipe or end)
+ *
+ * Return: Pointer to t_cmd structure, NULL on error
+ */
 static t_cmd	*parse_one(t_tokens **current)
 {
 	t_cmd		*cmd;
 	t_tokens	*cur;
-	int			arg_count;
+	int			count;
 	int			i;
-	int			redir_type;
 
 	cur = *current;
-	arg_count = count_args(cur);
+	count = count_args(cur);
 	cmd = ft_calloc(1, sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
-	cmd->args = ft_calloc(arg_count + 1, sizeof(char *));
+	cmd->args = ft_calloc(count + 1, sizeof(char *));
 	if (!cmd->args)
 	{
 		free_collector_one(cmd);
 		return (NULL);
 	}
-	cur = *current;
 	i = 0;
-	while (cur && !is_pipe(cur->value))
-	{
-		redir_type = get_redir_type(cur->value);
-		if (redir_type != -1)
-		{
-			if (!cur->next || is_pipe(cur->next->value))
-			{
-				syntax_error("newline");
-				free_collector_one(cmd);
-				return (NULL);
-			}
-			cmd->reds = add_redir(cmd->reds, redir_type, cur->next->value);
-			cur = cur->next->next;
-		}
-		else
-		{
-			if (i < arg_count)
-				cmd->args[i++] = ft_strdup(cur->value);
-			cur = cur->next;
-		}
-	}
+	if (init_cmd(&cur, cmd, count, &i) == -1)
+		return (NULL);
 	cmd->args[i] = NULL;
 	*current = cur;
 	return (cmd);
 }
 
+/**
+ * parse_loop - Builds a pipeline of commands from a token list
+ * 
+ * @current: The current token in the input list
+ * @last_pipe: Pointer to an int set to 1 if the last token was pipe
+ * @pipeline: Address of a t_cmd pointer, serves as the head of the pipeline list
+ *
+ * Return: 0 on success, -1 on error
+ */
 static int	parse_loop(t_tokens *current, int *last_pipe, t_cmd **pipeline)
 {
 	t_cmd	*cmd;
@@ -107,6 +142,13 @@ static int	parse_loop(t_tokens *current, int *last_pipe, t_cmd **pipeline)
 	return (0);
 }
 
+/**
+ * parse_tokens - parsing token list into a pipeline of commands
+ * 
+ * @tokens: Pointer to the head of the tokens list to be parsed
+ *
+ * Return: Pointer to the head of the pipeline, NULL on error
+ */
 t_cmd	*parse_tokens(t_tokens *tokens)
 {
 	int		last_pipe;

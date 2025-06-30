@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/29 05:44:39 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/30 17:41:46 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 /* Functions's libraries */
 
 # include <readline/readline.h>
+# include <readline/history.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -85,7 +86,7 @@ t_cmd				*parse_tokens(t_tokens *tokens);
 int					is_pipe(char *token);
 int					double_pipe(t_tokens *current);
 int					pipe_error(t_tokens *current);
-int					get_redir_type(char *token);
+int					check_redir_type(char *token);
 void				syntax_error(char *token);
 
 /* Char Checks Functions*/

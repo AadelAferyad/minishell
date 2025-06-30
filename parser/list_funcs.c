@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:01:37 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/29 05:44:46 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/30 17:33:53 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,15 @@ t_cmd	*add_cmd(t_cmd *head, t_cmd *new_cmd)
 	return (head);
 }
 
+/**
+ * add_redir - Add a new redirection node to the end of a redirection list
+ * 
+ * @head: Pointer to the head of the redirection list
+ * @type: Type of the redirection
+ * @flag: The filename or flag associated with the redirection
+ *
+ * Return: Pointer to the head ofredirection list, NULL on error
+ */
 t_reds	*add_redir(t_reds *head, t_types type, char *flag)
 {
 	t_reds	*redir;
@@ -86,7 +95,10 @@ t_reds	*add_redir(t_reds *head, t_types type, char *flag)
 	redir->type = type;
 	redir->flag = ft_strdup(flag);
 	if (!redir->flag)
+	{
+		free_collector_all();
 		return (NULL);
+	}
 	redir->next = NULL;
 	if (!head)
 		return (redir);

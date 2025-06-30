@@ -6,13 +6,13 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/29 01:53:21 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/29 05:48:28 by imellali         ###   ########.fr       */
+/*   Updated: 2025/06/30 17:41:55 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-int	get_redir_type(char *token)
+int	check_redir_type(char *token)
 {
 	if (!token)
 		return (-1);
@@ -29,7 +29,7 @@ int	get_redir_type(char *token)
 
 void	syntax_error(char *token)
 {
-	ft_putstr_fd("syntax error near unexpected token : '", 2);
+	ft_putstr_fd("syntax error unexpected token : ", 2);
 	if (token)
 		ft_putstr_fd(token, 2);
 	else
