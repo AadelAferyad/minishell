@@ -157,6 +157,23 @@ void	redirections_out(char *file)
 	if (fd == -1)
 		// error !
 		return ;
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+}
+
+void	redirections_in(char *file)
+{
+	int	fd;
+
+	if (access(file, F_OK) != 0)
+	{
+		ft_putstr_fd(": No such a file or directory\n", 2);
+		return ;
+	}
+	fd = open(file, O_APPEND);
+	if (fd == -1)
+		// error !
+		return ;
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 }
@@ -169,8 +186,8 @@ void	execute_redirections(t_reds *redirections)
 	{
 		if (redirections->type == R_OUT)
 			redirections_out(redirections->flag);
-		/*else if (redirections->type == R_IN)*/
-		/*	redirections_in(redirections->flag);*/
+		else if (redirections->type == R_IN)
+			redirections_in(redirections->flag);
 		redirections = redirections->next;
 	}
 }
@@ -181,10 +198,12 @@ void	execution()
 	char	*single_cmd;
 	char	*full_path;
 	int	std_out;
+	int	std_in;
 
 	cmd = g_structs.cmd;
 	//saved stdout
 	std_out = dup(STDOUT_FILENO);
+	std_in = dup(STDIN_FILENO);
 	while (cmd)
 	{
 		if (cmd->reds)
@@ -195,7 +214,6 @@ void	execution()
 			execute(full_path, cmd->args);
 		cmd = cmd->next;
 	}
-	dup2(std_out, STDOUT_FILENO);
-	write(STDOUT_FILENO, "exit\n", 5);
+	dup2(std_in, STDIN_FILENO);
 	ft_putstr_fd("exit after dup2\n", 1);
 }

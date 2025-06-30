@@ -31,7 +31,7 @@ int	main(int ac, char **av, char **env)
 	cmd->args[0] = ft_strdup(av[1]);
 	cmd->args[1] = NULL;
 	cmd->reds = safe_malloc(sizeof(t_reds));
-	cmd->reds->type = R_OUT;
+	cmd->reds->type = R_IN;
 	cmd->reds->flag = "log";
 	cmd->reds->next =NULL;
 
