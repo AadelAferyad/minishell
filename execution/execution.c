@@ -143,35 +143,48 @@ void	execute(char *full_path, char **args)
 		ft_putstr_fd(strerror(errno), 2);
 		exit(12);
 	}
-	waitpid(pid, &wstatus, 0);
+	else
+		waitpid(pid, &wstatus, 0);
 	if (wstatus == 12)
 		ft_putstr_fd("works", 1);
 }
 
 void	redirections_out(char *file)
 {
-	open(file, );
-	dup2();
+	int	fd;
+
+	fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	if (fd == -1)
+		// error !
+		return ;
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
 }
 
 void	execute_redirections(t_reds *redirections)
 {
-	int	save;
-
-	while (redirectios)
+	if (!redirections)
+		return ;
+	while (redirections)
 	{
 		if (redirections->type == R_OUT)
-			redirections_out();
+			redirections_out(redirections->flag);
+		/*else if (redirections->type == R_IN)*/
+		/*	redirections_in(redirections->flag);*/
 		redirections = redirections->next;
 	}
 }
+
 void	execution()
 {
 	t_cmd	*cmd;
 	char	*single_cmd;
 	char	*full_path;
+	int	std_out;
 
 	cmd = g_structs.cmd;
+	//saved stdout
+	std_out = dup(STDOUT_FILENO);
 	while (cmd)
 	{
 		if (cmd->reds)
@@ -182,4 +195,7 @@ void	execution()
 			execute(full_path, cmd->args);
 		cmd = cmd->next;
 	}
+	dup2(std_out, STDOUT_FILENO);
+	write(STDOUT_FILENO, "exit\n", 5);
+	ft_putstr_fd("exit after dup2\n", 1);
 }

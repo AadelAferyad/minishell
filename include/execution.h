@@ -14,6 +14,7 @@
 # define EXECUTION_H
 
 # include <builtins.h>
+# include <fcntl.h>
 # include <sys/wait.h>
 # include <sys/types.h>
 # include <collector.h>
