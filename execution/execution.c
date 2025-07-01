@@ -126,7 +126,7 @@ char	*check_add_path(char *single_cmd)
 	return (generate_right_path(single_cmd));
 }
 
-void	execute(char *full_path, char **args)
+void	execute(char *full_path, char **args, int *pipefd)
 {
 	pid_t	pid;
 	int	wstatus;
@@ -139,14 +139,16 @@ void	execute(char *full_path, char **args)
 	if (pid == 0)
 	{
 		execve(full_path, args, envp);
-		ft_putstr_fd(full_path, 1);
+		if (pipefd)
+		{
+			close(pipefd[0]);
+			close(pipefd[1]);
+		}
 		ft_putstr_fd(strerror(errno), 2);
 		exit(12);
 	}
 	else
 		waitpid(pid, &wstatus, 0);
-	if (wstatus == 12)
-		ft_putstr_fd("works", 1);
 }
 
 void	redirections_out(char *file)
@@ -155,41 +157,46 @@ void	redirections_out(char *file)
 
 	fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (fd == -1)
-		// error !
+	{
+		ft_putstr_fd(strerror(errno), 2);
 		return ;
-	dup2(fd, STDIN_FILENO);
+	}
+	dup2(fd, STDOUT_FILENO);
 	close(fd);
 }
 
-void	redirections_in(char *file)
+int	redirections_in(char *file)
 {
 	int	fd;
 
 	if (access(file, F_OK) != 0)
 	{
 		ft_putstr_fd(": No such a file or directory\n", 2);
-		return ;
+		return (1);
 	}
 	fd = open(file, O_APPEND);
 	if (fd == -1)
 		// error !
-		return ;
-	dup2(fd, STDOUT_FILENO);
+		return (1);
+	dup2(fd, STDIN_FILENO);
 	close(fd);
+	return (0);
 }
 
-void	execute_redirections(t_reds *redirections)
+int	execute_redirections(t_reds *redirections)
 {
-	if (!redirections)
-		return ;
 	while (redirections)
 	{
 		if (redirections->type == R_OUT)
 			redirections_out(redirections->flag);
 		else if (redirections->type == R_IN)
-			redirections_in(redirections->flag);
+		{
+			if (redirections_in(redirections->flag))
+				return (1);
+		}
 		redirections = redirections->next;
 	}
+	return (0);
 }
 
 void	execution()
@@ -199,21 +206,46 @@ void	execution()
 	char	*full_path;
 	int	std_out;
 	int	std_in;
+	int	pipefd[2];
+	int	*is_pipe;
+
 
 	cmd = g_structs.cmd;
 	//saved stdout
 	std_out = dup(STDOUT_FILENO);
 	std_in = dup(STDIN_FILENO);
+	is_pipe = NULL;
 	while (cmd)
 	{
+		ft_putstr_fd(cmd->args[0], 1);
+		if (cmd->next)
+		{
+			ft_putstr_fd("\ninside pipe\n", 1);
+			pipe(pipefd);
+			dup2(pipefd[0], STDIN_FILENO);
+			dup2(pipefd[1], STDOUT_FILENO);
+			is_pipe = pipefd;
+
+		}
 		if (cmd->reds)
 			execute_redirections(cmd->reds);
 		single_cmd = cmd->args[0];
 		full_path = check_add_path(single_cmd);
 		if (full_path)
-			execute(full_path, cmd->args);
+			execute(full_path, cmd->args, is_pipe);
+		if (is_pipe)
+		{
+			is_pipe = NULL;
+		}
+		else
+		{
+			close(pipefd[0]);
+			close(pipefd[1]);
+			dup2(std_out, STDOUT_FILENO);
+			dup2(std_in, STDIN_FILENO);
+		}
 		cmd = cmd->next;
 	}
-	dup2(std_in, STDIN_FILENO);
-	ft_putstr_fd("exit after dup2\n", 1);
+	close(std_out);
+	close(std_in);
 }
