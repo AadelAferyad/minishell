@@ -46,12 +46,7 @@ char	*find_right_path(char *single_cmd, char **path)
 		full_path = ft_strjoin(sub_path, single_cmd);
 		free_collector_one(sub_path);
 		if (access(full_path, X_OK) == 0)
-		{
-			ft_putstr_fd("found path: ", 1);
-			ft_putstr_fd(full_path, 1);
-			ft_putstr_fd("\n", 1);
 			return (full_path);
-		}
 		free_collector_one(full_path);
 		i++;
 	}
@@ -126,7 +121,7 @@ char	*check_add_path(char *single_cmd)
 	return (generate_right_path(single_cmd));
 }
 
-void	execute(char *full_path, char **args, int *pipefd)
+void	execute(char *full_path, char **args)
 {
 	pid_t	pid;
 	int	wstatus;
@@ -139,11 +134,6 @@ void	execute(char *full_path, char **args, int *pipefd)
 	if (pid == 0)
 	{
 		execve(full_path, args, envp);
-		if (pipefd)
-		{
-			close(pipefd[0]);
-			close(pipefd[1]);
-		}
 		ft_putstr_fd(strerror(errno), 2);
 		exit(12);
 	}
@@ -199,6 +189,36 @@ int	execute_redirections(t_reds *redirections)
 	return (0);
 }
 
+void	pipe_lines(t_cmd *cmd, int std_out)
+{
+	t_pipe	*ptr;
+
+	ptr = g_structs._pipe; 
+	if (ptr->prev_pipe != -1)
+	{
+		dup2(ptr->prev_pipe, STDIN_FILENO);
+		close(ptr->prev_pipe);
+		ptr->prev_pipe = -1;
+	}
+	if (cmd->next)
+	{
+		pipe(ptr->pipefd);
+		dup2(ptr->pipefd[1], STDOUT_FILENO);
+		close(ptr->pipefd[1]);
+		ptr->prev_pipe = ptr->pipefd[0];
+	}
+	else
+	{
+		dup2(std_out, STDOUT_FILENO);
+		if (ptr->prev_pipe != -1)
+		{
+			close(ptr->prev_pipe);
+			ptr->prev_pipe = -1;
+		}
+	}
+
+}
+
 void	execution()
 {
 	t_cmd	*cmd;
@@ -206,46 +226,23 @@ void	execution()
 	char	*full_path;
 	int	std_out;
 	int	std_in;
-	int	pipefd[2];
-	int	*is_pipe;
-
 
 	cmd = g_structs.cmd;
-	//saved stdout
 	std_out = dup(STDOUT_FILENO);
 	std_in = dup(STDIN_FILENO);
-	is_pipe = NULL;
 	while (cmd)
 	{
-		ft_putstr_fd(cmd->args[0], 1);
-		if (cmd->next)
-		{
-			ft_putstr_fd("\ninside pipe\n", 1);
-			pipe(pipefd);
-			dup2(pipefd[0], STDIN_FILENO);
-			dup2(pipefd[1], STDOUT_FILENO);
-			is_pipe = pipefd;
-
-		}
+		pipe_lines(cmd, std_out);
 		if (cmd->reds)
 			execute_redirections(cmd->reds);
 		single_cmd = cmd->args[0];
 		full_path = check_add_path(single_cmd);
 		if (full_path)
-			execute(full_path, cmd->args, is_pipe);
-		if (is_pipe)
-		{
-			is_pipe = NULL;
-		}
-		else
-		{
-			close(pipefd[0]);
-			close(pipefd[1]);
-			dup2(std_out, STDOUT_FILENO);
-			dup2(std_in, STDIN_FILENO);
-		}
+			execute(full_path, cmd->args);
 		cmd = cmd->next;
 	}
+	dup2(std_in, STDIN_FILENO);
+	dup2(std_out, STDOUT_FILENO);
 	close(std_out);
 	close(std_in);
 }

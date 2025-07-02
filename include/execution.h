@@ -27,11 +27,18 @@ typedef struct	environment
 	struct environment	*next;
 } t_env;
 
+typedef struct	pipe_line	
+{
+	int	pipefd[2];
+	int	prev_pipe;
+} t_pipe;
+
 typedef struct golobal_struct
 {
 	t_collector	*collector;
 	t_env	*env;
 	t_cmd	*cmd;
+	t_pipe	*_pipe;
 }	t_global;
 
 extern t_global	g_structs;
