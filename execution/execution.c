@@ -155,6 +155,19 @@ void	redirections_out(char *file)
 	close(fd);
 }
 
+void	redirections_append(char *file)
+{
+	int	fd;
+
+	fd = open(file, O_CREAT | O_WRONLY | O_APPEND, 0666);
+	if (fd == -1)
+	{
+		ft_putstr_fd(strerror(errno), 2);
+		return ;
+	}
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
+}
 int	redirections_in(char *file)
 {
 	int	fd;
@@ -179,6 +192,8 @@ int	execute_redirections(t_reds *redirections)
 	{
 		if (redirections->type == R_OUT)
 			redirections_out(redirections->flag);
+		if (redirections->type == R_APPEND)
+			redirections_append(redirections->flag);
 		else if (redirections->type == R_IN)
 		{
 			if (redirections_in(redirections->flag))
@@ -194,6 +209,8 @@ void	pipe_lines(t_cmd *cmd, int std_out)
 	t_pipe	*ptr;
 
 	ptr = g_structs._pipe; 
+	if (!ptr)
+		return ;
 	if (ptr->prev_pipe != -1)
 	{
 		dup2(ptr->prev_pipe, STDIN_FILENO);
@@ -216,7 +233,6 @@ void	pipe_lines(t_cmd *cmd, int std_out)
 			ptr->prev_pipe = -1;
 		}
 	}
-
 }
 
 void	execution()
@@ -230,6 +246,11 @@ void	execution()
 	cmd = g_structs.cmd;
 	std_out = dup(STDOUT_FILENO);
 	std_in = dup(STDIN_FILENO);
+	if (cmd->next)
+	{
+		g_structs._pipe = safe_malloc(sizeof(t_pipe));
+		g_structs._pipe->prev_pipe = -1;
+	}
 	while (cmd)
 	{
 		pipe_lines(cmd, std_out);
