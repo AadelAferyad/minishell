@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:43:10 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/26 14:18:42 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/03 13:54:41 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,9 @@ int	handle_double_op(char *input, int *i, t_tokens **tokens)
 		operator = ft_substr(input, *i, 2);
 		if (!operator)
 			return (-1);
-		*tokens = create_token(*tokens, operator, Q_NONE);
+		*tokens = create_token(*tokens, operator);
 		if (!*tokens)
-		{
-			free_collector_one(operator);
-			free_collector_all();
-			return (-1);
-		}
+			return (free_collector_all(), -1);
 		free_collector_one(operator);
 		*i += 2;
 		return (1);
@@ -64,10 +60,9 @@ int	handle_single_op(char *input, int *i, t_tokens **tokens)
 		operator = ft_substr(input, *i, 1);
 		if (!operator)
 			return (-1);
-		*tokens = create_token(*tokens, operator, Q_NONE);
+		*tokens = create_token(*tokens, operator);
 		if (!*tokens)
 		{
-			free_collector_one(operator);
 			free_collector_all();
 			return (-1);
 		}
@@ -91,24 +86,27 @@ int	handle_single_op(char *input, int *i, t_tokens **tokens)
 
 int	handle_word(char *input, int *i, t_tokens **tokens)
 {
-	int		start;
-	char	*word;
+	t_segment	*segments;
 
-	start = *i;
-	while (input[*i] && !ft_isop(input[*i]) && !ft_isspace(input[*i]))
-		(*i)++;
-	word = extracting_word(input, start, *i);
-	if (!word)
-		return (-1);
-	*tokens = create_token(*tokens, word, Q_NONE);
-	if (!*tokens)
+	segments = NULL;
+	while (input[*i] && !ft_isspace(input[*i]) && !ft_isop(input[*i]))
 	{
-		free_collector_one(word);
-		free_collector_all();
-		return (-1);
+		if (input[*i] == '\'')
+		{
+			if (handle_quoted(input, i, &segments, Q_SINGLE) == -1)
+				return (-1);
+		}
+		else if (input[*i] == '"')
+		{
+			if (handle_quoted(input, i, &segments, Q_DOUBLE) == -1)
+				return (-1);
+		}
+		else
+			handle_unquoted(input, i, &segments);
 	}
-	free_collector_one(word);
-	return (1);
+	if (segments)
+		return (create_seg(tokens, segments));
+	return (0);
 }
 
 /**

@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 05:10:43 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/30 17:41:47 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/03 15:07:25 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ static int	count_args(t_tokens *current)
 	int	count;
 
 	count = 0;
-	while (current && !is_pipe(current->value))
+	while (current && current->type != PIPE)
 	{
-		if (check_redir_type(current->value) != -1)
+		if (is_redir(current->type))
 		{
-			if (!current->next || is_pipe(current->next->value))
-				return (count);
+			if (!current->next || !is_word(current->next->type))
+				return (-1);
 			current = current->next->next;
 		}
 		else
@@ -47,20 +47,20 @@ static int	count_args(t_tokens *current)
  */
 static int	init_cmd(t_tokens **cur, t_cmd *cmd, int count, int *i)
 {
-	int	redir_type;
-
-	while (*cur && !is_pipe((*cur)->value))
+	while (*cur && (*cur)->type != PIPE)
 	{
-		redir_type = check_redir_type((*cur)->value);
-		if (redir_type != -1)
+		if (is_redir((*cur)->type))
 		{
-			if (!(*cur)->next || is_pipe((*cur)->next->value))
+			if (!(*cur)->next || !is_word((*cur)->next->type))
 			{
-				syntax_error("newline");
+				if ((*cur)->next)
+					syntax_error((*cur)->next->value);
+				else
+					syntax_error("newline");
 				free_collector_one(cmd);
 				return (-1);
 			}
-			cmd->reds = add_redir(cmd->reds, redir_type, (*cur)->next->value);
+			cmd->reds = add_redir(cmd->reds, (*cur)->type, (*cur)->next->value);
 			*cur = (*cur)->next->next;
 		}
 		else
@@ -89,7 +89,10 @@ static t_cmd	*parse_one(t_tokens **current)
 	int			i;
 
 	cur = *current;
+	i = 0;
 	count = count_args(cur);
+	if (count == -1)
+		return (redir_error(cur), NULL);
 	cmd = ft_calloc(1, sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
@@ -99,7 +102,6 @@ static t_cmd	*parse_one(t_tokens **current)
 		free_collector_one(cmd);
 		return (NULL);
 	}
-	i = 0;
 	if (init_cmd(&cur, cmd, count, &i) == -1)
 		return (NULL);
 	cmd->args[i] = NULL;
@@ -112,7 +114,8 @@ static t_cmd	*parse_one(t_tokens **current)
  * 
  * @current: The current token in the input list
  * @last_pipe: Pointer to an int set to 1 if the last token was pipe
- * @pipeline: Address of a t_cmd pointer, serves as the head of the pipeline list
+ * @pipeline: Address of a t_cmd pointer,
+	serves as the head of the pipeline list
  *
  * Return: 0 on success, -1 on error
  */
@@ -131,7 +134,7 @@ static int	parse_loop(t_tokens *current, int *last_pipe, t_cmd **pipeline)
 		if (double_pipe(current) == -1)
 			return (free_collector_all(), -1);
 		*pipeline = add_cmd(*pipeline, cmd);
-		if (current && is_pipe(current->value))
+		if (current && current->type == PIPE)
 		{
 			current = current->next;
 			*last_pipe = 1;
@@ -156,7 +159,7 @@ t_cmd	*parse_tokens(t_tokens *tokens)
 
 	last_pipe = 0;
 	pipeline = NULL;
-	if (tokens && is_pipe(tokens->value))
+	if (tokens && tokens->type == PIPE)
 		return (syntax_error("|"), NULL);
 	if (parse_loop(tokens, &last_pipe, &pipeline) == -1)
 		return (NULL);

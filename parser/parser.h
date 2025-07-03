@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/30 17:41:46 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/03 15:09:04 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 
 /* Functions's libraries */
 
-# include <readline/readline.h>
 # include <readline/history.h>
+# include <readline/readline.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -36,76 +36,91 @@ typedef enum e_types
 	R_OUT,
 	R_APPEND,
 	R_HEREDOC,
-}					t_types;
+}						t_types;
 
 typedef enum e_qtypes
 {
 	Q_NONE,
 	Q_SINGLE,
 	Q_DOUBLE,
-}					t_qtypes;
+}						t_qtypes;
+
+typedef struct s_segment
+{
+	char				*value;
+	t_qtypes			q_type;
+	struct s_segment	*next;
+}						t_segment;
 
 typedef struct s_tokens
 {
-	char			*value;
-	t_types			type;
-	t_qtypes		quote_type;
-	struct s_tokens	*next;
-}					t_tokens;
+	char				*value;
+	t_types				type;
+	t_segment			*segments;
+	struct s_tokens		*next;
+}						t_tokens;
 
 typedef struct s_reds
 {
-	t_types			type;
-	char			*flag;
-	struct s_reds	*next;
-}					t_reds;
+	t_types				type;
+	char				*flag;
+	struct s_reds		*next;
+}						t_reds;
 
 typedef struct s_cmd
 {
-	char			**args;
-	t_reds			*reds;
-	struct s_cmd	*next;
-}					t_cmd;
+	char				**args;
+	t_reds				*reds;
+	struct s_cmd		*next;
+}						t_cmd;
 
 /* Lexer/Tokenizer Functions */
 
-t_tokens			*lexer(char *input);
-int					handle_double_op(char *input, int *i, t_tokens **tokens);
-int					handle_single_op(char *input, int *i, t_tokens **tokens);
-int					handle_single_qt(char *input, int *i, t_tokens **tokens);
-int					handle_double_qt(char *input, int *i, t_tokens **tokens);
-int					handle_word(char *input, int *i, t_tokens **tokens);
-int					handle_space(char *input, int *i);
+t_tokens				*lexer(char *input);
+int						handle_double_op(char *input, int *i,
+							t_tokens **tokens);
+int						handle_single_op(char *input, int *i,
+							t_tokens **tokens);
+int						handle_space(char *input, int *i);
+int						handle_word(char *input, int *i, t_tokens **tokens);
+int						handle_quoted(char *input, int *i, t_segment **segments,
+							int quote_type);
+void					handle_unquoted(char *input, int *i,
+							t_segment **segments);
 
 /* Parser Functions */
 
-t_cmd				*parse_tokens(t_tokens *tokens);
+t_cmd					*parse_tokens(t_tokens *tokens);
 
 /* Parser Checks */
 
-int					is_pipe(char *token);
-int					double_pipe(t_tokens *current);
-int					pipe_error(t_tokens *current);
-int					check_redir_type(char *token);
-void				syntax_error(char *token);
+int						double_pipe(t_tokens *current);
+int						pipe_error(t_tokens *current);
+void					syntax_error(char *token);
+void					redir_error(t_tokens *cur);
 
 /* Char Checks Functions*/
 
-int					ft_isdouble_op(char *input);
-int					ft_isop(int c);
-int					ft_isspace(int c);
+int						ft_isdouble_op(char *input);
+int						ft_isop(int c);
+int						ft_isspace(int c);
+int						is_redir(int type);
+int						is_word(int type);
 
 /* String Manupilation Functions */
 
-int					ft_strcmp(char *s1, char *s2);
-char				*extracting_word(char *input, int start, int end);
+int						ft_strcmp(char *s1, char *s2);
+char					*extracting_word(char *input, int start, int end);
+char					*extract_quoted(char *input, int *i, char quote);
+char					*safe_strjoin(char *s1, char *s2);
 
 /* Linked List Functions */
 
-t_tokens			*create_token(t_tokens *tokens, char *value,
-						t_qtypes qtype);
-void				free_list(t_tokens **head);
-t_cmd				*add_cmd(t_cmd *head, t_cmd *new_cmd);
-t_reds				*add_redir(t_reds *head, t_types type, char *flag);
+t_tokens				*create_token(t_tokens *tokens, char *value);
+int						create_seg(t_tokens **tokens, t_segment *segments);
+void					free_list(t_tokens **head);
+t_cmd					*add_cmd(t_cmd *head, t_cmd *new_cmd);
+t_reds					*add_redir(t_reds *head, t_types type, char *flag);
+void					add_seg(t_segment **head, t_segment *newseg);
 
 #endif

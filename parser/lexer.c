@@ -6,11 +6,17 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:03:54 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/26 14:18:37 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/02 17:06:17 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+
+static t_tokens	*cleanup(void)
+{
+	free_collector_all();
+	return (NULL);
+}
 
 static int	lexer_helper_op(char *input, int *i, t_tokens **tokens)
 {
@@ -26,23 +32,6 @@ static int	lexer_helper_op(char *input, int *i, t_tokens **tokens)
 		return (1);
 	if (flag == -1)
 		return (-1);
-	return (0);
-}
-
-static int	lexer_helper_qt(char *input, int *i, t_tokens **tokens)
-{
-	if (input[*i] == '\'')
-	{
-		if (handle_single_qt(input, i, tokens) == -1)
-			return (-1);
-		return (1);
-	}
-	if (input[*i] == '"')
-	{
-		if (handle_double_qt(input, i, tokens) == -1)
-			return (-1);
-		return (1);
-	}
 	return (0);
 }
 
@@ -72,12 +61,6 @@ static void	class_tokens(t_tokens *tokens)
 	}
 }
 
-static t_tokens	*cleanup(void)
-{
-	free_collector_all();
-	return (NULL);
-}
-
 /**
  * lexer - split the input string into tokens and classifying it
  *
@@ -103,12 +86,10 @@ t_tokens	*lexer(char *input)
 			return (cleanup());
 		if (handle_space(input, &i))
 			continue ;
-		flag = lexer_helper_qt(input, &i, &tokens);
+		flag = handle_word(input, &i, &tokens);
 		if (flag == 1)
 			continue ;
 		if (flag == -1)
-			return (cleanup());
-		if (handle_word(input, &i, &tokens) == -1)
 			return (cleanup());
 	}
 	class_tokens(tokens);

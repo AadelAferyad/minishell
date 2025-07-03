@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:01:37 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/30 17:33:53 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/02 17:35:37 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	free_list(t_tokens **head)
  * Return: pointer to the new list , NULL if failed
  */
 
-t_tokens	*create_token(t_tokens *tokens, char *value, t_qtypes qtype)
+t_tokens	*create_token(t_tokens *tokens, char *value)
 {
 	t_tokens	*token;
 	t_tokens	*temp;
@@ -51,7 +51,7 @@ t_tokens	*create_token(t_tokens *tokens, char *value, t_qtypes qtype)
 		free_collector_all();
 		return (NULL);
 	}
-	token->quote_type = qtype;
+	token->segments = NULL;
 	token->next = NULL;
 	if (!tokens)
 		return (token);

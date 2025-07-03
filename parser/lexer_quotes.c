@@ -6,57 +6,75 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 18:16:13 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/26 14:18:40 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/03 15:06:32 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static int	creating_token(char *word, t_tokens **tokens, t_qtypes qtype)
+char	*extract_quoted(char *input, int *i, char quote)
 {
-	*tokens = create_token(*tokens, word, qtype);
-	if (!*tokens)
-	{
-		free_collector_one(word);
-		free_collector_all();
-		return (-1);
-	}
-	return (0);
-}
-
-static int	handle_quote(char *input, int *i, t_tokens **tokens, char quote)
-{
-	int			start;
-	int			end;
-	char		*word;
-	t_qtypes	qtype;
+	int		start;
+	int		end;
+	char	*word;
 
 	start = *i + 1;
 	end = start;
 	while (input[end] && input[end] != quote)
 		end++;
 	if (input[end] != quote)
-		return (-1);
+	{
+		ft_putstr_fd("Parser error : Enclosed Quotes!\n", 2);
+		return (NULL);
+	}
 	word = extracting_word(input, start, end);
 	if (!word)
-		return (-1);
-	if (quote == '"')
-		qtype = Q_DOUBLE;
-	else
-		qtype = Q_SINGLE;
-	if (creating_token(word, tokens, qtype) == -1)
-		return (-1);
+		return (NULL);
 	*i = end + 1;
-	free_collector_one(word);
-	return (1);
+	return (word);
 }
 
-int	handle_double_qt(char *input, int *i, t_tokens **tokens)
+int	handle_quoted(char *input, int *i, t_segment **segments, int qtype)
 {
-	return (handle_quote(input, i, tokens, '"'));
+	char		*tmp;
+	t_segment	*new_seg;
+
+	tmp = extract_quoted(input, i, input[*i]);
+	if (!tmp)
+		return (-1);
+	new_seg = safe_malloc(sizeof(t_segment));
+	if (!new_seg)
+		return (free_collector_one(tmp), -1);
+	new_seg->value = tmp;
+	new_seg->q_type = qtype;
+	new_seg->next = NULL;
+	add_seg(segments, new_seg);
+	return (0);
 }
 
-int	handle_single_qt(char *input, int *i, t_tokens **tokens)
+void	handle_unquoted(char *input, int *i, t_segment **segments)
 {
-	return (handle_quote(input, i, tokens, '\''));
+	int			start;
+	int			end;
+	char		*tmp;
+	t_segment	*new_seg;
+
+	start = *i;
+	end = start;
+	while (input[end] && !ft_isspace(input[end]) && !ft_isop(input[end])
+		&& input[end] != '\'' && input[end] != '"')
+		end++;
+	if (end == start)
+		return ;
+	tmp = extracting_word(input, start, end);
+	if (!tmp)
+		return ;
+	new_seg = safe_malloc(sizeof(t_segment));
+	if (!new_seg)
+		return (free_collector_one(tmp));
+	new_seg->value = tmp;
+	new_seg->q_type = Q_NONE;
+	new_seg->next = NULL;
+	add_seg(segments, new_seg);
+	*i = end;
 }
