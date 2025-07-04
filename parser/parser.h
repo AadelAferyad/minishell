@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/03 15:09:04 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/04 16:11:48 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ typedef struct s_cmd
 
 /* Lexer/Tokenizer Functions */
 
-t_tokens				*lexer(char *input);
 int						handle_double_op(char *input, int *i,
 							t_tokens **tokens);
 int						handle_single_op(char *input, int *i,
@@ -90,7 +89,10 @@ void					handle_unquoted(char *input, int *i,
 
 /* Parser Functions */
 
+t_tokens				*lexer(char *input);
 t_cmd					*parse_tokens(t_tokens *tokens);
+char					*expand_vars(char *input);
+
 
 /* Parser Checks */
 
@@ -98,6 +100,7 @@ int						double_pipe(t_tokens *current);
 int						pipe_error(t_tokens *current);
 void					syntax_error(char *token);
 void					redir_error(t_tokens *cur);
+
 
 /* Char Checks Functions*/
 
@@ -118,7 +121,6 @@ char					*safe_strjoin(char *s1, char *s2);
 
 t_tokens				*create_token(t_tokens *tokens, char *value);
 int						create_seg(t_tokens **tokens, t_segment *segments);
-void					free_list(t_tokens **head);
 t_cmd					*add_cmd(t_cmd *head, t_cmd *new_cmd);
 t_reds					*add_redir(t_reds *head, t_types type, char *flag);
 void					add_seg(t_segment **head, t_segment *newseg);

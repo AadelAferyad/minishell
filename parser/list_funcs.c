@@ -6,26 +6,11 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:01:37 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/02 17:35:37 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/04 16:12:01 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-void	free_list(t_tokens **head)
-{
-	t_tokens	*temp;
-
-	while (*head)
-	{
-		temp = *head;
-		*head = temp->next;
-		if (temp->value)
-			free_collector_one(temp->value);
-		free_collector_one(temp);
-	}
-	*head = NULL;
-}
 
 /**
  * create_token - create list and append the new node at the back

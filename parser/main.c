@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:17:44 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/02 20:10:14 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:45:19 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,26 @@ void	print_cmds(t_cmd *cmds)
 	}
 }
 
-int	main(void)
+void	print_env(t_env *env)
+{
+	while (env)
+	{
+		printf("%s=%s\n", env->key, env->value);
+		env = env->next;
+	}
+}
+
+int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
 	t_tokens	*tokens;
 	t_cmd		*cmds;
 
+	(void)argc;
+	(void)argv;
+	g_structs.env = NULL;
+	create_env(envp);
+	// print_env(g_structs.env);
 	input = readline("marvel$> ");
 	if (!input)
 		return (free_collector_all(), -1);
