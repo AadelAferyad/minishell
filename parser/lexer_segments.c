@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 15:05:56 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/03 15:07:42 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/04 01:02:09 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,22 @@ void	add_seg(t_segment **head, t_segment *newseg)
 static char	*join_seg(t_segment *segments)
 {
 	t_segment	*current;
-	size_t		len;
-	size_t		slen;
+	size_t		len = 0;
+	char		*tmp;
 	char		*res;
 	char		*p;
 
-	len = 0;
 	current = segments;
 	while (current)
 	{
-		len += ft_strlen(current->value);
+		if (current->q_type == Q_SINGLE)
+			len += ft_strlen(current->value);
+		else
+		{
+			tmp = expand_vars(current->value);
+			len += ft_strlen(tmp);
+			free_collector_one(tmp);
+		}
 		current = current->next;
 	}
 	res = safe_malloc(len + 1);
@@ -49,9 +55,18 @@ static char	*join_seg(t_segment *segments)
 	current = segments;
 	while (current)
 	{
-		slen = ft_strlen(current->value);
-		ft_memcpy(p, current->value, slen);
-		p += slen;
+		if (current->q_type == Q_SINGLE)
+		{
+			ft_memcpy(p, current->value, ft_strlen(current->value));
+			p += ft_strlen(current->value);
+		}
+		else
+		{
+			tmp = expand_vars(current->value);
+			ft_memcpy(p, tmp, ft_strlen(tmp));
+			p += ft_strlen(tmp);
+			free_collector_one(tmp);
+		}
 		current = current->next;
 	}
 	*p = '\0';
