@@ -310,7 +310,12 @@ void	execution()
 
 	if (!g_structs.cmd)
 	{
-		g_structs.exit_status = 1;
+		g_structs.exit_status = 2;
+		return ;
+	}
+	if (!g_structs.cmd->args[0])
+	{
+		g_structs.exit_status = 0;
 		return ;
 	}
 	num_cmd = n_cmd(g_structs.cmd);
