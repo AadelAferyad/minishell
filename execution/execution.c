@@ -91,31 +91,46 @@ char	*generate_right_path(char *single_cmd)
 	{
 		ft_putstr_fd(single_cmd, 2);
 		ft_putstr_fd(": command not found\n", 2);
+		g_structs.exit_status = 127;
 	}
 	return (full_path);
 }
 
-char	*check_add_path(char *single_cmd)
+char	*file_exists(char *single_cmd)
 {
 	struct stat	st;
 
 	stat(single_cmd, &st);
 	if (access(single_cmd, X_OK) == 0 && !S_ISDIR(st.st_mode))
 	{
-		if (!(single_cmd[0] == '.' && single_cmd[1] == '/'))
-			return (NULL);
+		if (single_cmd[0] == '.') 
+		{
+			if (single_cmd[1] != '/')
+				return (NULL);
+		}
 		return (single_cmd);
 	}
 	if (S_ISDIR(st.st_mode) && ft_strchr(single_cmd, '/'))
 	{
 		ft_putstr_fd(single_cmd, 2);
 		ft_putstr_fd(": Is a directory\n", 2);
+		g_structs.exit_status = 126;
 		return (NULL);
 	}
-	if (ft_strchr(single_cmd, '/'))
+	return (generate_right_path(single_cmd));
+}
+
+char	*check_add_path(char *single_cmd)
+{
+	if (access(single_cmd, F_OK) == 0)
+	{
+		return (file_exists(single_cmd));
+	}
+	else if (ft_strchr(single_cmd, '/') && ft_strchr(single_cmd, '.'))
 	{
 		ft_putstr_fd(single_cmd, 2);
 		ft_putstr_fd(": No such a file or directory\n", 2);
+		g_structs.exit_status = 127;
 		return (NULL);
 	}
 	return (generate_right_path(single_cmd));
@@ -226,14 +241,22 @@ pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
 
 	pid = fork();
 	envp = create_env_arr();
+	path = NULL;
 	if (pid == 0)
 	{
 		execute_pipes(n_cmd, pipefd, i_cmd);
 		if (cmd->reds)
 			execute_redirections(cmd->reds);
-		path = check_add_path(cmd->args[0]);
+		if (cmd->args[0])
+			path = check_add_path(cmd->args[0]);
 		if (path)
+		{
 			execve(path, cmd->args, envp);
+			ft_putstr_fd("execve failed : ", 2);
+			ft_putstr_fd(strerror(errno), 2);
+			ft_putstr_fd("\n", 2);
+			g_structs.exit_status = 126;
+		}
 	}
 	return (pid);
 }
