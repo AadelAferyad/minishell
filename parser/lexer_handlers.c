@@ -36,7 +36,7 @@ int	handle_double_op(char *input, int *i, t_tokens **tokens)
 		if (!*tokens)
 		{
 			free_collector_one(operator);
-			free_collector_all();
+			free_collector_all(1);
 			return (-1);
 		}
 		free_collector_one(operator);
@@ -68,7 +68,7 @@ int	handle_single_op(char *input, int *i, t_tokens **tokens)
 		if (!*tokens)
 		{
 			free_collector_one(operator);
-			free_collector_all();
+			free_collector_all(1);
 			return (-1);
 		}
 		free_collector_one(operator);
@@ -104,7 +104,7 @@ int	handle_word(char *input, int *i, t_tokens **tokens)
 	if (!*tokens)
 	{
 		free_collector_one(word);
-		free_collector_all();
+		free_collector_all(1);
 		return (-1);
 	}
 	free_collector_one(word);

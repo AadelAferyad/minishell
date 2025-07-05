@@ -2,7 +2,7 @@ NAME := minishell
 
 CC := cc
 
-FLAGS := -Wextra -Werror -Wall -I include -fsanitize=address
+FLAGS := -Wextra -Werror -Wall -I include #-fsanitize=address
 
 src_libft := libft/ft_atoi.c libft/ft_bzero.c libft/ft_calloc.c libft/ft_isalnum.c libft/ft_isalpha.c libft/ft_isascii.c libft/ft_isdigit.c libft/ft_isprint.c libft/ft_itoa.c libft/ft_memchr.c\
 	 libft/ft_memcmp.c libft/ft_memcpy.c libft/ft_memmove.c libft/ft_memset.c libft/ft_putchar_fd.c libft/ft_putendl_fd.c libft/ft_putnbr_fd.c libft/ft_putstr_fd.c libft/ft_split.c\
@@ -13,10 +13,12 @@ src_collector := safe_allocation/memory_system.c
 
 src_builtins := execution/env.c execution/builtins/builtins.c execution/execution.c
 
+src_parser := parser/lexer.c parser/char_check.c parser/str_funcs.c parser/list_funcs.c parser/lexer_handlers.c parser/lexer_quotes.c parser/parser.c parser/parser_checks.c
+
 all: $(NAME)
 
-$(NAME): $(src_libft) $(src_collector) $(src_builtins)
-	$(CC) $(FLAGS) main.c -lreadline $(src_collector) $(src_libft) $(src_builtins) -o $(NAME)
+$(NAME): $(src_libft) $(src_collector) $(src_builtins) $(src_parser)
+	$(CC) $(FLAGS) main.c -lreadline $(src_collector) $(src_libft) $(src_parser) $(src_builtins) -o $(NAME)
 
 fclean:
 	rm -rf minishell

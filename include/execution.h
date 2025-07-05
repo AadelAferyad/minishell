@@ -39,6 +39,7 @@ typedef struct golobal_struct
 	t_env	*env;
 	t_cmd	*cmd;
 	t_pipe	*_pipe;
+	int	exit_status;
 }	t_global;
 
 extern t_global	g_structs;

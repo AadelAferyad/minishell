@@ -48,7 +48,7 @@ t_tokens	*create_token(t_tokens *tokens, char *value, t_qtypes qtype)
 	token->value = ft_strdup(value);
 	if (!token->value)
 	{
-		free_collector_all();
+		free_collector_all(1);
 		return (NULL);
 	}
 	token->quote_type = qtype;
@@ -96,7 +96,7 @@ t_reds	*add_redir(t_reds *head, t_types type, char *flag)
 	redir->flag = ft_strdup(flag);
 	if (!redir->flag)
 	{
-		free_collector_all();
+		free_collector_all(1);
 		return (NULL);
 	}
 	redir->next = NULL;

@@ -49,7 +49,7 @@ void	*safe_malloc(unsigned int size)
 	ptr = malloc(size);
 	if (!add_node(ptr) || !ptr)
 	{
-		free_collector_all();
+		free_collector_all(0);
 		strerror(errno);
 		exit(1);
 	}
@@ -89,18 +89,41 @@ void	free_collector_one(void *add)
  * free_collector_all - frees all the noode and data that holeds
  * */
 
-void	free_collector_all(void)
+void	free_collector_all(int	flaged)
 {
 	t_collector	*tmp;
+	t_collector	*prev_head;
 	t_collector	*head;
 
 	head = g_structs.collector;
+	prev_head = g_structs.collector;
 	while (head)
 	{
+		if (flaged && head->flag)
+		{
+			if (prev_head == g_structs.collector)
+				g_structs.collector = head;
+			head = head->next;
+			continue ;
+		}
 		tmp = head->next;
 		free(head->data);
 		free(head);
 		head = tmp;
 	}
-	g_structs.collector = NULL;
+	g_structs.cmd = NULL;
+	g_structs._pipe = NULL;
+}
+
+void	flag_env(void *add)
+{
+	t_collector	*tmp;
+
+	tmp = g_structs.collector;
+	while (tmp)
+	{
+		if (tmp->data == add)
+			tmp->flag = 1;
+		tmp = tmp->next;
+	}
 }

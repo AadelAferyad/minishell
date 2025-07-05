@@ -74,7 +74,7 @@ static void	class_tokens(t_tokens *tokens)
 
 static t_tokens	*cleanup(void)
 {
-	free_collector_all();
+	free_collector_all(1);
 	return (NULL);
 }
 

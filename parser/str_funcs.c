@@ -35,7 +35,7 @@ char	*extracting_word(char *input, int start, int end)
 	word = ft_substr(input, start, end - start);
 	if (!word)
 	{
-		free_collector_all();
+		free_collector_all(1);
 		return (NULL);
 	}
 	return (word);

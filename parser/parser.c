@@ -124,12 +124,12 @@ static int	parse_loop(t_tokens *current, int *last_pipe, t_cmd **pipeline)
 	while (current)
 	{
 		if (pipe_error(current) == -1)
-			return (free_collector_all(), -1);
+			return (free_collector_all(1), -1);
 		cmd = parse_one(&current);
 		if (!cmd)
-			return (free_collector_all(), -1);
+			return (free_collector_all(1), -1);
 		if (double_pipe(current) == -1)
-			return (free_collector_all(), -1);
+			return (free_collector_all(1), -1);
 		*pipeline = add_cmd(*pipeline, cmd);
 		if (current && is_pipe(current->value))
 		{
@@ -161,6 +161,6 @@ t_cmd	*parse_tokens(t_tokens *tokens)
 	if (parse_loop(tokens, &last_pipe, &pipeline) == -1)
 		return (NULL);
 	if (last_pipe)
-		return (syntax_error("|"), free_collector_all(), NULL);
+		return (syntax_error("|"), free_collector_all(1), NULL);
 	return (pipeline);
 }

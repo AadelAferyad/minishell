@@ -121,7 +121,7 @@ char	*check_add_path(char *single_cmd)
 	return (generate_right_path(single_cmd));
 }
 
-void	execute(char *full_path, char **args)
+void	execute(char *full_path, char **args, int len_cmd)
 {
 	pid_t	pid;
 	int	wstatus;
@@ -137,7 +137,7 @@ void	execute(char *full_path, char **args)
 		ft_putstr_fd(strerror(errno), 2);
 		exit(12);
 	}
-	else
+	else if (len_cmd == 1)
 		waitpid(pid, &wstatus, 0);
 }
 
@@ -235,35 +235,119 @@ void	pipe_lines(t_cmd *cmd, int std_out)
 	}
 }
 
-void	execution()
+int	n_cmd(t_cmd *cmd)
 {
-	t_cmd	*cmd;
-	char	*single_cmd;
-	char	*full_path;
-	int	std_out;
-	int	std_in;
+	int	i;
 
-	cmd = g_structs.cmd;
-	std_out = dup(STDOUT_FILENO);
-	std_in = dup(STDIN_FILENO);
-	if (cmd->next)
-	{
-		g_structs._pipe = safe_malloc(sizeof(t_pipe));
-		g_structs._pipe->prev_pipe = -1;
-	}
+	i = 0;
 	while (cmd)
 	{
-		pipe_lines(cmd, std_out);
-		if (cmd->reds)
-			execute_redirections(cmd->reds);
-		single_cmd = cmd->args[0];
-		full_path = check_add_path(single_cmd);
-		if (full_path)
-			execute(full_path, cmd->args);
+		i++;
 		cmd = cmd->next;
 	}
-	dup2(std_in, STDIN_FILENO);
-	dup2(std_out, STDOUT_FILENO);
-	close(std_out);
-	close(std_in);
+	return (i);
+}
+
+void	execute_pipes(int n_cmd, int **pipefd, int i_cmd)
+{
+	int	i;
+
+	i = 0;
+	if (i_cmd > 0)
+	{
+		dup2(pipefd[i_cmd - 1][0], STDIN_FILENO);
+	}
+	if (i_cmd < n_cmd - 1)
+	{
+		dup2(pipefd[i_cmd][1], STDOUT_FILENO);
+	}
+	while (i < n_cmd - 1)
+	{
+		close(pipefd[i][0]);
+		close(pipefd[i][1]);
+		i++;
+	}
+}
+
+pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
+{
+	pid_t	pid;
+	char	**envp;
+	char	*path;
+
+	pid = fork();
+	envp = create_env_arr();
+	if (pid == 0)
+	{
+		execute_pipes(n_cmd, pipefd, i_cmd);
+		if (cmd->reds)
+			execute_redirections(cmd->reds);
+		path = check_add_path(cmd->args[0]);
+		if (path)
+			execve(path, cmd->args, envp);
+	}
+	return (pid);
+}
+
+void	execute_multiple_command(int num_cmd)
+{
+	int	**pipefd;
+	pid_t	*children;
+	t_cmd	*cmd;
+	int	i;
+	int	wstatus;
+
+	cmd = g_structs.cmd;
+	pipefd = safe_malloc(sizeof(int *) * (num_cmd - 1));
+	children = safe_malloc(sizeof(pid_t) * num_cmd);
+	i = 0;
+	while (i < num_cmd - 1)
+	{
+		pipefd[i] = safe_malloc(sizeof(int) * 2);
+		pipe(pipefd[i]);
+		i++;
+	}
+	i = 0;
+	while (i < num_cmd && cmd)
+	{
+		children[i] = execute_one_command(cmd, num_cmd, pipefd, i);
+		cmd = cmd->next;
+		i++;
+	}
+	i = 0;
+	while (i < num_cmd - 1)
+	{
+		close(pipefd[i][0]);
+		close(pipefd[i][1]);
+		i++;
+	}
+	i = 0;
+	while (i < num_cmd)
+	{
+		waitpid(children[i], &wstatus, 0);
+		i++;
+	}
+}
+
+
+void	execution()
+{
+	int	num_cmd;
+	int	wstatus;
+	pid_t	pid;
+
+	if (!g_structs.cmd)
+	{
+		g_structs.exit_status = 1;
+		return ;
+	}
+	num_cmd = n_cmd(g_structs.cmd);
+	if (num_cmd == 1)
+	{
+		pid = execute_one_command(g_structs.cmd, 0, NULL, 0);
+		waitpid(pid, &wstatus, 0);
+		g_structs.exit_status = wstatus;
+	}
+	else
+		execute_multiple_command(num_cmd);
 }

@@ -26,6 +26,9 @@ static void	trim(char *s)
 	node->key = ft_substr(s, 0, i);
 	node->value = ft_substr(s, i + 1, ft_strlen(&s[i]));
 	node->next = NULL;
+	flag_env(node);
+	flag_env(node->key);
+	flag_env(node->value);
 	if (!tmp)
 	{
 		g_structs.env = node;

@@ -18,7 +18,7 @@ static int	creating_token(char *word, t_tokens **tokens, t_qtypes qtype)
 	if (!*tokens)
 	{
 		free_collector_one(word);
-		free_collector_all();
+		free_collector_all(1);
 		return (-1);
 	}
 	return (0);
