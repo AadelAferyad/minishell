@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 15:05:56 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/04 19:16:31 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/05 21:18:07 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static void	copy_segs(t_segment *segments, char *buff)
 	*p = '\0';
 }
 
-static char	*join_segs(t_segment *segments)
+char	*join_segs(t_segment *segments)
 {
 	size_t	len;
 	char	*buff;

@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/05 16:34:46 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/05 23:15:25 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,6 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-
-/* Parser Structures */
-
 
 /* Parser Functions */
 
@@ -54,6 +51,8 @@ size_t					handle_env_var(char *input, size_t i, char **output);
 char					*get_env_value(char *varname);
 void					append_to_output(char **dst, char *src);
 size_t					key_end(char *input, size_t i);
+char					**field_splitting(const char *value);
+char					*join_segs(t_segment *segments);
 
 /* Parser Checks */
 

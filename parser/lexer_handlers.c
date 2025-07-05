@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:43:10 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/03 13:54:41 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/05 23:22:51 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	handle_double_op(char *input, int *i, t_tokens **tokens)
 
 	if (input[*i + 1] && ft_isdouble_op(input + *i))
 	{
-		operator = ft_substr(input, *i, 2);
+		operator= ft_substr(input, *i, 2);
 		if (!operator)
 			return (-1);
 		*tokens = create_token(*tokens, operator);
@@ -57,7 +57,7 @@ int	handle_single_op(char *input, int *i, t_tokens **tokens)
 
 	if (ft_isop(input[*i]))
 	{
-		operator = ft_substr(input, *i, 1);
+		operator= ft_substr(input, *i, 1);
 		if (!operator)
 			return (-1);
 		*tokens = create_token(*tokens, operator);
@@ -69,6 +69,54 @@ int	handle_single_op(char *input, int *i, t_tokens **tokens)
 		free_collector_one(operator);
 		(*i)++;
 		return (1);
+	}
+	return (0);
+}
+
+void	free_fields(char **fields)
+{
+	int	i;
+
+	if (!fields)
+		return ;
+	i = 0;
+	while (fields[i])
+	{
+		free_collector_one(fields[i]);
+		i++;
+	}
+	free_collector_one(fields);
+}
+
+int	handle_segs(t_tokens **tokens, t_segment *segments)
+{
+	char	*expanded;
+	char	**field;
+	int		i;
+
+	if (segments == NULL)
+		return (-1);
+	if (segments->next == NULL &&
+		(segments->q_type == Q_SINGLE || segments->q_type == Q_DOUBLE))
+		return (create_seg(tokens, segments));
+	else
+	{
+		expanded = join_segs(segments);
+		field = field_splitting(expanded);
+		i = 0;
+		while (field && field[i])
+		{
+			*tokens = create_token(*tokens, field[i]);
+			if (!tokens)
+			{
+				free_collector_one(expanded);
+				free_fields(field);
+				return (-1);
+			}
+			i++;
+		}
+		free_collector_one(expanded);
+		free_fields(field);
 	}
 	return (0);
 }
@@ -105,7 +153,7 @@ int	handle_word(char *input, int *i, t_tokens **tokens)
 			handle_unquoted(input, i, &segments);
 	}
 	if (segments)
-		return (create_seg(tokens, segments));
+		return (handle_segs(tokens, segments));
 	return (0);
 }
 
