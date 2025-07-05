@@ -315,6 +315,7 @@ void	execution()
 	}
 	if (!g_structs.cmd->args[0])
 	{
+		//To-Do koyo add redirection to create file in append mode and redirect 
 		g_structs.exit_status = 0;
 		return ;
 	}
