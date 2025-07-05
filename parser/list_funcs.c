@@ -6,26 +6,11 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:01:37 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/30 17:33:53 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/04 16:12:01 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-void	free_list(t_tokens **head)
-{
-	t_tokens	*temp;
-
-	while (*head)
-	{
-		temp = *head;
-		*head = temp->next;
-		if (temp->value)
-			free_collector_one(temp->value);
-		free_collector_one(temp);
-	}
-	*head = NULL;
-}
 
 /**
  * create_token - create list and append the new node at the back
@@ -37,7 +22,7 @@ void	free_list(t_tokens **head)
  * Return: pointer to the new list , NULL if failed
  */
 
-t_tokens	*create_token(t_tokens *tokens, char *value, t_qtypes qtype)
+t_tokens	*create_token(t_tokens *tokens, char *value)
 {
 	t_tokens	*token;
 	t_tokens	*temp;
@@ -51,7 +36,7 @@ t_tokens	*create_token(t_tokens *tokens, char *value, t_qtypes qtype)
 		free_collector_all(1);
 		return (NULL);
 	}
-	token->quote_type = qtype;
+	token->segments = NULL;
 	token->next = NULL;
 	if (!tokens)
 		return (token);

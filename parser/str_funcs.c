@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:01:42 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/26 14:22:32 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/01 17:11:39 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,12 @@ char	*extracting_word(char *input, int start, int end)
 		return (NULL);
 	}
 	return (word);
+}
+
+char	*safe_strjoin(char *s1, char *s2)
+{
+	if (s1)
+		return (ft_strjoin(s1, s2));
+	else
+		return (ft_strdup(s2));
 }

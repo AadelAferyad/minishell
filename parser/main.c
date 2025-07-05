@@ -6,13 +6,27 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:17:44 by imellali          #+#    #+#             */
-/*   Updated: 2025/06/30 17:10:27 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:45:19 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
 t_global	g_structs;
+
+void	print_segments(t_segment *segments)
+{
+	int	i;
+
+	i = 0;
+	while (segments)
+	{
+		printf("    [segment]: value=%s, quote_type=%d\n\n",
+			segments->value, segments->q_type);
+		segments = segments->next;
+		i++;
+	}
+}
 
 static void	print_tokens(t_tokens *tokens)
 {
@@ -21,8 +35,9 @@ static void	print_tokens(t_tokens *tokens)
 	i = 0;
 	while (tokens)
 	{
-		printf("VALUE =  [%s]   TYPE = %u   QUOTE_TYPE = %u\n", tokens->value,
-			tokens->type, tokens->quote_type);
+		printf("VALUE =  [%s]   TYPE = %u\n", tokens->value,
+			tokens->type);
+		print_segments(tokens->segments);
 		tokens = tokens->next;
 		i++;
 	}
@@ -62,34 +77,40 @@ void	print_cmds(t_cmd *cmds)
 		else
 			printf("  [no redirections]\n");
 		cmds = cmds->next;
+		printf("\n");
 	}
 }
 
-int	main(void)
+void	print_env(t_env *env)
+{
+	while (env)
+	{
+		printf("%s=%s\n", env->key, env->value);
+		env = env->next;
+	}
+}
+
+int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
 	t_tokens	*tokens;
 	t_cmd		*cmds;
 
+	(void)argc;
+	(void)argv;
+	g_structs.env = NULL;
+	create_env(envp);
+	// print_env(g_structs.env);
 	input = readline("marvel$> ");
 	if (!input)
-	{
-		free_collector_all();
-		return (-1);
-	}
+		return (free_collector_all(), -1);
 	tokens = lexer(input);
 	if (!tokens)
-	{
-		free_collector_all();
-		return (-1);
-	}
+		return (free_collector_all(), -1);
 	print_tokens(tokens);
 	cmds = parse_tokens(tokens);
 	if (!cmds)
-	{
-		free_collector_all();
-		return (-1);
-	}
+		return (free_collector_all(), -1);
 	print_cmds(cmds);
 	free_collector_all();
 	return (0);

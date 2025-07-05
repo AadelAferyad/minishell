@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 12:14:38 by aaferyad          #+#    #+#             */
 /*   Updated: 2025/06/26 11:57:22 by aaferyad         ###   ########.fr       */
@@ -41,6 +41,8 @@ typedef struct golobal_struct
 	t_pipe	*_pipe;
 	int	exit_status;
 }	t_global;
+
+void	create_env(char **env);
 
 extern t_global	g_structs;
 
