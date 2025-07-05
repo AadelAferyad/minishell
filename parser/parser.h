@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/04 16:11:48 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/05 02:17:11 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,12 @@ typedef struct s_cmd
 	struct s_cmd		*next;
 }						t_cmd;
 
+/* Parser Functions */
+
+t_tokens				*lexer(char *input);
+t_cmd					*parse_tokens(t_tokens *tokens);
+char					*expand_vars(char *input);
+
 /* Lexer/Tokenizer Functions */
 
 int						handle_double_op(char *input, int *i,
@@ -87,12 +93,12 @@ int						handle_quoted(char *input, int *i, t_segment **segments,
 void					handle_unquoted(char *input, int *i,
 							t_segment **segments);
 
-/* Parser Functions */
+/* Expansion Functions */
 
-t_tokens				*lexer(char *input);
-t_cmd					*parse_tokens(t_tokens *tokens);
-char					*expand_vars(char *input);
-
+size_t					handle_env_var(char *input, size_t i, char **output);
+char					*get_env_value(char *varname);
+void					append_to_output(char **dst, char *src);
+size_t					key_end(char *input, size_t i);
 
 /* Parser Checks */
 
@@ -100,7 +106,6 @@ int						double_pipe(t_tokens *current);
 int						pipe_error(t_tokens *current);
 void					syntax_error(char *token);
 void					redir_error(t_tokens *cur);
-
 
 /* Char Checks Functions*/
 

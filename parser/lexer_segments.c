@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 15:05:56 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/04 01:02:09 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/04 19:16:31 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,30 +29,37 @@ void	add_seg(t_segment **head, t_segment *newseg)
 	cur->next = newseg;
 }
 
-static char	*join_seg(t_segment *segments)
+static size_t	segs_len(t_segment *segments)
 {
 	t_segment	*current;
-	size_t		len = 0;
-	char		*tmp;
-	char		*res;
-	char		*p;
+	char		*temp;
+	size_t		len;
 
 	current = segments;
+	len = 0;
 	while (current)
 	{
 		if (current->q_type == Q_SINGLE)
 			len += ft_strlen(current->value);
 		else
 		{
-			tmp = expand_vars(current->value);
-			len += ft_strlen(tmp);
-			free_collector_one(tmp);
+			temp = expand_vars(current->value);
+			len += ft_strlen(temp);
+			free_collector_one(temp);
 		}
 		current = current->next;
 	}
-	res = safe_malloc(len + 1);
-	p = res;
+	return (len);
+}
+
+static void	copy_segs(t_segment *segments, char *buff)
+{
+	t_segment	*current;
+	char		*temp;
+	char		*p;
+
 	current = segments;
+	p = buff;
 	while (current)
 	{
 		if (current->q_type == Q_SINGLE)
@@ -62,15 +69,25 @@ static char	*join_seg(t_segment *segments)
 		}
 		else
 		{
-			tmp = expand_vars(current->value);
-			ft_memcpy(p, tmp, ft_strlen(tmp));
-			p += ft_strlen(tmp);
-			free_collector_one(tmp);
+			temp = expand_vars(current->value);
+			ft_memcpy(p, temp, ft_strlen(temp));
+			p += ft_strlen(temp);
+			free_collector_one(temp);
 		}
 		current = current->next;
 	}
 	*p = '\0';
-	return (res);
+}
+
+static char	*join_segs(t_segment *segments)
+{
+	size_t	len;
+	char	*buff;
+
+	len = segs_len(segments);
+	buff = safe_malloc(len + 1);
+	copy_segs(segments, buff);
+	return (buff);
 }
 
 int	create_seg(t_tokens **tokens, t_segment *segments)
@@ -79,7 +96,7 @@ int	create_seg(t_tokens **tokens, t_segment *segments)
 	t_tokens	*cur;
 	char		*joined;
 
-	joined = join_seg(segments);
+	joined = join_segs(segments);
 	if (!joined)
 		return (-1);
 	new_token = safe_malloc(sizeof(t_tokens));
