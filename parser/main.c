@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:17:44 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/04 15:45:19 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/05 16:41:04 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	print_env(t_env *env)
 	}
 }
 
-int	main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv)
 {
 	char		*input;
 	t_tokens	*tokens;
@@ -99,19 +99,18 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	g_structs.env = NULL;
-	create_env(envp);
 	// print_env(g_structs.env);
 	input = readline("marvel$> ");
 	if (!input)
-		return (free_collector_all(), -1);
+		return (free_collector_all(1), -1);
 	tokens = lexer(input);
 	if (!tokens)
-		return (free_collector_all(), -1);
+		return (free_collector_all(1), -1);
 	print_tokens(tokens);
 	cmds = parse_tokens(tokens);
 	if (!cmds)
-		return (free_collector_all(), -1);
+		return (free_collector_all(1), -1);
 	print_cmds(cmds);
-	free_collector_all();
+	free_collector_all(1);
 	return (0);
 }

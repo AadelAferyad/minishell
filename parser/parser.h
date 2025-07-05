@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/05 02:17:11 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/05 16:34:46 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@
 /* Own Headers */
 
 # include "../libft/libft.h"
-/*# include <execution.h>*/
-# include <collector.h>
+# include <minishell.h>
 
 /* Functions's libraries */
 
@@ -29,51 +28,6 @@
 
 /* Parser Structures */
 
-typedef enum e_types
-{
-	WORD,
-	PIPE,
-	R_IN,
-	R_OUT,
-	R_APPEND,
-	R_HEREDOC,
-}						t_types;
-
-typedef enum e_qtypes
-{
-	Q_NONE,
-	Q_SINGLE,
-	Q_DOUBLE,
-}						t_qtypes;
-
-typedef struct s_segment
-{
-	char				*value;
-	t_qtypes			q_type;
-	struct s_segment	*next;
-}						t_segment;
-
-typedef struct s_tokens
-{
-	char				*value;
-	t_types				type;
-	t_segment			*segments;
-	struct s_tokens		*next;
-}						t_tokens;
-
-typedef struct s_reds
-{
-	t_types				type;
-	char				*flag;
-	struct s_reds		*next;
-}						t_reds;
-
-typedef struct s_cmd
-{
-	char				**args;
-	t_reds				*reds;
-	struct s_cmd		*next;
-}						t_cmd;
 
 /* Parser Functions */
 

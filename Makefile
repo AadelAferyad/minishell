@@ -13,7 +13,7 @@ src_collector := safe_allocation/memory_system.c
 
 src_builtins := execution/env.c execution/builtins/builtins.c execution/execution.c
 
-src_parser := parser/lexer.c parser/char_check.c parser/str_funcs.c parser/list_funcs.c parser/lexer_handlers.c parser/lexer_quotes.c parser/parser.c parser/parser_checks.c
+src_parser := parser/lexer.c parser/char_check.c parser/str_funcs.c parser/list_funcs.c parser/lexer_handlers.c parser/lexer_quotes.c parser/parser.c parser/parser_checks.c parser/expand.c parser/lexer_segments.c parser/env_funcs.c
 
 all: $(NAME)
 

@@ -6,11 +6,11 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 11:45:21 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/06/26 15:25:04 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/05 16:31:46 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <execution.h>
+#include <minishell.h>
 
 static void	trim(char *s)
 {

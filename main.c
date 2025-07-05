@@ -6,12 +6,12 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 12:15:46 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/06/26 15:23:42 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/05 16:28:58 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <execution.h>
 #include <readline/readline.h>
+#include <minishell.h>
 
 t_global	g_structs;
 
@@ -22,7 +22,6 @@ int	main(int ac, char **av, char **env)
 	g_structs.collector = NULL;
 	g_structs.env = NULL;
 	g_structs.cmd = NULL;
-	g_structs._pipe = NULL;
 
 	(void) ac;
 	(void) av;

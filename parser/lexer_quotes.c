@@ -14,22 +14,6 @@
 
 char	*extract_quoted(char *input, int *i, char quote)
 {
-	*tokens = create_token(*tokens, word, qtype);
-	if (!*tokens)
-	{
-		free_collector_one(word);
-		free_collector_all(1);
-		return (-1);
-	}
-	return (0);
-}
-
-static int	handle_quote(char *input, int *i, t_tokens **tokens, char quote)
-{
-	int			start;
-	int			end;
-	char		*word;
-	t_qtypes	qtype;
 	int		start;
 	int		end;
 	char	*word;

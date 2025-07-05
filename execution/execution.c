@@ -6,11 +6,11 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 14:16:21 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/06/27 14:39:51 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/05 16:28:11 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <execution.h>
+# include <minishell.h>
 
 char	*extract_path()
 {
@@ -121,26 +121,6 @@ char	*check_add_path(char *single_cmd)
 	return (generate_right_path(single_cmd));
 }
 
-void	execute(char *full_path, char **args, int len_cmd)
-{
-	pid_t	pid;
-	int	wstatus;
-	char	**envp;
-
-	pid = fork();
-	if (pid < 0)
-		exit(1);
-	envp = create_env_arr();
-	if (pid == 0)
-	{
-		execve(full_path, args, envp);
-		ft_putstr_fd(strerror(errno), 2);
-		exit(12);
-	}
-	else if (len_cmd == 1)
-		waitpid(pid, &wstatus, 0);
-}
-
 void	redirections_out(char *file)
 {
 	int	fd;
@@ -202,37 +182,6 @@ int	execute_redirections(t_reds *redirections)
 		redirections = redirections->next;
 	}
 	return (0);
-}
-
-void	pipe_lines(t_cmd *cmd, int std_out)
-{
-	t_pipe	*ptr;
-
-	ptr = g_structs._pipe; 
-	if (!ptr)
-		return ;
-	if (ptr->prev_pipe != -1)
-	{
-		dup2(ptr->prev_pipe, STDIN_FILENO);
-		close(ptr->prev_pipe);
-		ptr->prev_pipe = -1;
-	}
-	if (cmd->next)
-	{
-		pipe(ptr->pipefd);
-		dup2(ptr->pipefd[1], STDOUT_FILENO);
-		close(ptr->pipefd[1]);
-		ptr->prev_pipe = ptr->pipefd[0];
-	}
-	else
-	{
-		dup2(std_out, STDOUT_FILENO);
-		if (ptr->prev_pipe != -1)
-		{
-			close(ptr->prev_pipe);
-			ptr->prev_pipe = -1;
-		}
-	}
 }
 
 int	n_cmd(t_cmd *cmd)

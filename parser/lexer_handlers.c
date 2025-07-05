@@ -34,12 +34,7 @@ int	handle_double_op(char *input, int *i, t_tokens **tokens)
 			return (-1);
 		*tokens = create_token(*tokens, operator);
 		if (!*tokens)
-		{
-			free_collector_one(operator);
-			free_collector_all(1);
-			return (-1);
-		}
-			return (free_collector_all(), -1);
+			return (free_collector_all(1), -1);
 		free_collector_one(operator);
 		*i += 2;
 		return (1);
@@ -68,9 +63,7 @@ int	handle_single_op(char *input, int *i, t_tokens **tokens)
 		*tokens = create_token(*tokens, operator);
 		if (!*tokens)
 		{
-			free_collector_one(operator);
 			free_collector_all(1);
-			free_collector_all();
 			return (-1);
 		}
 		free_collector_one(operator);
@@ -98,9 +91,6 @@ int	handle_word(char *input, int *i, t_tokens **tokens)
 	segments = NULL;
 	while (input[*i] && !ft_isspace(input[*i]) && !ft_isop(input[*i]))
 	{
-		free_collector_one(word);
-		free_collector_all(1);
-		return (-1);
 		if (input[*i] == '\'')
 		{
 			if (handle_quoted(input, i, &segments, Q_SINGLE) == -1)

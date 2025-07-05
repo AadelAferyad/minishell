@@ -101,7 +101,7 @@ int	create_seg(t_tokens **tokens, t_segment *segments)
 		return (-1);
 	new_token = safe_malloc(sizeof(t_tokens));
 	if (!new_token)
-		return (free_collector_all(), -1);
+		return (free_collector_all(1), -1);
 	new_token->value = joined;
 	new_token->type = WORD;
 	new_token->segments = segments;

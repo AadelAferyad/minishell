@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 02:10:16 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/05 02:16:02 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/05 16:08:02 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,42 +24,6 @@ char	*get_env_value(char *varname)
 		env = env->next;
 	}
 	return (NULL);
-}
-
-static void	trim(char *s)
-{
-	int		i;
-	t_env	*node;
-	t_env	*tmp;
-
-	i = 0;
-	tmp = g_structs.env;
-	while (s[i] != '=')
-		i++;
-	node = safe_malloc(sizeof(t_env));
-	node->key = ft_substr(s, 0, i);
-	node->value = ft_substr(s, i + 1, ft_strlen(&s[i]));
-	node->next = NULL;
-	if (!tmp)
-	{
-		g_structs.env = node;
-		return ;
-	}
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = node;
-}
-
-void	create_env(char **env)
-{
-	int	i;
-
-	i = 0;
-	while (env[i])
-	{
-		trim(env[i]);
-		i++;
-	}
 }
 
 static char	*key_varname(char *input, size_t start, size_t end)

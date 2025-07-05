@@ -6,11 +6,11 @@
 /*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 11:35:02 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/06/25 16:12:05 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/05 16:30:53 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <execution.h>
+#include <minishell.h>
 
 t_collector	*create_node()
 {
@@ -112,7 +112,6 @@ void	free_collector_all(int	flaged)
 		head = tmp;
 	}
 	g_structs.cmd = NULL;
-	g_structs._pipe = NULL;
 }
 
 void	flag_env(void *add)

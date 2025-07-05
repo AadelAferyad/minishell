@@ -6,11 +6,11 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 11:46:07 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/06/26 15:33:50 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/05 16:32:13 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <execution.h>
+#include <minishell.h>
 
 void	builtin_env(int fd)
 {
