@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 12:15:46 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/05 16:28:58 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/05 23:29:19 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,13 @@ int	main(int ac, char **av, char **env)
 	create_env(env);
 	while ((buff = readline("lgzara: ")))
 	{
+		add_history(buff);
 		if (ft_strncmp("exit", buff, 5) == 0)
 			break ;
 		lex = lexer(buff);
 		if (!lex)
 			continue ;
-		g_structs.cmd = parse_tokens(lex);
+		g_structs.cmd = parse_tokens(lex);	
 		execution();
 		free_collector_all(1);
 	}
