@@ -30,6 +30,12 @@ typedef enum e_qtypes
 	Q_DOUBLE,
 }						t_qtypes;
 
+typedef enum e_cmd_type
+{
+	BUILTINS,
+	OUTSIDER,
+}						t_cmd_type;
+
 typedef struct s_segment
 {
 	char				*value;
@@ -55,6 +61,7 @@ typedef struct s_reds
 typedef struct s_cmd
 {
 	char				**args;
+	t_cmd_type			type;
 	t_reds				*reds;
 	struct s_cmd		*next;
 }						t_cmd;

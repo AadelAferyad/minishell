@@ -126,7 +126,7 @@ char	*check_add_path(char *single_cmd)
 	{
 		return (file_exists(single_cmd));
 	}
-	else if (ft_strchr(single_cmd, '/') && ft_strchr(single_cmd, '.'))
+	else if (ft_strchr(single_cmd, '/'))
 	{
 		ft_putstr_fd(single_cmd, 2);
 		ft_putstr_fd(": No such a file or directory\n", 2);
@@ -136,7 +136,7 @@ char	*check_add_path(char *single_cmd)
 	return (generate_right_path(single_cmd));
 }
 
-void	redirections_out(char *file)
+void	redirections_out(char *file, int flag)
 {
 	int	fd;
 
@@ -146,11 +146,16 @@ void	redirections_out(char *file)
 		ft_putstr_fd(strerror(errno), 2);
 		return ;
 	}
+	if (!flag)
+	{
+		close(fd);
+		return ;
+	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 }
 
-void	redirections_append(char *file)
+void	redirections_append(char *file, int flag)
 {
 	int	fd;
 
@@ -160,38 +165,54 @@ void	redirections_append(char *file)
 		ft_putstr_fd(strerror(errno), 2);
 		return ;
 	}
+	if (!flag)
+	{
+		close(fd);
+		return ;
+	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 }
-int	redirections_in(char *file)
+int	redirections_in(char *file, int flag)
 {
 	int	fd;
 
 	if (access(file, F_OK) != 0)
 	{
+
+		ft_putstr_fd(file, 2);
 		ft_putstr_fd(": No such a file or directory\n", 2);
+		g_structs.exit_status = 1;
 		return (1);
 	}
 	fd = open(file, O_APPEND);
 	if (fd == -1)
-		// error !
-		return (1);
+	{
+		ft_putstr_fd("Could not open a fail\n", 2);
+		free_collector_all(0);
+		exit(1);
+	}
+	if (!flag)
+	{
+		close(fd);
+		return (0);
+	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 	return (0);
 }
 
-int	execute_redirections(t_reds *redirections)
+int	execute_redirections(t_reds *redirections, int just_create)
 {
 	while (redirections)
 	{
 		if (redirections->type == R_OUT)
-			redirections_out(redirections->flag);
+			redirections_out(redirections->flag, just_create);
 		if (redirections->type == R_APPEND)
-			redirections_append(redirections->flag);
+			redirections_append(redirections->flag, just_create);
 		else if (redirections->type == R_IN)
 		{
-			if (redirections_in(redirections->flag))
+			if (redirections_in(redirections->flag, just_create))
 				return (1);
 		}
 		redirections = redirections->next;
@@ -233,6 +254,68 @@ void	execute_pipes(int n_cmd, int **pipefd, int i_cmd)
 	}
 }
 
+char	**builtins_array()
+{
+	char	**arr;
+
+	arr = safe_malloc(sizeof(char *) * 8)
+	arr[0] = ft_strdup("echo");
+	arr[1] = ft_strdup("cd");
+	arr[2] = ft_strdup("pwd");
+	arr[3] = ft_strdup("export");
+	arr[4] = ft_strdup("unset");
+	arr[5] = ft_strdup("env");
+	arr[6] = ft_strdup("exit");
+	arr[7] = NULL;
+	return (arr);
+}
+
+void	free_builtins_arr(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i])
+	{
+		free_collector_one(arr[i]);
+		i++;
+	}
+	arr = NULL;
+}
+
+void	execute_outsider_cmd(t_cmd *cmd, char **envp)
+{
+	char	*path;
+
+	path = check_add_path(cmd->args[0]);
+	if (path)
+	{
+		execve(path, cmd->args, envp);
+		ft_putstr_fd("execve failed : ", 2);
+		ft_putstr_fd(strerror(errno), 2);
+		ft_putstr_fd("\n", 2);
+		g_structs.exit_status = 126;
+		free_collector_all(0);
+		exit(0);
+	}
+	else
+	{
+		free_collector_all(0);
+		exit(0);
+	}
+}
+
+void	execute_builtins_cmd(t_cmd *cmd)
+{
+	char	**arr;
+	int	i;
+
+	i = 0;
+	arr = builtins_array();
+	if ()
+	free_builtins_arr(arr);
+}
+
 pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
 {
 	pid_t	pid;
@@ -246,17 +329,12 @@ pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
 	{
 		execute_pipes(n_cmd, pipefd, i_cmd);
 		if (cmd->reds)
-			execute_redirections(cmd->reds);
-		if (cmd->args[0])
-			path = check_add_path(cmd->args[0]);
-		if (path)
-		{
-			execve(path, cmd->args, envp);
-			ft_putstr_fd("execve failed : ", 2);
-			ft_putstr_fd(strerror(errno), 2);
-			ft_putstr_fd("\n", 2);
-			g_structs.exit_status = 126;
-		}
+			execute_redirections(cmd->reds, 1);
+		if (cmd->args[0] && cmd->type == OUTSIDER)
+			execute_outsider_cmd(cmd, envp);
+		else if (cmd->args[0] && cmd->type == BUILTINS)
+			execute_builtins_cmd(cmd);
+
 	}
 	return (pid);
 }
@@ -301,6 +379,41 @@ void	execute_multiple_command(int num_cmd)
 	}
 }
 
+void	setup_helper(char **arr, t_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd)
+	{
+		i = 0;
+		while (arr[i])
+		{
+			if (ft_strncmp(cmd->args[0], arr[i], ft_strlen(arr[i])) == 0)
+			{
+				cmd->type = BUILTINS;
+				i = 0;
+				break ; 
+			}
+			i++;
+		}
+		if (i)
+			cmd->type = OUTSIDER;
+		cmd = cmd->next;
+	}
+}
+
+
+void	setup_types()
+{
+	char	**arr;
+	int	i;
+
+	i = 0;
+	arr = builtins_array();
+	setup_helper(arr, g_structs.cmd);
+	free_builtins_arr(arr);
+}
 
 void	execution()
 {
@@ -313,12 +426,12 @@ void	execution()
 		g_structs.exit_status = 2;
 		return ;
 	}
-	if (!g_structs.cmd->args[0])
+	while (!g_structs.cmd->args[0])
 	{
-		//To-Do koyo add redirection to create file in append mode and redirect 
-		g_structs.exit_status = 0;
-		return ;
+		execute_redirections(g_structs.cmd->reds, 0);
+		g_structs.cmd = g_structs.cmd->next;
 	}
+	setup_types();
 	num_cmd = n_cmd(g_structs.cmd);
 	if (num_cmd == 1)
 	{

@@ -85,9 +85,8 @@ int	builtin_pwd(int fd)
 /*
  * builtin_echo - Echo (print) the string to file ddescriptor
  * @args: double pointer points to the arguments the echo will print
- * @fd: integer file descriptor
  * */ 
-int	builtin_echo(char **args, int fd)
+int	builtin_echo(char **args)
 {
 	int	i;
 	int	flag;
@@ -101,12 +100,12 @@ int	builtin_echo(char **args, int fd)
 	}
 	while (args[i])
 	{
-		ft_putstr_fd(args[i], fd);
+		ft_putstr_fd(args[i], 1);
 		i++;
 		if (args[i])
-			ft_putchar_fd(' ', fd);
+			ft_putchar_fd(' ', 1);
 	}
 	if (!flag)
-		ft_putchar_fd('\n', fd);
+		ft_putchar_fd('\n', 1);
 	return (0);
 }
