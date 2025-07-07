@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 13:58:36 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/03 15:29:21 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/07 09:51:23 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,15 @@ int	ft_isdouble_op(char *input)
 		return (1);
 	else if (input[0] == '>' && input[1] == '>')
 		return (1);
+	return (0);
+}
+
+int	handle_space(char *input, int *i)
+{
+	if (ft_isspace(input[*i]))
+	{
+		(*i)++;
+		return (1);
+	}
 	return (0);
 }

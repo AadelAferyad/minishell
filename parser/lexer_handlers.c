@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:43:10 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/05 23:22:51 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/07 10:04:30 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	handle_double_op(char *input, int *i, t_tokens **tokens)
 
 	if (input[*i + 1] && ft_isdouble_op(input + *i))
 	{
-		operator= ft_substr(input, *i, 2);
+		operator = ft_substr(input, *i, 2);
 		if (!operator)
 			return (-1);
 		*tokens = create_token(*tokens, operator);
@@ -57,7 +57,7 @@ int	handle_single_op(char *input, int *i, t_tokens **tokens)
 
 	if (ft_isop(input[*i]))
 	{
-		operator= ft_substr(input, *i, 1);
+		operator = ft_substr(input, *i, 1);
 		if (!operator)
 			return (-1);
 		*tokens = create_token(*tokens, operator);
@@ -73,48 +73,49 @@ int	handle_single_op(char *input, int *i, t_tokens **tokens)
 	return (0);
 }
 
-void	free_fields(char **fields)
+static int	add_fields(t_tokens **tokens, char **fields, char *expanded)
 {
 	int	i;
 
-	if (!fields)
-		return ;
 	i = 0;
-	while (fields[i])
+	while (fields && fields[i])
 	{
-		free_collector_one(fields[i]);
+		*tokens = create_token(*tokens, fields[i]);
+		if (!*tokens)
+		{
+			free_collector_one(expanded);
+			free_fields(fields);
+			return (-1);
+		}
 		i++;
 	}
-	free_collector_one(fields);
+	return (0);
 }
 
+/**
+ * handle_segs - Handles the splitting and tokenization of segments
+ * 
+ * @tokens: Double pointer to the list of tokens to be updated
+ * @segments: Pointer to the list of segments to be processed
+ * 
+ * Return: 0 on success, -1 on error
+ */
 int	handle_segs(t_tokens **tokens, t_segment *segments)
 {
 	char	*expanded;
 	char	**field;
-	int		i;
 
 	if (segments == NULL)
 		return (-1);
-	if (segments->next == NULL &&
-		(segments->q_type == Q_SINGLE || segments->q_type == Q_DOUBLE))
+	if (segments->next == NULL
+		&& (segments->q_type == Q_SINGLE || segments->q_type == Q_DOUBLE))
 		return (create_seg(tokens, segments));
 	else
 	{
 		expanded = join_segs(segments);
 		field = field_splitting(expanded);
-		i = 0;
-		while (field && field[i])
-		{
-			*tokens = create_token(*tokens, field[i]);
-			if (!tokens)
-			{
-				free_collector_one(expanded);
-				free_fields(field);
-				return (-1);
-			}
-			i++;
-		}
+		if (add_fields(tokens, field, expanded) == -1)
+			return (-1);
 		free_collector_one(expanded);
 		free_fields(field);
 	}
@@ -154,24 +155,5 @@ int	handle_word(char *input, int *i, t_tokens **tokens)
 	}
 	if (segments)
 		return (handle_segs(tokens, segments));
-	return (0);
-}
-
-/**
- * handle_space - Skips whitespace characters in the input string
- * 
- * @input: The input string to be tokenized
- * @i: Pointer to the current position in the input string
- *
- * Return: 1 if whitespace skipped, 0 if not
- */
-
-int	handle_space(char *input, int *i)
-{
-	if (ft_isspace(input[*i]))
-	{
-		(*i)++;
-		return (1);
-	}
 	return (0);
 }
