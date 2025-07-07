@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 11:45:21 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/05 16:31:46 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/07 14:45:54 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	trim(char *s)
 {
-	int	i;
+	int		i;
 	t_env	*node;
 	t_env	*tmp;
 
@@ -39,9 +39,9 @@ static void	trim(char *s)
 	tmp->next = node;
 }
 
-int	list_len()
+int	list_len(void)
 {
-	unsigned int	i;
+	int		i;
 	t_env	*tmp;
 
 	i = 0;
@@ -54,12 +54,12 @@ int	list_len()
 	return (i);
 }
 
-char	**create_env_arr()
+char	**create_env_arr(void)
 {
 	char	**arr;
 	char	*buff;
 	t_env	*tmp;
-	int	i;
+	int		i;
 
 	tmp = g_structs.env;
 	arr = safe_malloc(sizeof(char *) * (list_len() + 1));

@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 12:14:38 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/05 16:28:35 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/07 13:44:08 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ typedef struct environment
 
 void					create_env(char **env);
 
-void					execution(void);
-void					create_env(char **env);
-char					**create_env_arr(void);
+void	execution(void);
+void	create_env(char **env);
+char	**create_env_arr(void);
+void	setup_types(void);
 #endif

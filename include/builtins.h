@@ -20,9 +20,9 @@
 # include <sys/stat.h>
 # include <unistd.h>
 
-int		builtin_echo(char **arg, int fd);
-int		builtin_pwd(int fd);
-int		builtin_cd(char *path);
-void	builtin_env(int fd);
+int	builtin_echo(char **arg);
+int	builtin_pwd(void);
+int	builtin_cd(char *path);
+void	builtin_env(void);
 
 #endif
