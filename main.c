@@ -6,12 +6,13 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 12:15:46 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/05 23:38:59 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/07 15:18:28 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <readline/readline.h>
 #include <minishell.h>
+#include <parser.h>
 
 t_global	g_structs;
 

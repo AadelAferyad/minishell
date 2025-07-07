@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/07 12:32:14 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/07 15:22:57 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /* Own Headers */
 
 # include "../libft/libft.h"
-# include <minishell.h>
+# include <structs.h>
 
 /* Functions's libraries */
 
