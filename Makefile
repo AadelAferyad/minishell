@@ -11,7 +11,7 @@ src_libft := libft/ft_atoi.c libft/ft_bzero.c libft/ft_calloc.c libft/ft_isalnum
 
 src_collector := safe_allocation/memory_system.c
 
-src_builtins := execution/env.c execution/builtins/builtins.c execution/execution.c
+src_builtins := execution/env.c execution/builtins/builtins.c execution/execution.c execution/redirection.c execution/execution_func.c execution/execution_path.c
 
 src_parser := parser/lexer.c parser/char_check.c parser/str_funcs.c parser/list_funcs.c parser/lexer_handlers.c parser/lexer_quotes.c parser/parser.c parser/parser_checks.c parser/expand.c parser/lexer_segments.c parser/env_funcs.c
 
