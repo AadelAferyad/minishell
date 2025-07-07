@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/05 23:15:25 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/07 09:39:22 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 t_tokens				*lexer(char *input);
 t_cmd					*parse_tokens(t_tokens *tokens);
 char					*expand_vars(char *input);
+char					**field_splitting(const char *value);
 
 /* Lexer/Tokenizer Functions */
 
@@ -51,7 +52,6 @@ size_t					handle_env_var(char *input, size_t i, char **output);
 char					*get_env_value(char *varname);
 void					append_to_output(char **dst, char *src);
 size_t					key_end(char *input, size_t i);
-char					**field_splitting(const char *value);
 char					*join_segs(t_segment *segments);
 
 /* Parser Checks */
