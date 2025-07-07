@@ -6,11 +6,12 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 02:10:16 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/07 16:19:59 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/07 16:24:03 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+#include <parser.h>
 
 char	*get_env_value(char *varname)
 {
