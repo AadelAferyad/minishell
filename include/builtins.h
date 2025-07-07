@@ -15,10 +15,10 @@
 
 # include "../libft/libft.h"
 # include <errno.h>
-# include <unistd.h>
-# include <stdlib.h>
 # include <stdio.h>
+# include <stdlib.h>
 # include <sys/stat.h>
+# include <unistd.h>
 
 int	builtin_echo(char **arg);
 int	builtin_pwd(void);

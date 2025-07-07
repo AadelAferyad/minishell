@@ -14,24 +14,22 @@
 # define EXECUTION_H
 
 # include <builtins.h>
-# include <fcntl.h>
-# include <sys/wait.h>
-# include <sys/types.h>
 # include <collector.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
-typedef struct	environment
+typedef struct environment
 {
-	char	*key;
-	char	*value;
+	char				*key;
+	char				*value;
 	struct environment	*next;
-} t_env;
+}						t_env;
 
-void	create_env(char **env);
-
+void					create_env(char **env);
 
 void	execution(void);
 void	create_env(char **env);
 char	**create_env_arr(void);
 void	setup_types(void);
-
 #endif

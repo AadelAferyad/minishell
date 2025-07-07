@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include <parser.h>
 
 void	syntax_error(char *token)
 {

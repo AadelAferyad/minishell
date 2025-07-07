@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include <parser.h>
 
 char	*extract_quoted(char *input, int *i, char quote)
 {
