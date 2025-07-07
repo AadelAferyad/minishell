@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Werror -Wall -Wextra -ggdb3
+CFLAGS = -Werror -Wall -Wextra -ggdb3 #-fsanitize=address
 
 NAME = minishell
 
