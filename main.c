@@ -12,6 +12,7 @@
 
 #include <readline/readline.h>
 #include <minishell.h>
+#include <parser.h>
 
 t_global	g_structs;
 

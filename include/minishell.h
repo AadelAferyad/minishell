@@ -14,7 +14,6 @@
 # define MINISHELL_H
 
 # include <execution.h>
-# include <parser.h>
 # include <structs.h>
 
 typedef struct golobal_struct

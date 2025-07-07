@@ -19,6 +19,9 @@ SRCS = main.c \
 	execution/builtins/builtins.c \
 	execution/execution.c \
 	execution/env.c \
+	execution/execution_func.c \
+	execution/execution_path.c \
+	execution/redirection.c \
 	safe_allocation/memory_system.c \
 
 OBJS = $(SRCS:.c=.o)
