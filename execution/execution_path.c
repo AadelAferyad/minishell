@@ -6,13 +6,13 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 13:45:51 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/07 13:48:34 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/07 14:48:10 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-char	*extract_path()
+char	*extract_path(void)
 {
 	char	*path;
 	t_env	*envp;
@@ -35,7 +35,7 @@ char	*extract_path()
 
 char	*find_right_path(char *single_cmd, char **path)
 {
-	int	i;
+	int		i;
 	char	*sub_path;
 	char	*full_path;
 

@@ -6,12 +6,11 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 13:30:17 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/07 13:31:42 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/07 14:47:33 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <minishell.h>
-
+#include <minishell.h>
 
 void	redirections_out(char *file, int flag)
 {
@@ -50,13 +49,13 @@ void	redirections_append(char *file, int flag)
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 }
+
 int	redirections_in(char *file, int flag)
 {
 	int	fd;
 
 	if (access(file, F_OK) != 0)
 	{
-
 		ft_putstr_fd(file, 2);
 		ft_putstr_fd(": No such a file or directory\n", 2);
 		g_structs.exit_status = 1;

@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 13:41:20 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/07 13:51:37 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/07 14:49:46 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*file_exists(char *single_cmd)
 	stat(single_cmd, &st);
 	if (access(single_cmd, X_OK) == 0 && !S_ISDIR(st.st_mode))
 	{
-		if (single_cmd[0] == '.') 
+		if (single_cmd[0] == '.')
 		{
 			if (single_cmd[1] != '/')
 				return (NULL);
@@ -81,7 +81,7 @@ static void	setup_helper(char **arr, t_cmd *cmd)
 			{
 				cmd->type = BUILTINS;
 				i = 0;
-				break ; 
+				break ;
 			}
 			i++;
 		}
@@ -91,11 +91,10 @@ static void	setup_helper(char **arr, t_cmd *cmd)
 	}
 }
 
-
-void	setup_types()
+void	setup_types(void)
 {
 	char	*arr[8];
-	int	i;
+	int		i;
 
 	arr[0] = ft_strdup("echo");
 	arr[1] = ft_strdup("cd");
