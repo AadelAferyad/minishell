@@ -15,23 +15,23 @@
 
 # include "../libft/libft.h"
 # include <errno.h>
-# include <unistd.h>
-# include <string.h>
-# include <stdlib.h>
-# include <stdio.h>
 # include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
 
 typedef struct memory_system_managment
 {
-	bool					flag;
-	void					*data;
+	bool							flag;
+	void							*data;
 	struct memory_system_managment	*next;
-}	t_collector;
+}									t_collector;
 
-void	*safe_malloc(unsigned int size);
-void	free_collector_one(void *add);
-void	free_collector_all(int flaged);
-t_collector	*add_node(void *add);
-void	flag_env(void *add);
+void								*safe_malloc(unsigned int size);
+void								free_collector_one(void *add);
+void								free_collector_all(int flaged);
+t_collector							*add_node(void *add);
+void								flag_env(void *add);
 
 #endif

@@ -14,16 +14,16 @@
 # define MINISHELL_H
 
 # include <execution.h>
-# include <structs.h>
 # include <parser.h>
+# include <structs.h>
 
 typedef struct golobal_struct
 {
 	t_collector	*collector;
-	t_env	*env;
-	t_cmd	*cmd;
-	int	exit_status;
-}	t_global;
+	t_env		*env;
+	t_cmd		*cmd;
+	int			exit_status;
+}				t_global;
 
 extern t_global	g_structs;
 #endif
