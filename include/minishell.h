@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 16:24:31 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/05 16:36:58 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/07 12:34:22 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define MINISHELL_H
 
 # include <execution.h>
-# include "../parser/structs.h"
-# include "../parser/parser.h"
+# include <structs.h>
+# include <parser.h>
 
 typedef struct golobal_struct
 {
