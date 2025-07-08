@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 16:34:11 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/05 16:34:41 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:34:29 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ typedef struct s_reds
 {
 	t_types				type;
 	char				*flag;
+	int					quoted;
+	char				*heredoc_buff;
 	struct s_reds		*next;
 }						t_reds;
 
