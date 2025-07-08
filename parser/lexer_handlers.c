@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:43:10 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/07 10:04:30 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:45:58 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	handle_double_op(char *input, int *i, t_tokens **tokens)
 
 	if (input[*i + 1] && ft_isdouble_op(input + *i))
 	{
-		operator = ft_substr(input, *i, 2);
+		operator= ft_substr(input, *i, 2);
 		if (!operator)
 			return (-1);
 		*tokens = create_token(*tokens, operator);
@@ -57,7 +57,7 @@ int	handle_single_op(char *input, int *i, t_tokens **tokens)
 
 	if (ft_isop(input[*i]))
 	{
-		operator = ft_substr(input, *i, 1);
+		operator= ft_substr(input, *i, 1);
 		if (!operator)
 			return (-1);
 		*tokens = create_token(*tokens, operator);
@@ -107,8 +107,8 @@ int	handle_segs(t_tokens **tokens, t_segment *segments)
 
 	if (segments == NULL)
 		return (-1);
-	if (segments->next == NULL
-		&& (segments->q_type == Q_SINGLE || segments->q_type == Q_DOUBLE))
+	if (segments->next == NULL && (segments->q_type == Q_SINGLE
+			|| segments->q_type == Q_DOUBLE))
 		return (create_seg(tokens, segments));
 	else
 	{
@@ -122,6 +122,32 @@ int	handle_segs(t_tokens **tokens, t_segment *segments)
 	return (0);
 }
 
+static int	create_seg_token(t_tokens **tokens, t_segment *segments)
+{
+	t_tokens	*new_token;
+	t_tokens	*current;
+
+	new_token = safe_malloc(sizeof(t_tokens));
+	if (!new_token)
+		return (-1);
+	new_token->segments = segments;
+	new_token->type = WORD;
+	new_token->next = NULL;
+	new_token->value = NULL;
+	if (!*tokens)
+	{
+		*tokens = new_token;
+	}
+	else
+	{
+		current = *tokens;
+		while (current->next)
+			current = current->next;
+		current->next = new_token;
+	}
+	return (1);
+}
+
 /**
  * handle_word - Handles word tokens in the input string
  * 
@@ -133,7 +159,7 @@ int	handle_segs(t_tokens **tokens, t_segment *segments)
  *         -1 on error
  */
 
-int	handle_word(char *input, int *i, t_tokens **tokens)
+int	handle_word(char *input, int *i, t_tokens **tokens, int is_heredoc_delim)
 {
 	t_segment	*segments;
 
@@ -154,6 +180,11 @@ int	handle_word(char *input, int *i, t_tokens **tokens)
 			handle_unquoted(input, i, &segments);
 	}
 	if (segments)
-		return (handle_segs(tokens, segments));
+	{
+		if (is_heredoc_delim)
+			return (create_seg_token(tokens, segments));
+		else
+			return (handle_segs(tokens, segments));
+	}
 	return (0);
 }

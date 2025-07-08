@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:03:54 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/02 17:06:17 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:46:01 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,22 +41,25 @@ static int	lexer_helper_op(char *input, int *i, t_tokens **tokens)
  * @tokens: pointer to tokens list
  */
 
-static void	class_tokens(t_tokens *tokens)
+void	class_tokens(t_tokens *tokens)
 {
 	while (tokens)
 	{
-		if (ft_strcmp(tokens->value, "|") == 1)
-			tokens->type = PIPE;
-		else if (ft_strcmp(tokens->value, "<") == 1)
-			tokens->type = R_IN;
-		else if (ft_strcmp(tokens->value, ">") == 1)
-			tokens->type = R_OUT;
-		else if (ft_strcmp(tokens->value, ">>") == 1)
-			tokens->type = R_APPEND;
-		else if (ft_strcmp(tokens->value, "<<") == 1)
-			tokens->type = R_HEREDOC;
-		else
-			tokens->type = WORD;
+		if (tokens->value)
+		{
+			if (ft_strcmp(tokens->value, "|") == 1)
+				tokens->type = PIPE;
+			else if (ft_strcmp(tokens->value, "<") == 1)
+				tokens->type = R_IN;
+			else if (ft_strcmp(tokens->value, ">") == 1)
+				tokens->type = R_OUT;
+			else if (ft_strcmp(tokens->value, ">>") == 1)
+				tokens->type = R_APPEND;
+			else if (ft_strcmp(tokens->value, "<<") == 1)
+				tokens->type = R_HEREDOC;
+			else
+				tokens->type = WORD;
+		}
 		tokens = tokens->next;
 	}
 }
@@ -74,19 +77,30 @@ t_tokens	*lexer(char *input)
 	t_tokens	*tokens;
 	int			i;
 	int			flag;
+	int			heredoc;
+	t_tokens	*last;
 
 	tokens = NULL;
 	i = 0;
+	heredoc = 0;
 	while (input[i])
 	{
 		flag = lexer_helper_op(input, &i, &tokens);
 		if (flag == 1)
+		{
+			last = tokens;
+			while (last && last->next)
+				last = last->next;
+			if (last && last->value && ft_strcmp(last->value, "<<") == 1)
+				heredoc = 1;
 			continue ;
+		}
 		if (flag == -1)
 			return (cleanup());
 		if (handle_space(input, &i))
 			continue ;
-		flag = handle_word(input, &i, &tokens);
+		flag = handle_word(input, &i, &tokens, heredoc);
+		heredoc = 0;
 		if (flag == 1)
 			continue ;
 		if (flag == -1)

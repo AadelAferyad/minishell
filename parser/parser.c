@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 05:10:43 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/03 15:07:25 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:46:02 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,17 @@ static int	init_cmd(t_tokens **cur, t_cmd *cmd, int count, int *i)
 	{
 		if (is_redir((*cur)->type))
 		{
-			if (!(*cur)->next || !is_word((*cur)->next->type))
-			{
-				if ((*cur)->next)
-					syntax_error((*cur)->next->value);
-				else
-					syntax_error("newline");
-				free_collector_one(cmd);
+			if (validate_redir_syntax(cur, cmd) == -1)
 				return (-1);
+			if ((*cur)->type == R_HEREDOC)
+			{
+				if (process_heredoc_redir((*cur)->next, &cmd->reds, cmd) == -1)
+					return (-1);
 			}
-			cmd->reds = add_redir(cmd->reds, (*cur)->type, (*cur)->next->value);
+			else
+			{
+				cmd->reds = add_redir(cmd->reds, (*cur)->type, (*cur)->next->value, 0);
+			}
 			*cur = (*cur)->next->next;
 		}
 		else
