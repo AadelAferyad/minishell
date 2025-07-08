@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:01:37 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/04 16:12:01 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/08 15:52:24 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_cmd	*add_cmd(t_cmd *head, t_cmd *new_cmd)
  *
  * Return: Pointer to the head ofredirection list, NULL on error
  */
-t_reds	*add_redir(t_reds *head, t_types type, char *flag)
+t_reds	*add_redir(t_reds *head, t_types type, char *flag, int quoted)
 {
 	t_reds	*redir;
 	t_reds	*current;
@@ -84,6 +84,7 @@ t_reds	*add_redir(t_reds *head, t_types type, char *flag)
 		free_collector_all(1);
 		return (NULL);
 	}
+	redir->quoted = quoted;
 	redir->next = NULL;
 	if (!head)
 		return (redir);
