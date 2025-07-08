@@ -122,7 +122,10 @@ void	flag_env(void *add)
 	while (tmp)
 	{
 		if (tmp->data == add)
+		{
 			tmp->flag = 1;
+			return ;
+		}
 		tmp = tmp->next;
 	}
 }

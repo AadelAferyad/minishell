@@ -27,19 +27,38 @@ void	builtin_env()
 	}
 }
 
+void free_collector_env(void *add)
+{
+	t_collector	*tmp;
+
+	tmp = g_structs.collector;
+	while (tmp)
+	{
+		if (tmp->data == add)
+		{
+			free(tmp->data);
+			tmp->data = NULL;
+			return ;
+		}
+		tmp = tmp->next;
+	}
+}
+
 static void	change_pwd(char *s, int len)
 {
 	t_env	*tmp;
+	char	*buff;
 
 	tmp = g_structs.env;
 	while (tmp)
 	{
 		if (!ft_strncmp(tmp->key, s, len))
 		{
-			free_collector_one(tmp->value);
-			tmp->value = getcwd(NULL, 0);
-			printf("inside changing pwd : %s = %s\n", tmp->key, tmp->value);
-			add_node(tmp->value);
+			free_collector_env(tmp->value);
+			buff = getcwd(NULL, 0);
+			tmp->value = ft_strdup(buff);
+			free(buff);
+			/*printf("inside changing pwd : %s = %s\n", tmp->key, tmp->value);*/
 			return ;
 		}
 		tmp = tmp->next;

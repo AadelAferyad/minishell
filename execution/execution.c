@@ -50,11 +50,6 @@ void	execute_outsider_cmd(t_cmd *cmd)
 		free_collector_all(0);
 		exit(0);
 	}
-	else
-	{
-		free_collector_all(0);
-		exit(0);
-	}
 }
 
 void	execute_builtins_cmd(t_cmd *cmd)
@@ -67,8 +62,6 @@ void	execute_builtins_cmd(t_cmd *cmd)
 		builtin_pwd();
 	else if (ft_strncmp(cmd->args[0], "env", 3) == 0)
 		builtin_env();
-	free_collector_all(0);
-	exit(0);
 }
 
 pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
@@ -87,7 +80,8 @@ pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
 			execute_outsider_cmd(cmd);
 		else if (cmd->args[0] && cmd->type == BUILTINS)
 			execute_builtins_cmd(cmd);
-
+		free_collector_all(0);
+		exit(0);
 	}
 	return (pid);
 }
@@ -152,9 +146,14 @@ void	execution()
 	num_cmd = n_cmd(g_structs.cmd);
 	if (num_cmd == 1)
 	{
-		pid = execute_one_command(g_structs.cmd, 0, NULL, 0);
-		waitpid(pid, &wstatus, 0);
-		g_structs.exit_status = wstatus;
+		if (g_structs.cmd->type == BUILTINS)
+			execute_builtins_cmd(g_structs.cmd);
+		else
+		{
+			pid = execute_one_command(g_structs.cmd, 0, NULL, 0);
+			waitpid(pid, &wstatus, 0);
+			g_structs.exit_status = wstatus;
+		}
 	}
 	else if (num_cmd > 1)
 		execute_multiple_command(num_cmd);
