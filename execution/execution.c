@@ -65,8 +65,6 @@ void	execute_builtins_cmd(t_cmd *cmd)
 		builtin_pwd();
 	else if (ft_strncmp(cmd->args[0], "env", 3) == 0)
 		builtin_env();
-	free_collector_all(0);
-	exit(0);
 }
 
 pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
@@ -83,6 +81,7 @@ pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
 			execute_outsider_cmd(cmd);
 		else if (cmd->args[0] && cmd->type == BUILTINS)
 			execute_builtins_cmd(cmd);
+		free_collector_all(0);
 		exit(0);
 	}
 	return (pid);
