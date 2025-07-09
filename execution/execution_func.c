@@ -77,7 +77,7 @@ static void	setup_helper(char **arr, t_cmd *cmd)
 		i = 0;
 		while (arr[i])
 		{
-			if (ft_strncmp(cmd->args[0], arr[i], ft_strlen(arr[i])) == 0)
+			if (cmd->args[0] && ft_strncmp(cmd->args[0], arr[i], ft_strlen(arr[i])) == 0)
 			{
 				cmd->type = BUILTINS;
 				i = 0;

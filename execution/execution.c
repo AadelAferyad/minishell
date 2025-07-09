@@ -70,13 +70,24 @@ void	execute_builtins_cmd(t_cmd *cmd)
 pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
 {
 	pid_t	pid;
+	int	reds;
 
 	pid = fork();
 	if (pid == 0)
 	{
 		execute_pipes(n_cmd, pipefd, i_cmd);
 		if (cmd->reds)
-			execute_redirections(cmd->reds, 1);
+		{
+			if (!cmd->args[0])
+				reds = execute_redirections(cmd->reds, 0);
+			else
+				reds = execute_redirections(cmd->reds, 1);
+			if (reds == 1 || !cmd->args[0])
+			{
+				free_collector_all(0);
+				exit(0);
+			}
+		}
 		if (cmd->args[0] && cmd->type == OUTSIDER)
 			execute_outsider_cmd(cmd);
 		else if (cmd->args[0] && cmd->type == BUILTINS)
@@ -139,11 +150,11 @@ void	execution()
 		g_structs.exit_status = 2;
 		return ;
 	}
-	while (g_structs.cmd && !g_structs.cmd->args[0])
-	{
-		execute_redirections(g_structs.cmd->reds, 0);
-		g_structs.cmd = g_structs.cmd->next;
-	}
+	/*while (g_structs.cmd && !g_structs.cmd->args[0])*/
+	/*{*/
+	/*	execute_redirections(g_structs.cmd->reds, 0);*/
+	/*	g_structs.cmd = g_structs.cmd->next;*/
+	/*}*/
 	setup_types();
 	num_cmd = n_cmd(g_structs.cmd);
 	if (num_cmd == 1)
