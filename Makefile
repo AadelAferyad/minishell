@@ -16,7 +16,9 @@ SRCS = main.c \
 	parser/expand.c \
 	parser/env_funcs.c \
 	parser/field_split.c \
+	parser/herdoc.c \
 	execution/builtins/builtins.c \
+	execution/normal_func.c \
 	execution/execution.c \
 	execution/env.c \
 	execution/execution_func.c \

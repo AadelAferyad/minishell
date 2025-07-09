@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 16:24:31 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/07 13:51:44 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/09 12:30:18 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 typedef struct golobal_struct
 {
 	t_collector	*collector;
-	t_env		*env;
 	t_cmd		*cmd;
 	int			exit_status;
 }				t_global;

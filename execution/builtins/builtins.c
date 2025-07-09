@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 11:46:07 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/07 14:30:01 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/09 12:37:22 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,51 +16,70 @@ void	builtin_env()
 {
 	t_env	*tmp;
 
-	tmp = g_structs.env;
+	tmp = *get_env();
 	while (tmp)
 	{
-		ft_putstr_fd(tmp->key, 1);
-		ft_putchar_fd('=', 1);
-		ft_putstr_fd(tmp->value, 1);
-		ft_putchar_fd('\n', 1);
+		/*ft_putstr_fd(tmp->key, 1);*/
+		/*ft_putchar_fd('=', 1);*/
+		/*ft_putstr_fd(tmp->value, 1);*/
+		/*ft_putchar_fd('\n', 1);*/
+		printf("%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
 }
 
-void free_collector_env(void *add)
+t_env	*create_node_env(char *key, char *value)
 {
-	t_collector	*tmp;
+	t_env	*node;
 
-	tmp = g_structs.collector;
-	while (tmp)
+	node = malloc(sizeof(t_env));
+	node->key = _strdup(key);
+	node->value = _strdup(value);
+	node->next = NULL;
+	if (!node || !node->key || !node->value)
 	{
-		if (tmp->data == add)
-		{
-			free(tmp->data);
-			tmp->data = NULL;
-			return ;
-		}
-		tmp = tmp->next;
+		free_collector_all(0);
+		ft_putstr_fd(strerror(errno), 2);
+		exit(1);
 	}
+	return (node);
 }
+
 
 static void	change_pwd(char *s, int len)
 {
 	t_env	*tmp;
+	t_env	**head;
+	t_env	*prev;
+	t_env	*node;
 	char	*buff;
 
-	tmp = g_structs.env;
+	head = get_env();
+	tmp = *head;
+	prev = tmp;
 	while (tmp)
 	{
 		if (!ft_strncmp(tmp->key, s, len))
 		{
-			free_collector_env(tmp->value);
 			buff = getcwd(NULL, 0);
-			tmp->value = ft_strdup(buff);
+			node = create_node_env(tmp->key, buff);
+			if (tmp == *head)
+			{
+				*head = node;
+				node->next = tmp->next;
+			}
+			else
+			{
+				prev->next = node;
+				node->next = tmp->next;
+			}
 			free(buff);
-			/*printf("inside changing pwd : %s = %s\n", tmp->key, tmp->value);*/
+			free(tmp->key);
+			free(tmp->value);
+			free(tmp);
 			return ;
 		}
+		prev = tmp;
 		tmp = tmp->next;
 	}
 	ft_putstr_fd("NOt found OLDPWD\n", 1);

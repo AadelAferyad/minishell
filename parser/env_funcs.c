@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 02:10:16 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/07 16:24:03 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/09 12:35:59 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*get_env_value(char *varname)
 {
 	t_env	*env;
 
-	env = g_structs.env;
+	env = *get_env();
 	while (env)
 	{
 		if (ft_strcmp(env->key, varname) == 1)

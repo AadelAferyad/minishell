@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 13:45:51 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/07 14:48:10 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/09 12:31:14 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*extract_path(void)
 	t_env	*envp;
 
 	path = NULL;
-	envp = g_structs.env;
+	envp = *get_env();
 	if (!envp)
 		return (NULL);
 	while (envp)

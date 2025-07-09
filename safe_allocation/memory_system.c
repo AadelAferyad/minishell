@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 11:35:02 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/05 16:30:53 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/09 13:03:44 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,11 @@ t_collector	*add_node(void *add)
 {
 	t_collector	*node;
 
+	if (!add)
+		return (NULL);
 	node = create_node();
 	if (!node)
 		return (NULL);
-	node->flag = 0;
 	node->next = g_structs.collector;
 	node->data = add;
 	g_structs.collector = node;
@@ -45,9 +46,17 @@ t_collector	*add_node(void *add)
 void	*safe_malloc(unsigned int size)
 {
 	void	*ptr;
+	void	*tmp;
 
 	ptr = malloc(size);
-	if (!add_node(ptr) || !ptr)
+	if (!ptr)
+	{
+		free_collector_all(0);
+		strerror(errno);
+		exit(1);
+	}
+	tmp = add_node(ptr);
+	if (!tmp)
 	{
 		free_collector_all(0);
 		strerror(errno);
@@ -67,15 +76,15 @@ void	free_collector_one(void *add)
 	t_collector	*prev;
 
 	tmp = g_structs.collector;
-	prev = tmp;
+	prev = NULL;
 	while (tmp)
 	{
 		if (tmp->data == add)
 		{
-			if (g_structs.collector == tmp)
-				g_structs.collector = tmp->next;
-			else
+			if (prev)
 				prev->next = tmp->next;
+			else
+				g_structs.collector = tmp->next;
 			free(tmp->data);
 			free(tmp);
 			return ;
@@ -85,6 +94,25 @@ void	free_collector_one(void *add)
 	}
 }
 
+void	free_env(void)
+{
+	t_env	**head;
+	t_env	*tmp;
+	t_env	*ptr;
+
+	head = get_env();
+	tmp = *head;
+	while (tmp)
+	{
+		ptr = tmp->next;
+		free(tmp->key);
+		free(tmp->value);
+		free(tmp);
+		tmp = ptr;
+	}
+	head = NULL;
+}
+
 /*
  * free_collector_all - frees all the noode and data that holeds
  * */
@@ -92,40 +120,20 @@ void	free_collector_one(void *add)
 void	free_collector_all(int	flaged)
 {
 	t_collector	*tmp;
-	t_collector	*prev_head;
 	t_collector	*head;
 
 	head = g_structs.collector;
-	prev_head = g_structs.collector;
 	while (head)
 	{
-		if (flaged && head->flag)
-		{
-			if (prev_head == g_structs.collector)
-				g_structs.collector = head;
-			head = head->next;
-			continue ;
-		}
 		tmp = head->next;
 		free(head->data);
 		free(head);
 		head = tmp;
 	}
-	g_structs.cmd = NULL;
-}
-
-void	flag_env(void *add)
-{
-	t_collector	*tmp;
-
-	tmp = g_structs.collector;
-	while (tmp)
+	if (!flaged)
 	{
-		if (tmp->data == add)
-		{
-			tmp->flag = 1;
-			return ;
-		}
-		tmp = tmp->next;
+		free_env();
 	}
+	g_structs.cmd = NULL;
+	g_structs.collector = NULL;
 }

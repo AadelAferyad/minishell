@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 14:16:21 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/07 14:12:41 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/09 12:59:41 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	execute_outsider_cmd(t_cmd *cmd)
 	char	**envp;
 
 	path = check_add_path(cmd->args[0]);
+	/*printf("here %s \n", path);*/
 	if (path)
 	{
 		envp = create_env_arr();
@@ -50,6 +51,8 @@ void	execute_outsider_cmd(t_cmd *cmd)
 		free_collector_all(0);
 		exit(0);
 	}
+	free_collector_all(0);
+	exit(0);
 }
 
 void	execute_builtins_cmd(t_cmd *cmd)
@@ -62,15 +65,15 @@ void	execute_builtins_cmd(t_cmd *cmd)
 		builtin_pwd();
 	else if (ft_strncmp(cmd->args[0], "env", 3) == 0)
 		builtin_env();
+	free_collector_all(0);
+	exit(0);
 }
 
 pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
 {
 	pid_t	pid;
-	char	*path;
 
 	pid = fork();
-	path = NULL;
 	if (pid == 0)
 	{
 		execute_pipes(n_cmd, pipefd, i_cmd);
@@ -80,7 +83,6 @@ pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
 			execute_outsider_cmd(cmd);
 		else if (cmd->args[0] && cmd->type == BUILTINS)
 			execute_builtins_cmd(cmd);
-		free_collector_all(0);
 		exit(0);
 	}
 	return (pid);
@@ -95,8 +97,8 @@ void	execute_multiple_command(int num_cmd)
 	int	wstatus;
 
 	cmd = g_structs.cmd;
-	pipefd = safe_malloc(sizeof(int *) * (num_cmd - 1));
-	children = safe_malloc(sizeof(pid_t) * num_cmd);
+	pipefd = safe_malloc(sizeof(int *) * (num_cmd));
+	children = safe_malloc(sizeof(pid_t) * (num_cmd + 1));
 	i = 0;
 	while (i < num_cmd - 1)
 	{
@@ -112,7 +114,7 @@ void	execute_multiple_command(int num_cmd)
 		i++;
 	}
 	i = 0;
-	while (i < num_cmd - 1)
+	while (i < num_cmd - 1) 
 	{
 		close(pipefd[i][0]);
 		close(pipefd[i][1]);
@@ -121,7 +123,8 @@ void	execute_multiple_command(int num_cmd)
 	i = 0;
 	while (i < num_cmd)
 	{
-		waitpid(children[i], &wstatus, 0);
+		if (children[i] > 0)
+			waitpid(children[i], &wstatus, 0);
 		i++;
 	}
 }
