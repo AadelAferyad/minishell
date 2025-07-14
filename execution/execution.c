@@ -51,8 +51,8 @@ void	execute_outsider_cmd(t_cmd *cmd)
 		free_collector_all(0);
 		exit(0);
 	}
-	free_collector_all(0);
-	exit(0);
+	/*free_collector_all(0);*/
+	/*exit(0);*/
 }
 
 void	execute_builtins_cmd(t_cmd *cmd)
@@ -65,6 +65,8 @@ void	execute_builtins_cmd(t_cmd *cmd)
 		builtin_pwd();
 	else if (ft_strncmp(cmd->args[0], "env", 3) == 0)
 		builtin_env();
+	else if (ft_strncmp(cmd->args[0], "export", 6) == 0)
+		builtin_export(&cmd->args[1]);
 }
 
 pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)

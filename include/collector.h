@@ -30,5 +30,6 @@ typedef struct memory_system_managment
 void								*safe_malloc(unsigned int size);
 void								free_collector_one(void *add);
 void								free_collector_all(int flaged);
+void								free_env(void);
 
 #endif

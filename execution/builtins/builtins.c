@@ -19,10 +19,6 @@ void	builtin_env()
 	tmp = *get_env();
 	while (tmp)
 	{
-		/*ft_putstr_fd(tmp->key, 1);*/
-		/*ft_putchar_fd('=', 1);*/
-		/*ft_putstr_fd(tmp->value, 1);*/
-		/*ft_putchar_fd('\n', 1);*/
 		printf("%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
@@ -155,4 +151,61 @@ int	builtin_echo(char **args)
 	if (!flag)
 		ft_putchar_fd('\n', 1);
 	return (0);
+}
+
+void	print_export()
+{
+	t_env	*tmp;
+
+	tmp = *get_env();
+	while (tmp)
+	{
+		printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
+		tmp = tmp->next;
+	}
+}
+
+void	add_node_to_env(char *key, char *value)
+{
+	t_env	*node;
+	t_env	**head;
+
+	head = get_env();
+	node = create_node_env(key, value);
+	node->next = *head;
+	*head = node;
+}
+
+void	builtin_export(char **args)
+{
+	int	i;
+	char	*key;
+	char	*value;
+
+	i = 0;
+	if (!args[0])
+	{
+		print_export();
+		return ;
+	}
+	if (!ft_strchr(args[0], '=') )
+	{
+		ft_putstr_fd("export: not a valid identifier\n", 2);
+		return ;
+	}
+	while (args[0][i] != '=')
+		i++;
+	key = ft_substr(args[0], 0, i);
+	value = ft_strdup(&args[0][i + 1]);
+	printf("key: %s\nvalue :%s\n", key, value);
+	add_node_to_env(key, value);
+	i = 0;
+	while (args[i])
+	{
+		printf("args[%d] %s\n", i, args[i]);
+		i++;
+	}
+
+	free_collector_one(key);
+	free_collector_one(value);
 }

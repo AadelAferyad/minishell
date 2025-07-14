@@ -24,5 +24,6 @@ int	builtin_echo(char **arg);
 int	builtin_pwd(void);
 int	builtin_cd(char *path);
 void	builtin_env(void);
+void	builtin_export(char **args);
 
 #endif

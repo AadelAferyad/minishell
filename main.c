@@ -20,25 +20,17 @@ int	main(int ac, char **av, char **env)
 {
 	char	*buff;
 	t_tokens	*lex;
+
 	g_structs.collector = NULL;
 	g_structs.cmd = NULL;
-
 	(void) ac;
 	(void) av;
-
-	/*t_env	*head;*/
 	create_env(env);
-	/*head = *get_env();*/
-	/*while (head)*/
-	/*{*/
-	/*	printf("%s=%s\n", head->key, head->value);*/
-	/*	head = head->next;*/
-	/*}*/
 	while ((buff = readline("lgzara: ")))
 	{
 		if (ft_strlen(buff) != 0)
 			add_history(buff);
-		if (ft_strncmp("exit", buff, 5) == 0)
+		if (ft_strncmp("exit", buff, 4) == 0)
 		{
 			free_collector_all(0);
 			free(buff);

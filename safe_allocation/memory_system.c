@@ -101,6 +101,8 @@ void	free_env(void)
 	t_env	*ptr;
 
 	head = get_env();
+	if (!head)
+		return ;
 	tmp = *head;
 	while (tmp)
 	{
@@ -123,16 +125,18 @@ void	free_collector_all(int	flaged)
 	t_collector	*head;
 
 	head = g_structs.collector;
+	if (!flaged)
+	{
+		free_env();
+	}
+	if (!head)
+		return ;
 	while (head)
 	{
 		tmp = head->next;
 		free(head->data);
 		free(head);
 		head = tmp;
-	}
-	if (!flaged)
-	{
-		free_env();
 	}
 	g_structs.cmd = NULL;
 	g_structs.collector = NULL;
