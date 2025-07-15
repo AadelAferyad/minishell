@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:03:54 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/15 12:42:39 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/15 13:02:22 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	handle_assignment(char *input, int *i, t_tokens **tokens)
 	start = *i;
 	name_end = start;
 	if (!is_valid_start(input[name_end]))
-		return (0);
+		return (ft_putstr_fd("not a valid identifier\n", 2), -1);
 	name_end++;
 	while (input[name_end] && is_valid_char(input[name_end]))
 		name_end++;
@@ -155,6 +155,8 @@ t_tokens	*lexer(char *input)
 		flag = handle_assignment(input, &i, &tokens);
 		if (flag == 1)
 			continue ;
+		if (flag == -1)
+			return (cleanup());
 		flag = handle_word(input, &i, &tokens, heredoc);
 		heredoc = 0;
 		if (flag == 1)
