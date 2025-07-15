@@ -188,24 +188,14 @@ void	builtin_export(char **args)
 		print_export();
 		return ;
 	}
-	if (!ft_strchr(args[0], '=') )
-	{
-		ft_putstr_fd("export: not a valid identifier\n", 2);
-		return ;
-	}
 	while (args[0][i] != '=')
 		i++;
 	key = ft_substr(args[0], 0, i);
-	value = ft_strdup(&args[0][i + 1]);
-	printf("key: %s\nvalue :%s\n", key, value);
+	if (args[1][0])
+		value = ft_strdup(args[1]);
+	else
+		value = ft_strdup("");
 	add_node_to_env(key, value);
-	i = 0;
-	while (args[i])
-	{
-		printf("args[%d] %s\n", i, args[i]);
-		i++;
-	}
-
 	free_collector_one(key);
 	free_collector_one(value);
 }

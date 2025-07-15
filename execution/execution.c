@@ -177,7 +177,7 @@ void	connect_heredoc()
 	red = get_last_heredoc(red);
 	if (!red)
 		return ;
-	tmp_file = open("/tmp/heredoc", O_CREAT | O_WRONLY | O_APPEND, 0666);
+	tmp_file = open("/tmp/heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (tmp_file == -1)
 	{
 		ft_putstr_fd(strerror(errno), 2);
@@ -187,7 +187,6 @@ void	connect_heredoc()
 	close(tmp_file);
 	red->type = R_IN;
 	red->flag = "/tmp/heredoc";
-	red->next = NULL;
 }
 
 void	execution()
@@ -212,8 +211,10 @@ void	execution()
 	num_cmd = n_cmd(g_structs.cmd);
 	if (num_cmd == 1)
 	{
-		if (g_structs.cmd->type == BUILTINS)
+		if (g_structs.cmd->type == BUILTINS && !g_structs.cmd->reds)
+		{
 			execute_builtins_cmd(g_structs.cmd);
+		}
 		else
 		{
 			pid = execute_one_command(g_structs.cmd, 0, NULL, 0);
