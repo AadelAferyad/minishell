@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:47:28 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/09 12:07:56 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/15 12:47:32 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	append_line(char **buff, const char *line)
 	*buff = new_buff;
 }
 
-static int	read_heredoc_input(t_reds *redir)
+static int	read_heredoc(t_reds *redir)
 {
 	char	*heredoc_buff;
 	char	*line;
@@ -82,15 +82,16 @@ static int	read_heredoc_input(t_reds *redir)
 	return (0);
 }
 
-int	handle_all_heredocs(t_reds *reds)
+int	handle_heredocs(t_reds *reds)
 {
-	t_reds *current;
-    current = reds;
+	t_reds	*current;
+
+	current = reds;
 	while (current)
 	{
 		if (current->type == R_HEREDOC)
 		{
-			if (read_heredoc_input(current) == -1)
+			if (read_heredoc(current) == -1)
 				return (-1);
 		}
 		current = current->next;

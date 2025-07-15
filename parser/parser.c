@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 05:10:43 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/09 12:08:35 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/15 12:37:19 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,8 @@ static int	init_cmd(t_tokens **cur, t_cmd *cmd, int count, int *i)
 					return (-1);
 			}
 			else
-			{
-				cmd->reds = add_redir(cmd->reds, (*cur)->type, (*cur)->next->value, 0);
-			}
+				cmd->reds = add_redir(cmd->reds, (*cur)->type,
+						(*cur)->next->value, 0);
 			*cur = (*cur)->next->next;
 		}
 		else
