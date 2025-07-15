@@ -7,12 +7,14 @@ SRCS = main.c \
 	parser/lexer.c \
 	parser/char_check.c \
 	parser/str_funcs.c \
+	parser/char_check2.c \
 	parser/list_funcs.c \
 	parser/lexer_handlers.c \
 	parser/lexer_quotes.c \
 	parser/parser.c \
 	parser/parser_checks.c \
 	parser/lexer_segments.c \
+	parser/herdoc_read.c \
 	parser/expand.c \
 	parser/env_funcs.c \
 	parser/field_split.c \

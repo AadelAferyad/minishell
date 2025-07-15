@@ -17,6 +17,7 @@
 
 # include <signal.h>
 # include <structs.h>
+# include <parser.h>
 
 typedef struct golobal_struct
 {

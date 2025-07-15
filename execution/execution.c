@@ -69,15 +69,25 @@ void	execute_builtins_cmd(t_cmd *cmd)
 		builtin_export(&cmd->args[1]);
 }
 
+void	def_sig(int sigint)
+{
+	if (sigint == SIGINT)
+		printf("test\n");
+}
+
 pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
 {
 	pid_t	pid;
+	struct sigaction sa;
 	int	reds;
 
 	pid = fork();
 	if (pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);
+		sa.sa_handler = def_sig;
+		sigemptyset(&sa.sa_mask);
+		sa.sa_flags = 0;
+		sigaction(SIGINT, &sa, NULL);
 		execute_pipes(n_cmd, pipefd, i_cmd);
 		if (cmd->reds)
 		{
@@ -142,6 +152,44 @@ void	execute_multiple_command(int num_cmd)
 	}
 }
 
+t_reds	*get_last_heredoc(t_reds *reds)
+{
+	t_reds	*last;
+
+	last = NULL;
+	if (!reds)
+		return (NULL);
+	while (reds)
+	{
+		if (reds->type == R_HEREDOC)
+			last = reds;
+		reds = reds->next;
+	}
+	return (last);
+}
+
+void	connect_heredoc()
+{
+	t_reds	*red;
+	int	tmp_file;
+
+	red = g_structs.cmd->reds;
+	red = get_last_heredoc(red);
+	if (!red)
+		return ;
+	tmp_file = open("/tmp/heredoc", O_CREAT | O_WRONLY | O_APPEND, 0666);
+	if (tmp_file == -1)
+	{
+		ft_putstr_fd(strerror(errno), 2);
+		return ;
+	}
+	write(tmp_file, red->heredoc_buff, ft_strlen(red->heredoc_buff));
+	close(tmp_file);
+	red->type = R_IN;
+	red->flag = "/tmp/heredoc";
+	red->next = NULL;
+}
+
 void	execution()
 {
 	int	num_cmd;
@@ -158,7 +206,9 @@ void	execution()
 	/*	execute_redirections(g_structs.cmd->reds, 0);*/
 	/*	g_structs.cmd = g_structs.cmd->next;*/
 	/*}*/
+	handle_heredocs(g_structs.cmd->reds);
 	setup_types();
+	connect_heredoc();
 	num_cmd = n_cmd(g_structs.cmd);
 	if (num_cmd == 1)
 	{
