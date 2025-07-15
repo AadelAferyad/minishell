@@ -16,11 +16,29 @@
 
 t_global	g_structs;
 
+void	signal_handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		rl_replace_line("", 0);
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	return ;
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char	*buff;
 	t_tokens	*lex;
+	struct sigaction	sa;
 
+	sa.sa_handler = signal_handler;
+	sa.sa_flags = 0;
+	sigemptyset(&sa.sa_mask);
+
+	sigaction(SIGINT, &sa, NULL);
 	g_structs.collector = NULL;
 	g_structs.cmd = NULL;
 	(void) ac;

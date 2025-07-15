@@ -77,6 +77,7 @@ pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
 	pid = fork();
 	if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
 		execute_pipes(n_cmd, pipefd, i_cmd);
 		if (cmd->reds)
 		{
