@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:17:44 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/08 17:14:03 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/15 12:47:40 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,6 @@ int	main(int argc, char **argv, char **envp)
 		return (free_collector_all(1), -1);
 	g_structs.cmd = cmds;
 	print_cmds(cmds);
-	handle_all_heredocs(cmds->reds);
 	heredoc = get_last_heredoc(cmds->reds);
 	if (heredoc)
 		printf("%s", heredoc->heredoc_buff);
@@ -137,4 +136,3 @@ int	main(int argc, char **argv, char **envp)
 	free_collector_all(0);
 	return (0);
 }
-

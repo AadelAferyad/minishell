@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/08 17:17:45 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/15 12:47:33 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void		free_fields(char **fields);
 int			validate_redir_syntax(t_tokens **cur, t_cmd *cmd);
 int			process_heredoc_redir(t_tokens *delim_token, t_reds **reds,
 				t_cmd *cmd);
-int			handle_all_heredocs(t_reds *reds);
+int			handle_heredocs(t_reds *reds);
 
 /* Parser Checks */
 
@@ -75,6 +75,8 @@ int			ft_isop(int c);
 int			ft_isspace(int c);
 int			is_redir(int type);
 int			is_word(int type);
+int			is_valid_start(char c);
+int			is_valid_char(char c);
 
 /* String Manupilation Functions */
 
