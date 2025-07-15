@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:03:54 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/15 13:02:22 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/15 13:21:48 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,12 @@ int	handle_assignment(char *input, int *i, t_tokens **tokens)
 
 	start = *i;
 	name_end = start;
-	if (!is_valid_start(input[name_end]))
-		return (ft_putstr_fd("not a valid identifier\n", 2), -1);
-	name_end++;
 	while (input[name_end] && is_valid_char(input[name_end]))
 		name_end++;
 	if (input[name_end] == '=')
 	{
+		if (!is_valid_start(input[start]))
+			return (ft_putstr_fd("not a valid identifier\n", 2), -1);
 		name_token = extracting_word(input, start, name_end + 1);
 		*tokens = create_token(*tokens, name_token);
 		free_collector_one(name_token);
@@ -93,6 +92,12 @@ int	handle_assignment(char *input, int *i, t_tokens **tokens)
 			value_end = value_start + 1;
 			while (input[value_end] && input[value_end] != quote)
 				value_end++;
+			if (!input[value_end])
+			{
+				ft_putstr_fd("Parser error : Enclosed Quotes!\n", 2);
+				*i = value_end;
+				return (-1);
+			}
 			value_token = extracting_word(input, value_start + 1, value_end);
 			*tokens = create_token(*tokens, value_token);
 			free_collector_one(value_token);
