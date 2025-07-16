@@ -38,6 +38,8 @@ char	*file_exists(char *single_cmd)
 
 char	*check_add_path(char *single_cmd)
 {
+	/*if (!single_cmd)*/
+	/*	return (NULL);*/
 	if (access(single_cmd, F_OK) == 0)
 	{
 		return (file_exists(single_cmd));
