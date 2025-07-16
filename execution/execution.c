@@ -47,10 +47,10 @@ void	execute_outsider_cmd(t_cmd *cmd)
 		ft_putstr_fd("execve failed : ", 2);
 		ft_putstr_fd(strerror(errno), 2);
 		ft_putstr_fd("\n", 2);
-		g_structs.exit_status = 126;
 		free_collector_all(0);
-		exit(0);
+		exit(126);
 	}
+	exit(127);
 	/*free_collector_all(0);*/
 	/*exit(0);*/
 }
@@ -149,7 +149,10 @@ void	execute_multiple_command(int num_cmd)
 	while (i < num_cmd)
 	{
 		if (children[i] > 0)
+		{
 			waitpid(children[i], &wstatus, 0);
+			g_structs.exit_status = WEXITSTATUS(wstatus);
+		}
 		i++;
 	}
 }
@@ -221,7 +224,7 @@ void	execution()
 		{
 			pid = execute_one_command(g_structs.cmd, 0, NULL, 0);
 			waitpid(pid, &wstatus, 0);
-			g_structs.exit_status = wstatus;
+			g_structs.exit_status = WEXITSTATUS(wstatus);
 		}
 	}
 	else if (num_cmd > 1)
