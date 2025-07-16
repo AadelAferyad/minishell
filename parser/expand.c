@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 00:34:03 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/09 12:07:17 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/16 01:45:27 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,17 @@ void	add_char(char **dst, char c)
 
 static size_t	expand(char *input, size_t i, char **output)
 {
+	char *exit_status;
+
 	if (!input[i])
 		add_char(output, '$');
+	else if (input[i] == '?')
+	{
+		exit_status = ft_itoa(g_structs.exit_status);
+		append_to_output(output, exit_status);
+		free_collector_one(exit_status);
+		i++;
+	}
 	else if (ft_isalpha(input[i]) || input[i] == '_')
 		i = handle_env_var(input, i, output);
 	else if (ft_isdigit(input[i]))
