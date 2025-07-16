@@ -165,15 +165,70 @@ void	print_export()
 	}
 }
 
+t_env	*does_node_exists(char *key, int size)
+{
+	t_env	*node;
+
+	node = *get_env();
+	while (node)
+	{
+		if (!ft_strncmp(key, node->key, size))
+			return (node);
+		node = node->next;
+	}
+	return (NULL);
+}
+
 void	add_node_to_env(char *key, char *value)
 {
 	t_env	*node;
 	t_env	**head;
 
 	head = get_env();
-	node = create_node_env(key, value);
-	node->next = *head;
-	*head = node;
+	node = does_node_exists(key, ft_strlen(key));
+	if (node)
+	{
+		free(node->value);
+		node->value = _strdup(value);
+	}
+	else
+	{
+		node = create_node_env(key, value);
+		node->next = *head;
+		*head = node;
+	}
+}
+
+void	builtin_unset(char *args)
+{
+	t_env	**head;
+	t_env	*node;
+	t_env	*tmp;
+	int	size;
+
+	head = get_env();
+	node = *head;
+	if (!args)
+		return ;
+	size = ft_strlen(args);
+	while (node)
+	{
+		if (!ft_strncmp(args, node->key, size))
+		{
+			if (node == *head)
+			{
+				*head = node->next;
+			}
+			else
+				tmp->next = node->next;
+			free(node->key);
+			free(node->value);
+			free(node);
+			break ;
+		}
+		tmp = node;
+		node = node->next;
+	}
 }
 
 void	builtin_export(char **args)

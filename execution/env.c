@@ -71,6 +71,35 @@ int	list_len(void)
 	return (i);
 }
 
+void	sort_env()
+{
+	t_env	*tmp;
+	t_env	*buff;
+	t_env	*node;
+	t_env	**head;
+
+	/*(c)-->(b)-->(a)-->N*/
+	head = get_env();
+	tmp = *head;
+	while (tmp)
+	{
+		node = tmp;
+		while (node)
+		{
+			if (tmp->key[0] > node->key[0])
+			{
+				buff = node->next;
+				node->next = tmp;
+				tmp->next = buff;
+				if (*head == tmp)
+					*head = node;
+			}
+			node = node->next;
+		}
+		tmp = tmp->next;
+	}
+}
+
 char	**create_env_arr(void)
 {
 	char	**arr;

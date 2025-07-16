@@ -67,6 +67,8 @@ void	execute_builtins_cmd(t_cmd *cmd)
 		builtin_env();
 	else if (ft_strncmp(cmd->args[0], "export", 6) == 0)
 		builtin_export(&cmd->args[1]);
+	else if (ft_strncmp(cmd->args[0], "unset", 5) == 0)
+		builtin_unset(cmd->args[1]);
 }
 
 void	def_sig(int sigint)

@@ -40,6 +40,8 @@ char	*find_right_path(char *single_cmd, char **path)
 	char	*full_path;
 
 	i = 0;
+	if (!path || !single_cmd)
+		return (NULL);
 	while (path[i])
 	{
 		sub_path = ft_strjoin(path[i], "/");
@@ -58,6 +60,8 @@ static void	free_list_of_path(char **grid)
 	int	i;
 
 	i = 0;
+	if (!grid)
+		return ;
 	while (grid[i])
 	{
 		free_collector_one(grid[i]);
@@ -75,8 +79,8 @@ char	*generate_right_path(char *single_cmd)
 	char	*full_path;
 
 	extracted_path = extract_path();
-	if (!extracted_path)
-		return (NULL);
+	/*if (!extracted_path)*/
+	/*	return (NULL);*/
 	path = ft_split(extracted_path, ':');
 	full_path = find_right_path(single_cmd, path);
 	free_list_of_path(path);
