@@ -131,16 +131,18 @@ int	builtin_pwd()
 int	builtin_echo(char **args)
 {
 	int	i;
+	int	j;
 	int	flag;
 
 	i = 0;
+	j = 0;
 	flag = 0;
 	if (!args[0])
 	{
 		ft_putchar_fd('\n', 1);
 		return (0);
 	}
-	if (args[i][0] == '-' && args[i][1] == 'n' && args[i][2] == '\0')
+	while (args[i][0] == '-' && args[i][1] == 'n' && args[i][2] == '\0')
 	{
 		flag = 1;
 		i++;
@@ -247,13 +249,23 @@ void	builtin_export(char **args)
 		print_export();
 		return ;
 	}
-	while (args[0][i] != '=')
+	while (args[0][i] && args[0][i] != '=')
+	{
+		if (!ft_isalnum(args[0][i]))
+		{
+			ft_putstr_fd("export: not a valid identifier\n", 2);
+			g_structs.exit_status = 1;
+			return ;
+		}
 		i++;
+	}
+	if (!args[0][i])
+		return ;
 	key = ft_substr(args[0], 0, i);
-	if (args[1][0])
-		value = ft_strdup(args[1]);
-	else
+	if (!args[1])
 		value = ft_strdup("");
+	else
+		value = ft_strdup(args[1]);
 	add_node_to_env(key, value);
 	free_collector_one(key);
 	free_collector_one(value);
