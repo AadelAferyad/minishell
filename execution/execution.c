@@ -209,7 +209,20 @@ void	execution()
 	{
 		
 		if (g_structs.cmd->args[1])
+		{
+			status = 0;
+			while (g_structs.cmd->args[1][status])
+			{
+				if (!ft_isdigit(g_structs.cmd->args[1][status]) && g_structs.cmd->args[1][status] != '+')
+				{
+					ft_putstr_fd("exit: numeric argument required\n", 2);
+					free_collector_all(0);
+					exit(2);
+				}
+				status++;
+			}
 			status = ft_atoi(g_structs.cmd->args[1]);
+		}
 		else
 			status = g_structs.exit_status;
 		free_collector_all(0);
