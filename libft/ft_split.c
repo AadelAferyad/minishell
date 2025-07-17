@@ -48,7 +48,7 @@ static void	ft_collector(char **grid)
 	i = 0;
 	while (grid[i])
 	{
-		free(grid[i]);
+		free_collector_one(grid[i]);
 		grid[i] = NULL;
 		i++;
 	}
@@ -92,12 +92,12 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	words = ft_count_words(s, c);
-	grid = malloc(sizeof(char *) * (words + 1));
+	grid = safe_malloc(sizeof(char *) * (words + 1));
 	if (!grid)
 		return (NULL);
 	if (ft_split_healper(s, c, grid))
 	{
-		free(grid);
+		free_collector_one(grid);
 		return (NULL);
 	}
 	return (grid);

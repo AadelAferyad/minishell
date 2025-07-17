@@ -2,7 +2,7 @@ CC = cc
 CFLAGS = -Werror -Wall -Wextra -ggdb3
 NAME = minishell
 
-SRCS = main.c
+SRCS = main.c lexer.c char_check.c str_funcs.c list_funcs.c lexer_handlers.c lexer_quotes.c ../safe_allocation/memory_system.c parser.c parser_checks.c lexer_segments.c expand.c env_funcs.c ../execution/env.c field_split.c herdoc.c herdoc_read.c ../execution/normal_func.c char_check2.c
 OBJS = $(SRCS:.c=.o)
 
 LIBFT_DIR = ../libft
@@ -14,10 +14,10 @@ $(LIBFT):
 	make -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline -I ../include -o $(NAME)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -I ../include -c $< -o $@
 
 clean:
 	rm -f $(OBJS)

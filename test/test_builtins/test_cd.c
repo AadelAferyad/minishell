@@ -1,24 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   test_cd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/20 16:23:57 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/06/20 16:30:44 by aaferyad         ###   ########.fr       */
+/*   Created: 2025/06/22 10:03:16 by aaferyad          #+#    #+#             */
+/*   Updated: 2025/06/22 10:42:12 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include <builtins.h>
+#include <fcntl.h>
 
 
-int	ft_echo(char *str, int flag)
+int	main(int ac, char **av, char **env)
 {
-	if (!str)
-		return (1);
-	ft_puts(str);
-	if (!flag)
-		write(1, "\n", 1);
+	(void) ac;
+	(void) env;
+	/*fd = open("file", O_RDWR | O_CREAT, S_IRWXU);*/
+	/*if (fd == -1)*/
+	/*	return (1);*/
+
+	builtin_pwd(1);
+	builtin_cd(av[1]);
+	builtin_pwd(1);
 	return (0);
 }

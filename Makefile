@@ -1,0 +1,57 @@
+CC = cc
+CFLAGS = -Werror -Wall -Wextra -ggdb3 #-fsanitize=address
+
+NAME = minishell
+
+SRCS = main.c \
+	parser/lexer.c \
+	parser/char_check.c \
+	parser/str_funcs.c \
+	parser/char_check2.c \
+	parser/list_funcs.c \
+	parser/lexer_handlers.c \
+	parser/lexer_quotes.c \
+	parser/parser.c \
+	parser/parser_checks.c \
+	parser/lexer_segments.c \
+	parser/herdoc_read.c \
+	parser/expand.c \
+	parser/env_funcs.c \
+	parser/field_split.c \
+	parser/herdoc.c \
+	execution/builtins/builtins.c \
+	execution/normal_func.c \
+	execution/execution.c \
+	execution/env.c \
+	execution/execution_func.c \
+	execution/execution_path.c \
+	execution/redirection.c \
+	safe_allocation/memory_system.c \
+
+OBJS = $(SRCS:.c=.o)
+
+LIBFT_DIR = libft
+LIBFT = $(LIBFT_DIR)/libft.a
+
+all: $(LIBFT) $(NAME)
+
+$(LIBFT):
+	make -C $(LIBFT_DIR)
+
+$(NAME): $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline -I include -o $(NAME)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -I include -c $< -o $@
+
+clean:
+	rm -f $(OBJS)
+	make -C $(LIBFT_DIR) clean
+
+fclean: clean
+	rm -f $(NAME)
+	make -C $(LIBFT_DIR) fclean
+
+re: fclean all
+
+.PHONY: all fclean clean re

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 18:02:36 by aaferyad          #+#    #+#             */
-/*   Updated: 2024/11/16 12:40:37 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/06/26 14:16:59 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include "../include/collector.h"
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
