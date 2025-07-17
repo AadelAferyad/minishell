@@ -201,6 +201,12 @@ void	builting_exit()
 	status = 0;
 	if (!ft_strncmp(g_structs.cmd->args[0], "exit", 4))
 	{
+		if (str && g_structs.cmd-args[2])
+		{
+				ft_putstr_fd("exit: to many arguments\n", 2);
+				free_collector_all(0);
+				exit(1);
+		}
 		if (str)
 		{
 			while (g_structs.cmd->args[1][status])
