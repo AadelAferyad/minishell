@@ -98,6 +98,11 @@ int	builtin_cd(char *path)
 		if (S_ISDIR(st.st_mode))
 			change_pwd("OLDPWD", 6);
 	}
+	else
+	{
+		g_structs.exit_status = 1;
+		return (1);
+	}
 	if (chdir(path) == 0)
 		change_pwd("PWD", 3);
 	else
