@@ -232,7 +232,7 @@ void	execution()
 		g_structs.exit_status = 2;
 		return ;
 	}
-	builting_exit()
+	builting_exit();
 	/*while (g_structs.cmd && !g_structs.cmd->args[0])*/
 	/*{*/
 	/*	execute_redirections(g_structs.cmd->reds, 0);*/
