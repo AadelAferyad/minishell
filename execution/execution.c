@@ -192,28 +192,20 @@ void	connect_heredoc()
 	red->type = R_IN;
 	red->flag = "/tmp/heredoc";
 }
-
-void	execution()
+void	exit()
 {
-	int	num_cmd;
-	int	wstatus;
-	int	status;
-	pid_t	pid;
+	char	*str;
+	int		status;
 
-	if (!g_structs.cmd)
-	{
-		g_structs.exit_status = 2;
-		return ;
-	}
+	str = g_structs.cmd->args[1];
+	status = 0;
 	if (!ft_strncmp(g_structs.cmd->args[0], "exit", 4))
 	{
-		
-		if (g_structs.cmd->args[1])
+		if (str)
 		{
-			status = 0;
 			while (g_structs.cmd->args[1][status])
 			{
-				if (!ft_isdigit(g_structs.cmd->args[1][status]) && g_structs.cmd->args[1][status] != '+')
+				if (!ft_isdigit(str[status]) && (str[status] != '+' && str[status] != '-'))
 				{
 					ft_putstr_fd("exit: numeric argument required\n", 2);
 					free_collector_all(0);
@@ -228,6 +220,20 @@ void	execution()
 		free_collector_all(0);
 		exit(status);
 	}
+}
+void	execution()
+{
+	int	num_cmd;
+	int	wstatus;
+	int	status;
+	pid_t	pid;
+
+	if (!g_structs.cmd)
+	{
+		g_structs.exit_status = 2;
+		return ;
+	}
+
 	/*while (g_structs.cmd && !g_structs.cmd->args[0])*/
 	/*{*/
 	/*	execute_redirections(g_structs.cmd->reds, 0);*/
