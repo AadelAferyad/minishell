@@ -22,6 +22,7 @@ void	builtin_env()
 		printf("%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
+	g_structs.exit_status = 0;
 }
 
 t_env	*create_node_env(char *key, char *value)
@@ -103,7 +104,9 @@ int	builtin_cd(char *path)
 	{
 		ft_putstr_fd(strerror(errno), 2);
 		ft_putchar_fd('\n', 2);
+		g_structs.exit_status = 127;
 	}
+	g_structs.exit_status = 0;
 	return (0);
 }
 
@@ -121,6 +124,7 @@ int	builtin_pwd()
 	ft_putstr_fd(cwd, 1);
 	ft_putchar_fd('\n', 1);
 	free(cwd);
+	g_structs.exit_status = 0;
 	return (0);
 }
 
@@ -138,6 +142,7 @@ int	builtin_echo(char **args)
 	if (!args[0])
 	{
 		ft_putchar_fd('\n', 1);
+		g_structs.exit_status = 0;
 		return (0);
 	}
 	while (args[i][0] == '-' && args[i][1] == 'n' && args[i][2] == '\0')
@@ -154,6 +159,7 @@ int	builtin_echo(char **args)
 	}
 	if (!flag)
 		ft_putchar_fd('\n', 1);
+	g_structs.exit_status = 0;
 	return (0);
 }
 
@@ -167,6 +173,7 @@ void	print_export()
 		printf("declare -x %s=\"%s\"\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
+	g_structs.exit_status = 0;
 }
 
 t_env	*does_node_exists(char *key, int size)
@@ -228,11 +235,13 @@ void	builtin_unset(char *args)
 			free(node->key);
 			free(node->value);
 			free(node);
+			g_structs.exit_status = 0;
 			break ;
 		}
 		tmp = node;
 		node = node->next;
 	}
+	g_structs.exit_status = 0;
 }
 
 void	builtin_export(char **args)
