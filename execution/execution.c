@@ -203,7 +203,7 @@ void	builting_exit()
 	{
 		if (str && g_structs.cmd->args[2])
 		{
-				ft_putstr_fd("exit: to many arguments\n", 2);
+				ft_putstr_fd("exit: too many arguments\n", 2);
 				free_collector_all(0);
 				exit(1);
 		}
