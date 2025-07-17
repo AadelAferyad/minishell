@@ -197,12 +197,23 @@ void	execution()
 {
 	int	num_cmd;
 	int	wstatus;
+	int	status;
 	pid_t	pid;
 
 	if (!g_structs.cmd)
 	{
 		g_structs.exit_status = 2;
 		return ;
+	}
+	if (!ft_strncmp(g_structs.cmd->args[0], "exit", 4))
+	{
+		
+		if (g_structs.cmd->args[1])
+			status = ft_atoi(g_structs.cmd->args[1]);
+		else
+			status = g_structs.exit_status;
+		free_collector_all(0);
+		exit(status);
 	}
 	/*while (g_structs.cmd && !g_structs.cmd->args[0])*/
 	/*{*/

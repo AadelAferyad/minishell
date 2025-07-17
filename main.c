@@ -48,12 +48,6 @@ int	main(int ac, char **av, char **env)
 	{
 		if (ft_strlen(buff) != 0)
 			add_history(buff);
-		if (ft_strncmp("exit", buff, 4) == 0)
-		{
-			free_collector_all(0);
-			free(buff);
-			exit(0);
-		}
 		lex = lexer(buff);
 		if (!lex)
 		{

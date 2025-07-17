@@ -219,6 +219,7 @@ void	builtin_unset(char *args)
 
 	head = get_env();
 	node = *head;
+	g_structs.exit_status = 0;
 	if (!args)
 		return ;
 	size = ft_strlen(args);
@@ -235,13 +236,11 @@ void	builtin_unset(char *args)
 			free(node->key);
 			free(node->value);
 			free(node);
-			g_structs.exit_status = 0;
 			break ;
 		}
 		tmp = node;
 		node = node->next;
 	}
-	g_structs.exit_status = 0;
 }
 
 void	builtin_export(char **args)
@@ -258,7 +257,7 @@ void	builtin_export(char **args)
 	}
 	while (args[0][i] && args[0][i] != '=')
 	{
-		if (!ft_isalnum(args[0][i]))
+		if (ft_isdigit(args[0][0]) || !ft_isalnum(args[0][i]))
 		{
 			ft_putstr_fd("export: not a valid identifier\n", 2);
 			g_structs.exit_status = 1;
@@ -276,4 +275,5 @@ void	builtin_export(char **args)
 	add_node_to_env(key, value);
 	free_collector_one(key);
 	free_collector_one(value);
+	g_structs.exit_status = 0;
 }
