@@ -50,9 +50,8 @@ void	execute_outsider_cmd(t_cmd *cmd)
 		free_collector_all(0);
 		exit(126);
 	}
+	free_collector_all(0);
 	exit(127);
-	/*free_collector_all(0);*/
-	/*exit(0);*/
 }
 
 void	execute_builtins_cmd(t_cmd *cmd)

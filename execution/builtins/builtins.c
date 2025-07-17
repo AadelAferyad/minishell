@@ -78,7 +78,11 @@ static void	change_pwd(char *s, int len)
 		prev = tmp;
 		tmp = tmp->next;
 	}
-	ft_putstr_fd("NOt found OLDPWD\n", 1);
+	buff = getcwd(NULL, 0);
+	node = create_node_env(s, buff);
+	node->next = *head;
+	(*head) = node;
+	free(buff);
 }
 
 int	builtin_cd(char *path)
