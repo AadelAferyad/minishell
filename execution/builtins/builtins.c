@@ -131,11 +131,9 @@ int	builtin_pwd()
 int	builtin_echo(char **args)
 {
 	int	i;
-	int	j;
 	int	flag;
 
 	i = 0;
-	j = 0;
 	flag = 0;
 	if (!args[0])
 	{
