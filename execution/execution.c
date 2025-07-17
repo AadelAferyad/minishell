@@ -192,7 +192,7 @@ void	connect_heredoc()
 	red->type = R_IN;
 	red->flag = "/tmp/heredoc";
 }
-void	exit()
+void	builting_exit()
 {
 	char	*str;
 	int		status;
@@ -225,7 +225,6 @@ void	execution()
 {
 	int	num_cmd;
 	int	wstatus;
-	int	status;
 	pid_t	pid;
 
 	if (!g_structs.cmd)
@@ -233,7 +232,7 @@ void	execution()
 		g_structs.exit_status = 2;
 		return ;
 	}
-
+	builting_exit()
 	/*while (g_structs.cmd && !g_structs.cmd->args[0])*/
 	/*{*/
 	/*	execute_redirections(g_structs.cmd->reds, 0);*/
