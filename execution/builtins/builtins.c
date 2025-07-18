@@ -86,17 +86,38 @@ static void	change_pwd(char *s, int len)
 	free(buff);
 }
 
-int	builtin_cd(char *path)
+int	builtin_cd(char **args)
 {
 	struct stat	st;
+	char	*path;
 
+	path = args[0];
 	if (!path || !path[0])
 		return (0);
+	if (args[1])
+	{
+		ft_putstr_fd("too many arguments\n", 2);
+		g_structs.exit_status = 1;
+		return (0);
+	}
 	if (access(path, F_OK) == 0)
 	{
 		stat(path, &st);
 		if (S_ISDIR(st.st_mode))
 			change_pwd("OLDPWD", 6);
+		else
+		{
+			g_structs.exit_status = 1;
+			ft_putstr_fd("No such file or directory\n", 2);
+			return (0);
+
+		}
+	}
+	else
+	{
+		g_structs.exit_status = 1;
+		ft_putstr_fd("No such file or directory", 2);
+		return (0);
 	}
 	if (chdir(path) == 0)
 		change_pwd("PWD", 3);

@@ -33,6 +33,8 @@ char	*file_exists(char *single_cmd)
 		g_structs.exit_status = 126;
 		return (NULL);
 	}
+	if (single_cmd[0] == '.' && single_cmd[1] == '/')
+		return (single_cmd);
 	return (generate_right_path(single_cmd));
 }
 
@@ -47,7 +49,7 @@ char	*check_add_path(char *single_cmd)
 	else if (ft_strchr(single_cmd, '/'))
 	{
 		ft_putstr_fd(single_cmd, 2);
-		ft_putstr_fd(": No such a file or directory\n", 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		g_structs.exit_status = 127;
 		return (NULL);
 	}
