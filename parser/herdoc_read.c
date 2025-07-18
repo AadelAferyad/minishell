@@ -6,13 +6,13 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:47:28 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/15 12:47:32 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/18 01:30:06 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
 
-static void	append_line(char **buff, const char *line)
+void	append_line(char **buff, const char *line)
 {
 	size_t	old_len;
 	size_t	line_len;
@@ -39,47 +39,43 @@ static void	append_line(char **buff, const char *line)
 	*buff = new_buff;
 }
 
-static int	read_heredoc(t_reds *redir)
+static int	heredoc_loop(t_reds *redir, char **heredoc_buff, int is_quoted)
 {
-	char	*heredoc_buff;
 	char	*line;
-	int		is_quoted;
-	char	*to_store;
+	int		status;
 
-	heredoc_buff = NULL;
 	line = NULL;
-	is_quoted = 0;
-	if (redir->quoted)
-		is_quoted = 1;
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
 			break ;
-		if (ft_strcmp(line, redir->flag) == 1)
+		if (is_end(line, redir))
 		{
 			free_collector_one(line);
 			break ;
 		}
-		to_store = NULL;
-		if (!is_quoted)
-			to_store = expand_vars(line);
-		else
-			to_store = ft_strdup(line);
-		if (!to_store)
-			return (free_collector_one(line), free_collector_one(heredoc_buff),
-				-1);
-		append_line(&heredoc_buff, to_store);
+		status = store_line(heredoc_buff, line, is_quoted);
 		free_collector_one(line);
-		free_collector_one(to_store);
-		if (!heredoc_buff)
+		if (status == -1)
 			return (-1);
 	}
-	if (heredoc_buff)
-		redir->heredoc_buff = heredoc_buff;
-	else
-		redir->heredoc_buff = ft_strdup("");
 	return (0);
+}
+
+int	read_heredoc(t_reds *redir)
+{
+	char	*heredoc_buff;
+	int		is_quoted;
+	int		status;
+
+	heredoc_buff = NULL;
+	is_quoted = 0;
+	if (redir->quoted)
+		is_quoted = 1;
+	status = heredoc_loop(redir, &heredoc_buff, is_quoted);
+	set_buff(redir, heredoc_buff);
+	return (status);
 }
 
 int	handle_heredocs(t_reds *reds)
