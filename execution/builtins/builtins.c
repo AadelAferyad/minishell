@@ -108,7 +108,7 @@ int	builtin_cd(char **args)
 		else
 		{
 			g_structs.exit_status = 1;
-			ft_putstr_fd("No such file or directory", 2);
+			ft_putstr_fd("No such file or directory\n", 2);
 			return (0);
 
 		}
