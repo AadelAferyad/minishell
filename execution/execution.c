@@ -59,7 +59,7 @@ void	execute_builtins_cmd(t_cmd *cmd)
 	if (ft_strncmp(cmd->args[0], "echo", 4) == 0)
 		builtin_echo(&cmd->args[1]);
 	else if (ft_strncmp(cmd->args[0], "cd", 2) == 0)
-		builtin_cd(cmd->args[1]);
+		builtin_cd(&cmd->args[1]);
 	else if (ft_strncmp(cmd->args[0], "pwd", 3) == 0)
 		builtin_pwd();
 	else if (ft_strncmp(cmd->args[0], "env", 3) == 0)
@@ -99,7 +99,7 @@ pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
 			if (reds == 1 || !cmd->args[0])
 			{
 				free_collector_all(0);
-				exit(0);
+				exit(reds);
 			}
 		}
 		if (cmd->args[0] && cmd->type == OUTSIDER)
@@ -196,7 +196,7 @@ void	builting_exit()
 {
 	char	*str;
 	int		status;
-
+;
 	str = g_structs.cmd->args[1];
 	status = 0;
 	if (!ft_strncmp(g_structs.cmd->args[0], "exit", 4))
