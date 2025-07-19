@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 14:16:21 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/09 12:59:41 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/19 19:40:41 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,21 @@ void	execute_pipes(int n_cmd, int **pipefd, int i_cmd)
 	}
 }
 
+void	child_signal(int sig)
+{
+	(void) sig;
+	/*rl_replace_line("", 0);*/
+	printf("tesst\n");
+	write(1, "\n", 1);
+	free_collector_all(0);
+	exit(130);
+}
+
 void	execute_outsider_cmd(t_cmd *cmd)
 {
 	char	*path;
 	char	**envp;
+	int	exit_s;
 
 	path = check_add_path(cmd->args[0]);
 	/*printf("here %s \n", path);*/
@@ -49,8 +60,9 @@ void	execute_outsider_cmd(t_cmd *cmd)
 		ft_putstr_fd("\n", 2);
 		g_structs.exit_status = 126;
 	}
+	exit_s = g_structs.exit_status;
 	free_collector_all(0);
-	exit(g_structs.exit_status);
+	exit(exit_s);
 }
 
 void	execute_builtins_cmd(t_cmd *cmd)
@@ -69,25 +81,17 @@ void	execute_builtins_cmd(t_cmd *cmd)
 		builtin_unset(cmd->args[1]);
 }
 
-void	def_sig(int sigint)
-{
-	if (sigint == SIGINT)
-		printf("test\n");
-}
 
 pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
 {
 	pid_t	pid;
-	struct sigaction sa;
 	int	reds;
 
 	pid = fork();
 	if (pid == 0)
 	{
-		sa.sa_handler = def_sig;
-		sigemptyset(&sa.sa_mask);
-		sa.sa_flags = 0;
-		sigaction(SIGINT, &sa, NULL);
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		execute_pipes(n_cmd, pipefd, i_cmd);
 		if (cmd->reds)
 		{
@@ -107,6 +111,11 @@ pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
 			execute_builtins_cmd(cmd);
 		free_collector_all(0);
 		exit(0);
+	}
+	else
+	{
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 	}
 	return (pid);
 }
@@ -150,9 +159,16 @@ void	execute_multiple_command(int num_cmd)
 		{
 			waitpid(children[i], &wstatus, 0);
 			g_structs.exit_status = WEXITSTATUS(wstatus);
+			if (WTERMSIG(wstatus) == SIGINT)
+			{
+				write(1, "\n", 1);
+				g_structs.exit_status = 130;
+			}
 		}
 		i++;
 	}
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 t_reds	*get_last_heredoc(t_reds *reds)
@@ -228,6 +244,7 @@ void	builting_exit()
 		exit(status);
 	}
 }
+
 void	execution()
 {
 	int	num_cmd;
@@ -260,6 +277,18 @@ void	execution()
 			pid = execute_one_command(g_structs.cmd, 0, NULL, 0);
 			waitpid(pid, &wstatus, 0);
 			g_structs.exit_status = WEXITSTATUS(wstatus);
+			signal(SIGINT, signal_handler);
+			signal(SIGQUIT, SIG_IGN);
+			if (WTERMSIG(wstatus) == SIGQUIT)
+			{
+				ft_putstr_fd("Quit (core dumped)\n", 1);
+				g_structs.exit_status = 130;
+			}
+			else if (WTERMSIG(wstatus) == SIGINT)
+			{
+				ft_putstr_fd("\n", 1);
+				g_structs.exit_status = 130;
+			}
 		}
 	}
 	else if (num_cmd > 1)
