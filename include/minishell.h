@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 16:24:31 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/09 12:30:18 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/19 18:10:10 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,5 @@ int	n_cmd(t_cmd *cmd);
 
 char	*check_add_path(char *single_cmd);
 char	*generate_right_path(char *single_cmd);
+void	signal_handler(int sig);
 #endif
