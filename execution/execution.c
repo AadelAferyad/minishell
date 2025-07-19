@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 14:16:21 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/19 19:30:31 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/19 19:40:41 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,9 +279,14 @@ void	execution()
 			g_structs.exit_status = WEXITSTATUS(wstatus);
 			signal(SIGINT, signal_handler);
 			signal(SIGQUIT, SIG_IGN);
-			if (WTERMSIG(wstatus) == SIGINT)
+			if (WTERMSIG(wstatus) == SIGQUIT)
 			{
-				write(1, "\n", 1);
+				ft_putstr_fd("Quit (core dumped)\n", 1);
+				g_structs.exit_status = 130;
+			}
+			else if (WTERMSIG(wstatus) == SIGINT)
+			{
+				ft_putstr_fd("\n", 1);
 				g_structs.exit_status = 130;
 			}
 		}
