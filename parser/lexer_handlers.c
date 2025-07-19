@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:43:10 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/18 01:55:06 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/19 16:05:09 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,23 +83,27 @@ int	handle_single_op(char *input, int *i, t_tokens **tokens)
  */
 int	handle_segs(t_tokens **tokens, t_segment *segments)
 {
-	char	*expanded;
+	char	*joined;
 	char	**field;
 
-	if (segments == NULL)
+	if (!segments)
 		return (-1);
-	if (segments->next == NULL && (segments->q_type == Q_SINGLE
-			|| segments->q_type == Q_DOUBLE))
-		return (create_seg(tokens, segments));
+	joined = join_segs(segments);
+	if (!joined)
+		return (-1);
+	if (is_quoted_seg(segments))
+	{
+		if (add_fields(tokens, (char *[]){joined, NULL}, joined) == -1)
+			return (free_collector_one(joined), -1);
+	}
 	else
 	{
-		expanded = join_segs(segments);
-		field = field_splitting(expanded);
-		if (add_fields(tokens, field, expanded) == -1)
-			return (-1);
-		free_collector_one(expanded);
+		field = field_splitting(joined);
+		if (add_fields(tokens, field, joined) == -1)
+			return (free_collector_one(joined), free_fields(field), -1);
 		free_fields(field);
 	}
+	free_collector_one(joined);
 	return (0);
 }
 

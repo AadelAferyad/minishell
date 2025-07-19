@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/18 02:07:33 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/19 16:05:07 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ int			is_redir(int type);
 int			is_word(int type);
 int			is_valid_start(char c);
 int			is_valid_char(char c);
+int			is_quoted_seg(t_segment *segments);
 
 /* String Manupilation Functions */
 

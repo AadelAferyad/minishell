@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:03:54 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/18 02:08:17 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/19 16:05:13 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	handle_assignment(char *input, int *i, t_tokens **tokens)
 	if (input[name_end] == '=')
 	{
 		if (!is_valid_start(input[start]))
-			return (ft_putstr_fd("not a valid identifier\n", 2), -1);
+			return (ft_putstr_fd("not a valid identifier\n", 2),
+				g_structs.exit_status = 1, -1);
 		name_token = extracting_word(input, start, name_end + 1);
 		*tokens = create_token(*tokens, name_token);
 		free_collector_one(name_token);
