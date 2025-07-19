@@ -211,7 +211,7 @@ void	builting_exit()
 {
 	char	*str;
 	int		status;
-;
+
 	if (!g_structs.cmd->args || !g_structs.cmd->args[0])
 		return ;
 	str = g_structs.cmd->args[1];
@@ -263,6 +263,7 @@ void	execution()
 	/*	g_structs.cmd = g_structs.cmd->next;*/
 	/*}*/
 	handle_heredocs(g_structs.cmd->reds);
+	signal(SIGINT, );
 	setup_types();
 	connect_heredoc();
 	num_cmd = n_cmd(g_structs.cmd);
