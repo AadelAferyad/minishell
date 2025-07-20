@@ -23,6 +23,10 @@ SRCS = main.c \
 	parser/env_funcs.c \
 	parser/field_split.c \
 	execution/builtins/builtins.c \
+	execution/builtins/builtins_1.c \
+	execution/builtins/builtins_2.c \
+	execution/builtins/builtins_3.c \
+	execution/builtins/builtins_4.c \
 	execution/normal_func.c \
 	execution/execution.c \
 	execution/env.c \
