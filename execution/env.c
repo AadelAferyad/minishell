@@ -6,17 +6,17 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 11:45:21 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/09 12:50:29 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/20 20:45:38 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-t_env	**get_env()
+t_env	**get_env(void)
 {
 	static t_env	*head;
-	static int	init;
-	
+	static int		init;
+
 	if (!init)
 	{
 		head = NULL;
@@ -25,26 +25,13 @@ t_env	**get_env()
 	return (&head);
 }
 
-static void	trim(char *s)
+static void	trim(t_env *node)
 {
-	int		i;
-	t_env	*node;
 	t_env	*tmp;
 	t_env	**head;
 
-	i = 0;
 	head = get_env();
 	tmp = *head;
-	while (s[i] != '=')
-		i++;
-	node = malloc(sizeof(t_env));
-	node->key = _substr(s, 0, i);
-	node->value = _substr(s, i + 1, ft_strlen(&s[i]));
-	if (!node || !node->key || !node->value)
-	{
-		free_collector_all(0);
-		exit(1);
-	}
 	node->next = NULL;
 	if (!(*head))
 	{
@@ -71,35 +58,6 @@ int	list_len(void)
 	return (i);
 }
 
-void	sort_env()
-{
-	t_env	*tmp;
-	t_env	*buff;
-	t_env	*node;
-	t_env	**head;
-
-	/*(c)-->(b)-->(a)-->N*/
-	head = get_env();
-	tmp = *head;
-	while (tmp)
-	{
-		node = tmp;
-		while (node)
-		{
-			if (tmp->key[0] > node->key[0])
-			{
-				buff = node->next;
-				node->next = tmp;
-				tmp->next = buff;
-				if (*head == tmp)
-					*head = node;
-			}
-			node = node->next;
-		}
-		tmp = tmp->next;
-	}
-}
-
 char	**create_env_arr(void)
 {
 	char	**arr;
@@ -124,12 +82,25 @@ char	**create_env_arr(void)
 
 void	create_env(char **env)
 {
-	int	i;
+	int		i;
+	int		j;
+	t_env	*node;
 
 	i = 0;
 	while (env[i])
 	{
-		trim(env[i]);
+		j = 0;
+		while (env[i][j] != '=')
+			j++;
+		node = malloc(sizeof(t_env));
+		node->key = _substr(env[i], 0, j);
+		node->value = _substr(env[i], j + 1, ft_strlen(&env[i][j]));
+		if (!node || !node->key || !node->value)
+		{
+			free_collector_all(0);
+			exit(1);
+		}
+		trim(node);
 		i++;
 	}
 }

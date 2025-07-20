@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 13:41:20 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/07 14:49:46 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/20 20:53:38 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ char	*file_exists(char *single_cmd)
 
 char	*check_add_path(char *single_cmd)
 {
-	/*if (!single_cmd)*/
-	/*	return (NULL);*/
 	if (access(single_cmd, F_OK) == 0)
 	{
 		return (file_exists(single_cmd));
@@ -81,7 +79,8 @@ static void	setup_helper(char **arr, t_cmd *cmd)
 		i = 0;
 		while (arr[i])
 		{
-			if (cmd->args[0] && ft_strncmp(cmd->args[0], arr[i], ft_strlen(arr[i])) == 0)
+			if (cmd->args[0]
+				&& ft_strncmp(cmd->args[0], arr[i], ft_strlen(arr[i])) == 0)
 			{
 				cmd->type = BUILTINS;
 				i = 0;

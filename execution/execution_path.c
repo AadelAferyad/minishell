@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 13:45:51 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/09 12:31:14 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/20 20:54:09 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,6 @@ char	*generate_right_path(char *single_cmd)
 	char	*full_path;
 
 	extracted_path = extract_path();
-	/*if (!extracted_path)*/
-	/*	return (NULL);*/
 	path = ft_split(extracted_path, ':');
 	full_path = find_right_path(single_cmd, path);
 	free_list_of_path(path);
