@@ -25,6 +25,6 @@ int	builtin_pwd(void);
 int	builtin_cd(char **args);
 void	builtin_env(void);
 void	builtin_export(char **args);
-void	builtin_unset(char *args);
+void	builtin_unset(char **args);
 
 #endif

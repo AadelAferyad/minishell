@@ -78,7 +78,7 @@ void	execute_builtins_cmd(t_cmd *cmd)
 	else if (ft_strncmp(cmd->args[0], "export", 6) == 0)
 		builtin_export(&cmd->args[1]);
 	else if (ft_strncmp(cmd->args[0], "unset", 5) == 0)
-		builtin_unset(cmd->args[1]);
+		builtin_unset(&cmd->args[1]);
 }
 
 
@@ -263,7 +263,6 @@ void	execution()
 	/*	g_structs.cmd = g_structs.cmd->next;*/
 	/*}*/
 	handle_heredocs(g_structs.cmd->reds);
-	signal(SIGINT, SIG_DFL);
 	setup_types();
 	connect_heredoc();
 	num_cmd = n_cmd(g_structs.cmd);

@@ -231,22 +231,18 @@ void	add_node_to_env(char *key, char *value)
 	}
 }
 
-void	builtin_unset(char *args)
+t_env	*search_for_node(t_env **head, char *arg)
 {
-	t_env	**head;
+	int	size;
 	t_env	*node;
 	t_env	*tmp;
-	int	size;
 
-	head = get_env();
 	node = *head;
-	g_structs.exit_status = 0;
-	if (!args)
-		return ;
-	size = ft_strlen(args);
+	tmp = node;	
+	size = ft_strlen(arg);
 	while (node)
 	{
-		if (!ft_strncmp(args, node->key, size))
+		if (!ft_strncmp(arg, node->key, size))
 		{
 			if (node == *head)
 			{
@@ -257,44 +253,82 @@ void	builtin_unset(char *args)
 			free(node->key);
 			free(node->value);
 			free(node);
-			break ;
+			return (tmp);
 		}
 		tmp = node;
 		node = node->next;
+	}
+	return (NULL);
+
+}
+
+void	builtin_unset(char **args)
+{
+	t_env	**head;
+	int	i;
+
+	head = get_env();
+	g_structs.exit_status = 0;
+	if (!args || !args[0])
+		return ;
+	i = 0;
+	while (args[i])
+	{
+		search_for_node(head, args[i]);
+		i++;
+	}
+}
+
+static int	export_check(char c)
+{
+	if (c == '_' || ft_isalnum(c))
+		return (1);
+	return (0);
+}
+
+void	export_helper(char **args)
+{
+	int	i;
+	int	j;
+	char	*key;
+	char	*value;
+
+	i = 0;
+	while (args[i])
+	{
+		j = 0;
+		while (args[i][j] && args[i][j] != '=')
+		{
+			if (ft_isdigit(args[i][0]) || !export_check(args[i][j]))
+			{
+				ft_putstr_fd("export: not a valid identifier\n", 2);
+				g_structs.exit_status = 1;
+				return ;
+			}
+			j++;
+		}
+		if (!args[i][j])
+			return ;
+		key = ft_substr(args[i], 0, j);
+		if (!args[i + 1])
+			value = ft_strdup("");
+		else
+			value = ft_strdup(args[i + 1]);
+		add_node_to_env(key, value);
+		free_collector_one(key);
+		free_collector_one(value);
+		i += 2;
+		g_structs.exit_status = 0;
 	}
 }
 
 void	builtin_export(char **args)
 {
-	int	i;
-	char	*key;
-	char	*value;
 
-	i = 0;
 	if (!args[0])
 	{
 		print_export();
 		return ;
 	}
-	while (args[0][i] && args[0][i] != '=')
-	{
-		if (ft_isdigit(args[0][0]) || !ft_isalnum(args[0][i]))
-		{
-			ft_putstr_fd("export: not a valid identifier\n", 2);
-			g_structs.exit_status = 1;
-			return ;
-		}
-		i++;
-	}
-	if (!args[0][i])
-		return ;
-	key = ft_substr(args[0], 0, i);
-	if (!args[1])
-		value = ft_strdup("");
-	else
-		value = ft_strdup(args[1]);
-	add_node_to_env(key, value);
-	free_collector_one(key);
-	free_collector_one(value);
-	g_structs.exit_status = 0;
+	export_helper(args);
 }
