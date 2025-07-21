@@ -3,35 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:17:44 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/15 12:47:40 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/21 19:42:00 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
 
-t_global	g_structs;
+t_global g_structs;
 
-void	print_segments(t_segment *segments)
+void print_segments(t_segment *segments)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (segments)
 	{
 		printf("    [segment]: value=%s, quote_type=%d\n\n",
-				segments->value,
-				segments->q_type);
+			   segments->value,
+			   segments->q_type);
 		segments = segments->next;
 		i++;
 	}
 }
 
-static void	print_tokens(t_tokens *tokens)
+static void print_tokens(t_tokens *tokens)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (tokens)
@@ -43,20 +43,20 @@ static void	print_tokens(t_tokens *tokens)
 	}
 }
 
-static void	print_reds(t_reds *reds)
+static void print_reds(t_reds *reds)
 {
 	while (reds)
 	{
 		printf("    [redir] type: %d, flag: %s, flag_quoted: %d\n", reds->type,
-				reds->flag, reds->quoted);
+			   reds->flag, reds->quoted);
 		reds = reds->next;
 	}
 }
 
-void	print_cmds(t_cmd *cmds)
+void print_cmds(t_cmd *cmds)
 {
-	int	i;
-	int	j;
+	int i;
+	int j;
 
 	i = 0;
 	while (cmds)
@@ -82,7 +82,7 @@ void	print_cmds(t_cmd *cmds)
 	}
 }
 
-void	print_env(t_env *env)
+void print_env(t_env *env)
 {
 	while (env)
 	{
@@ -91,9 +91,9 @@ void	print_env(t_env *env)
 	}
 }
 
-t_reds	*get_last_heredoc(t_reds *reds)
+static t_reds *get_last_heredoc(t_reds *reds)
 {
-	t_reds	*last;
+	t_reds *last;
 
 	last = NULL;
 	while (reds)
@@ -105,12 +105,12 @@ t_reds	*get_last_heredoc(t_reds *reds)
 	return (last);
 }
 
-int	main(int argc, char **argv, char **envp)
+int main(int argc, char **argv, char **envp)
 {
-	char		*input;
-	t_tokens	*tokens;
-	t_cmd		*cmds;
-	t_reds		*heredoc;
+	char *input;
+	t_tokens *tokens;
+	t_cmd *cmds;
+	t_reds *heredoc;
 
 	(void)argc;
 	(void)argv;
