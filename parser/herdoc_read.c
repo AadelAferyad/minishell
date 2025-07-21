@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:47:28 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/21 19:13:49 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/21 19:52:14 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,14 @@ static int	heredoc_loop(t_reds *redir, char **heredoc_buff, int is_quoted)
 	{
 		line = readline("> ");
 		if (!line)
-			break ;
+		{
+			ft_putstr_fd("warning: here-document at line 1 delimited by end-of-file", 2);
+			ft_putstr_fd("(wanted `", 2);
+			ft_putstr_fd(redir->flag, 2);
+			ft_putstr_fd("\')\n", 2);
+			free_collector_all(0);
+			exit(2);
+		}
 		if (is_end(line, redir))
 		{
 			free(line);
@@ -110,6 +117,49 @@ int	read_heredoc(t_reds *redir)
 	return (status);
 }
 
+void	here_sig(int sig)
+{
+	if (sig == SIGINT)
+	{
+		ft_putstr_fd("\n", 1);
+		if (access("/tmp/heredoc", F_OK))
+			unlink("/tmp/heredoc");
+		free_collector_all(0);
+		exit(130);
+	}
+	else if (sig == EOF)
+	{
+		ft_putstr_fd("\n", 1);
+		if (access("/tmp/heredoc", F_OK))
+			unlink("/tmp/heredoc");
+		free_collector_all(0);
+		exit(130);
+	}
+}
+
+void	skip_cmd(t_reds *current)
+{
+	t_cmd	*cmd;
+	t_cmd	*prev;
+
+	cmd = g_structs.cmd;
+	prev = cmd;
+	while (cmd)
+	{
+		if (cmd->reds == current)
+		{
+			if (cmd == g_structs.cmd)
+				g_structs.cmd = cmd->next;
+			else
+				prev->next = cmd->next;
+			free_collector_one(cmd);
+			return ;
+		}
+		prev = cmd;
+		cmd = cmd->next;
+	}
+}
+
 int	handle_heredocs(t_reds *reds)
 {
 	t_reds	*current;
@@ -117,7 +167,8 @@ int	handle_heredocs(t_reds *reds)
 	pid_t	pid;
 
 	pid = fork();
-	signal(SIGINT, SIG_DFL);
+	signal(SIGINT, here_sig);
+	signal(EOF, here_sig);
 	current = reds;
 	if (pid == 0)
 	{
@@ -139,9 +190,20 @@ int	handle_heredocs(t_reds *reds)
 	else
 	{
 		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		waitpid(pid, &status, 0);
 		current = get_last_heredoc(current);
-		if (current)
+		if (WEXITSTATUS(status) == 130)
+		{
+			g_structs.cmd = NULL;
+			g_structs.exit_status = 130;
+		}
+		else if (WEXITSTATUS(status) == 2)
+		{
+			skip_cmd(current);
+			g_structs.exit_status = 0;
+		}
+		else if (current)
 		{
 			current->type = R_IN;
 			current->flag = "/tmp/heredoc";
