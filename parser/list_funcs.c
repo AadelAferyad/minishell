@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:01:37 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/09 12:08:26 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/18 01:37:42 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,49 @@ t_reds	*add_redir(t_reds *head, t_types type, char *flag, int quoted)
 		current = current->next;
 	current->next = redir;
 	return (head);
+}
+
+int	add_fields(t_tokens **tokens, char **fields, char *expanded)
+{
+	int	i;
+
+	i = 0;
+	while (fields && fields[i])
+	{
+		*tokens = create_token(*tokens, fields[i]);
+		if (!*tokens)
+		{
+			free_collector_one(expanded);
+			free_fields(fields);
+			return (-1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	create_seg_token(t_tokens **tokens, t_segment *segments)
+{
+	t_tokens	*new_token;
+	t_tokens	*current;
+
+	new_token = safe_malloc(sizeof(t_tokens));
+	if (!new_token)
+		return (-1);
+	new_token->segments = segments;
+	new_token->type = WORD;
+	new_token->next = NULL;
+	new_token->value = NULL;
+	if (!*tokens)
+	{
+		*tokens = new_token;
+	}
+	else
+	{
+		current = *tokens;
+		while (current->next)
+			current = current->next;
+		current->next = new_token;
+	}
+	return (1);
 }

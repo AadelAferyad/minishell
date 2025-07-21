@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 13:45:51 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/09 12:31:14 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/21 20:42:09 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,15 @@ char	*generate_right_path(char *single_cmd)
 	char	*extracted_path;
 	char	*full_path;
 
+	if (!single_cmd[0] || (single_cmd[0] == '.' && (!single_cmd[1]
+				|| single_cmd[1] == '.')))
+	{
+		ft_putstr_fd(single_cmd, 2);
+		ft_putstr_fd(": command not found\n", 2);
+		g_structs.exit_status = 127;
+		return (NULL);
+	}
 	extracted_path = extract_path();
-	/*if (!extracted_path)*/
-	/*	return (NULL);*/
 	path = ft_split(extracted_path, ':');
 	full_path = find_right_path(single_cmd, path);
 	free_list_of_path(path);

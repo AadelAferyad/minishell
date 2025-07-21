@@ -6,13 +6,13 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 13:30:17 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/07 14:47:33 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/21 20:46:12 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	redirections_out(char *file, int flag)
+int	redirections_out(char *file, int flag)
 {
 	int	fd;
 
@@ -20,18 +20,21 @@ void	redirections_out(char *file, int flag)
 	if (fd == -1)
 	{
 		ft_putstr_fd(strerror(errno), 2);
-		return ;
+		ft_putstr_fd("\n", 2);
+		g_structs.exit_status = 1;
+		return (1);
 	}
 	if (!flag)
 	{
 		close(fd);
-		return ;
+		return (0);
 	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
+	return (0);
 }
 
-void	redirections_append(char *file, int flag)
+int	redirections_append(char *file, int flag)
 {
 	int	fd;
 
@@ -39,15 +42,18 @@ void	redirections_append(char *file, int flag)
 	if (fd == -1)
 	{
 		ft_putstr_fd(strerror(errno), 2);
-		return ;
+		ft_putstr_fd("\n", 2);
+		g_structs.exit_status = 1;
+		return (1);
 	}
 	if (!flag)
 	{
 		close(fd);
-		return ;
+		return (1);
 	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
+	return (0);
 }
 
 int	redirections_in(char *file, int flag)
@@ -57,11 +63,11 @@ int	redirections_in(char *file, int flag)
 	if (access(file, F_OK) != 0)
 	{
 		ft_putstr_fd(file, 2);
-		ft_putstr_fd(": No such a file or directory\n", 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		g_structs.exit_status = 1;
 		return (1);
 	}
-	fd = open(file, O_APPEND);
+	fd = open(file, O_RDONLY);
 	if (fd == -1)
 	{
 		ft_putstr_fd("Could not open a fail\n", 2);
@@ -83,9 +89,15 @@ int	execute_redirections(t_reds *redirections, int just_create)
 	while (redirections)
 	{
 		if (redirections->type == R_OUT)
-			redirections_out(redirections->flag, just_create);
-		if (redirections->type == R_APPEND)
-			redirections_append(redirections->flag, just_create);
+		{
+			if (redirections_out(redirections->flag, just_create))
+				return (1);
+		}
+		else if (redirections->type == R_APPEND)
+		{
+			if (redirections_append(redirections->flag, just_create))
+				return (1);
+		}
 		else if (redirections->type == R_IN)
 		{
 			if (redirections_in(redirections->flag, just_create))

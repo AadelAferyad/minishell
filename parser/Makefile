@@ -2,7 +2,7 @@ CC = cc
 CFLAGS = -Werror -Wall -Wextra -ggdb3
 NAME = minishell
 
-SRCS = main.c lexer.c char_check.c str_funcs.c list_funcs.c lexer_handlers.c lexer_quotes.c ../safe_allocation/memory_system.c parser.c parser_checks.c lexer_segments.c expand.c env_funcs.c ../execution/env.c field_split.c herdoc.c herdoc_read.c ../execution/normal_func.c char_check2.c
+SRCS = main.c lexer.c char_check.c str_funcs.c list_funcs.c lexer_handlers.c lexer_quotes.c ../safe_allocation/memory_system.c parser.c parser_checks.c lexer_segments.c expand.c env_funcs.c ../execution/env.c field_split.c herdoc.c herdoc_read.c ../execution/normal_func.c char_check2.c herdoc_utils.c lexer_utils.c cleaning.c
 OBJS = $(SRCS:.c=.o)
 
 LIBFT_DIR = ../libft

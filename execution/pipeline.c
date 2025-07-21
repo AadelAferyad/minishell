@@ -10,4 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <pipline.h>
+#include <minishell.h>
+
+void	execute_pipes(int n_cmd, int **pipefd, int i_cmd)
+{
+	int	i;
+
+	i = 0;
+	if (i_cmd > 0)
+	{
+		dup2(pipefd[i_cmd - 1][0], STDIN_FILENO);
+	}
+	if (i_cmd < n_cmd - 1)
+	{
+		dup2(pipefd[i_cmd][1], STDOUT_FILENO);
+	}
+	while (i < n_cmd - 1)
+	{
+		close(pipefd[i][0]);
+		close(pipefd[i][1]);
+		i++;
+	}
+}

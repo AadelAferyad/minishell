@@ -6,11 +6,25 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 18:16:13 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/09 12:08:11 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/19 16:05:08 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
+
+int	is_quoted_seg(t_segment *segments)
+{
+	t_segment	*cur;
+
+	cur = segments;
+	while (cur)
+	{
+		if (cur->q_type == Q_SINGLE || cur->q_type == Q_DOUBLE)
+			return (1);
+		cur = cur->next;
+	}
+	return (0);
+}
 
 char	*extract_quoted(char *input, int *i, char quote)
 {

@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:43:10 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/15 12:38:05 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/19 16:05:09 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,25 +73,6 @@ int	handle_single_op(char *input, int *i, t_tokens **tokens)
 	return (0);
 }
 
-static int	add_fields(t_tokens **tokens, char **fields, char *expanded)
-{
-	int	i;
-
-	i = 0;
-	while (fields && fields[i])
-	{
-		*tokens = create_token(*tokens, fields[i]);
-		if (!*tokens)
-		{
-			free_collector_one(expanded);
-			free_fields(fields);
-			return (-1);
-		}
-		i++;
-	}
-	return (0);
-}
-
 /**
  * handle_segs - Handles the splitting and tokenization of segments
  * 
@@ -102,50 +83,48 @@ static int	add_fields(t_tokens **tokens, char **fields, char *expanded)
  */
 int	handle_segs(t_tokens **tokens, t_segment *segments)
 {
-	char	*expanded;
+	char	*joined;
 	char	**field;
 
-	if (segments == NULL)
+	if (!segments)
 		return (-1);
-	if (segments->next == NULL && (segments->q_type == Q_SINGLE
-			|| segments->q_type == Q_DOUBLE))
-		return (create_seg(tokens, segments));
+	joined = join_segs(segments);
+	if (!joined)
+		return (-1);
+	if (is_quoted_seg(segments))
+	{
+		if (add_fields(tokens, (char *[]){joined, NULL}, joined) == -1)
+			return (free_collector_one(joined), -1);
+	}
 	else
 	{
-		expanded = join_segs(segments);
-		field = field_splitting(expanded);
-		if (add_fields(tokens, field, expanded) == -1)
-			return (-1);
-		free_collector_one(expanded);
+		field = field_splitting(joined);
+		if (add_fields(tokens, field, joined) == -1)
+			return (free_collector_one(joined), free_fields(field), -1);
 		free_fields(field);
 	}
+	free_collector_one(joined);
 	return (0);
 }
 
-static int	create_seg_token(t_tokens **tokens, t_segment *segments)
+static int	handle_word_loop(char *input, int *i, t_segment **segments)
 {
-	t_tokens	*new_token;
-	t_tokens	*current;
-
-	new_token = safe_malloc(sizeof(t_tokens));
-	if (!new_token)
-		return (-1);
-	new_token->segments = segments;
-	new_token->type = WORD;
-	new_token->next = NULL;
-	new_token->value = NULL;
-	if (!*tokens)
+	while (input[*i] && !ft_isspace(input[*i]) && !ft_isop(input[*i]))
 	{
-		*tokens = new_token;
+		if (input[*i] == '\'')
+		{
+			if (handle_quoted(input, i, segments, Q_SINGLE) == -1)
+				return (-1);
+		}
+		else if (input[*i] == '"')
+		{
+			if (handle_quoted(input, i, segments, Q_DOUBLE) == -1)
+				return (-1);
+		}
+		else
+			handle_unquoted(input, i, segments);
 	}
-	else
-	{
-		current = *tokens;
-		while (current->next)
-			current = current->next;
-		current->next = new_token;
-	}
-	return (1);
+	return (0);
 }
 
 /**
@@ -158,30 +137,18 @@ static int	create_seg_token(t_tokens **tokens, t_segment *segments)
  * Return: 1 if a word was handled, 0 if not
  *         -1 on error
  */
-
-int	handle_word(char *input, int *i, t_tokens **tokens, int is_heredoc_delim)
+int	handle_word(char *input, int *i, t_tokens **tokens, int is_heredoc_del)
 {
 	t_segment	*segments;
+	int			status;
 
 	segments = NULL;
-	while (input[*i] && !ft_isspace(input[*i]) && !ft_isop(input[*i]))
-	{
-		if (input[*i] == '\'')
-		{
-			if (handle_quoted(input, i, &segments, Q_SINGLE) == -1)
-				return (-1);
-		}
-		else if (input[*i] == '"')
-		{
-			if (handle_quoted(input, i, &segments, Q_DOUBLE) == -1)
-				return (-1);
-		}
-		else
-			handle_unquoted(input, i, &segments);
-	}
+	status = handle_word_loop(input, i, &segments);
+	if (status == -1)
+		return (-1);
 	if (segments)
 	{
-		if (is_heredoc_delim)
+		if (is_heredoc_del)
 			return (create_seg_token(tokens, segments));
 		else
 			return (handle_segs(tokens, segments));

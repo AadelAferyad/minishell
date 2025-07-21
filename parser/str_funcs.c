@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:01:42 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/09 12:08:46 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/18 01:33:56 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,32 @@ char	*safe_strjoin(char *s1, char *s2)
 		return (ft_strjoin(s1, s2));
 	else
 		return (ft_strdup(s2));
+}
+
+void	append_to_output(char **dst, char *src)
+{
+	char	*tmp;
+	size_t	dest_len;
+	size_t	src_len;
+	size_t	i;
+
+	dest_len = 0;
+	if (*dst)
+		while ((*dst)[dest_len])
+			dest_len++;
+	src_len = 0;
+	while (src && src[src_len])
+		src_len++;
+	tmp = safe_malloc(dest_len + src_len + 1);
+	if (!tmp)
+		return ;
+	i = -1;
+	while (++i < dest_len)
+		tmp[i] = (*dst)[i];
+	i = -1;
+	while (++i < src_len)
+		tmp[dest_len + i] = src[i];
+	tmp[dest_len + src_len] = '\0';
+	free_collector_one(*dst);
+	*dst = tmp;
 }

@@ -6,39 +6,11 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 00:34:03 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/16 01:45:27 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/18 01:33:58 by imellali         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parser.h>
-
-void	append_to_output(char **dst, char *src)
-{
-	char	*tmp;
-	size_t	dest_len;
-	size_t	src_len;
-	size_t	i;
-
-	dest_len = 0;
-	if (*dst)
-		while ((*dst)[dest_len])
-			dest_len++;
-	src_len = 0;
-	while (src && src[src_len])
-		src_len++;
-	tmp = safe_malloc(dest_len + src_len + 1);
-	if (!tmp)
-		return ;
-	i = -1;
-	while (++i < dest_len)
-		tmp[i] = (*dst)[i];
-	i = -1;
-	while (++i < src_len)
-		tmp[dest_len + i] = src[i];
-	tmp[dest_len + src_len] = '\0';
-	free_collector_one(*dst);
-	*dst = tmp;
-}
 
 size_t	key_end(char *input, size_t i)
 {
@@ -56,17 +28,22 @@ void	add_char(char **dst, char c)
 	append_to_output(dst, buf);
 }
 
+static void	handle_exit_status(char **output)
+{
+	char	*exit_status;
+
+	exit_status = ft_itoa(g_structs.exit_status);
+	append_to_output(output, exit_status);
+	free_collector_one(exit_status);
+}
+
 static size_t	expand(char *input, size_t i, char **output)
 {
-	char *exit_status;
-
 	if (!input[i])
 		add_char(output, '$');
 	else if (input[i] == '?')
 	{
-		exit_status = ft_itoa(g_structs.exit_status);
-		append_to_output(output, exit_status);
-		free_collector_one(exit_status);
+		handle_exit_status(output);
 		i++;
 	}
 	else if (ft_isalpha(input[i]) || input[i] == '_')
@@ -83,7 +60,8 @@ static size_t	expand(char *input, size_t i, char **output)
 	else
 	{
 		add_char(output, '$');
-		add_char(output, input[i++]);
+		add_char(output, input[i]);
+		i++;
 	}
 	return (i);
 }
