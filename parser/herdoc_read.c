@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:47:28 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/21 20:21:31 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/21 20:28:35 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ static int	heredoc_loop(t_reds *redir, char **heredoc_buff, int is_quoted)
 			break ;
 		}
 		status = store_line(heredoc_buff, line, is_quoted);
+		connect_heredoc(heredoc_buff);
 		free(line);
 		if (status == -1)
 			return (-1);
