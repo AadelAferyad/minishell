@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 13:30:17 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/07 14:47:33 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/21 20:01:53 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	redirections_out(char *file, int flag)
 	if (fd == -1)
 	{
 		ft_putstr_fd(strerror(errno), 2);
+		ft_putstr_fd("\n", 2);
 		g_structs.exit_status = 1;
 		return (1);
 	}
@@ -41,6 +42,7 @@ int	redirections_append(char *file, int flag)
 	if (fd == -1)
 	{
 		ft_putstr_fd(strerror(errno), 2);
+		ft_putstr_fd("\n", 2);
 		g_structs.exit_status = 1;
 		return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 11:46:07 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/20 22:47:13 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/21 20:06:06 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ t_env	*create_node_env(char *key, char *value)
 	{
 		free_collector_all(0);
 		ft_putstr_fd(strerror(errno), 2);
+		ft_putstr_fd("\n", 2);
 		exit(1);
 	}
 	return (node);

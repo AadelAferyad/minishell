@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 14:16:21 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/21 19:00:18 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/21 20:13:29 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,23 +62,25 @@ void	execution_init(void)
 	t_cmd	*tmp;
 	int	flag;
 
+	builting_exit();
+	setup_types();
 	here = g_structs.cmd;
 	flag = 0;
 	tmp = here;
 	while (here)
 	{
 		if (here->reds && here->reds->type == R_HEREDOC)
+		{
 			tmp = here;
-		else if (here->reds)
 			flag = 1;
+		}
 		here = here->next;
 	}
-	flag++;
-	builting_exit();
+	if (!flag)
+		return ;
 	handle_heredocs(tmp->reds);
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
-	setup_types();
 }
 
 static void	execute_cmd_helper(void)

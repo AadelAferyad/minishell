@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:41:41 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/20 21:57:00 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/21 20:15:29 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ void	execute_outsider_cmd(t_cmd *cmd)
 	{
 		envp = create_env_arr();
 		execve(path, cmd->args, envp);
-		ft_putstr_fd("execve failed : ", 2);
-		ft_putstr_fd(strerror(errno), 2);
-		ft_putstr_fd("\n", 2);
-		g_structs.exit_status = 126;
+		/*ft_putstr_fd("execve failed : ", 2);*/
+		/*ft_putstr_fd(strerror(errno), 2);*/
+		/*ft_putstr_fd("\n", 2);*/
+		/*g_structs.exit_status = 126;*/
 	}
 	exit_s = g_structs.exit_status;
 	free_collector_all(0);

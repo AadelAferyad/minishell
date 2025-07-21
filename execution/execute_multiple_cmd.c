@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:49:25 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/21 00:20:18 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/21 19:57:34 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static int	checking_exit_args(char *s)
 	{
 		if ((!ft_isdigit(s[i]) && (s[i] != '+' && s[i] != '-')))
 		{
-			ft_putstr_fd("exit: numeric argument required\n", 2);
+			ft_putstr_fd("exit\nexit: numeric argument required\n", 2);
 			free_collector_all(0);
 			exit(2);
 		}
@@ -103,7 +103,7 @@ void	builting_exit(void)
 	{
 		if (str && g_structs.cmd->args[2])
 		{
-			ft_putstr_fd("exit: too many arguments\n", 2);
+			ft_putstr_fd("exit\nexit: too many arguments\n", 2);
 			free_collector_all(0);
 			exit(1);
 		}

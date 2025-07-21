@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:47:28 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/21 19:52:14 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/21 20:21:31 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ void	skip_cmd(t_reds *current)
 	{
 		if (cmd->reds == current)
 		{
-			if (cmd == g_structs.cmd)
+			if (cmd == g_structs.cmd && (cmd != prev || cmd->next))
 				g_structs.cmd = cmd->next;
 			else
 				prev->next = cmd->next;
@@ -200,8 +200,10 @@ int	handle_heredocs(t_reds *reds)
 		}
 		else if (WEXITSTATUS(status) == 2)
 		{
-			skip_cmd(current);
+			/*skip_cmd(current);*/
 			g_structs.exit_status = 0;
+			current->type = R_IN;
+			current->flag = "/tmp/heredoc";
 		}
 		else if (current)
 		{
