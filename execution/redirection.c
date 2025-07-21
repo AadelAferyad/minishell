@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 13:30:17 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/21 20:01:53 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/21 20:46:12 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	redirections_in(char *file, int flag)
 		g_structs.exit_status = 1;
 		return (1);
 	}
-	fd = open(file, O_APPEND);
+	fd = open(file, O_RDONLY);
 	if (fd == -1)
 	{
 		ft_putstr_fd("Could not open a fail\n", 2);

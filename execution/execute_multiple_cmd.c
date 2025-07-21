@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:49:25 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/21 19:57:34 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/21 20:53:06 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,17 +73,24 @@ void	execute_multiple_command(int num_cmd)
 static int	checking_exit_args(char *s)
 {
 	int		i;
+	int		flag;
 	long	n;
 
 	i = 0;
+	flag = 0;
 	n = ft_atoi(g_structs.cmd->args[1]);
 	while (g_structs.cmd->args[1][i])
 	{
-		if ((!ft_isdigit(s[i]) && (s[i] != '+' && s[i] != '-')))
+		if (!ft_isdigit(s[i]))
 		{
-			ft_putstr_fd("exit\nexit: numeric argument required\n", 2);
-			free_collector_all(0);
-			exit(2);
+			if (!flag && (s[i] == '+' || s[i] == '-'))
+				flag++;
+			else
+			{
+				ft_putstr_fd("exit\nexit: numeric argument required\n", 2);
+				free_collector_all(0);
+				exit(2);
+			}
 		}
 		i++;
 	}

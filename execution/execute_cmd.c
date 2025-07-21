@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:41:41 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/21 20:31:30 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/21 20:48:54 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,3 @@ void	execute_builtins_cmd(t_cmd *cmd)
 	else if (ft_strncmp(cmd->args[0], "unset", 5) == 0)
 		builtin_unset(&cmd->args[1]);
 }
-
-
