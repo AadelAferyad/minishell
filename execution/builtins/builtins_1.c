@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 19:18:39 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/20 23:35:34 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/21 21:33:22 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	change_pwd_helper(t_env **head, char *s, int len)
 		return (ft_putstr_fd("cd: error retrieving current directory:\
 				getcwd : cannot access parent directories:\
 	       			No such file or directory\n", 2),
-			g_structs.exit_status = 1, chdir("/home/aaferyad/"), 0);
+			g_structs.exit_status = 1, chdir("/home/"), 0);
 	while (tmp)
 	{
 		if (!ft_strncmp(tmp->key, s, len))

@@ -18,6 +18,7 @@ SRCS = main.c \
 	parser/parser_checks.c \
 	parser/herdoc.c \
 	parser/herdoc_read.c \
+	parser/herdoc_func.c \
 	parser/herdoc_utils.c \
 	parser/expand.c \
 	parser/env_funcs.c \

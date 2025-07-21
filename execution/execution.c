@@ -60,7 +60,7 @@ void	execution_init(void)
 {
 	t_cmd	*here;
 	t_cmd	*tmp;
-	int	flag;
+	int		flag;
 
 	builting_exit();
 	setup_types();

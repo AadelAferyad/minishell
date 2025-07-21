@@ -78,7 +78,8 @@ char	*generate_right_path(char *single_cmd)
 	char	*extracted_path;
 	char	*full_path;
 
-	if (!single_cmd[0] || (single_cmd[0] == '.' && (!single_cmd[1] || single_cmd[1] == '.')))
+	if (!single_cmd[0] || (single_cmd[0] == '.' && (!single_cmd[1]
+				|| single_cmd[1] == '.')))
 	{
 		ft_putstr_fd(single_cmd, 2);
 		ft_putstr_fd(": command not found\n", 2);

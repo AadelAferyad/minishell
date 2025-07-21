@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/20 22:17:28 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/21 21:19:15 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,12 @@ void		append_line(char **buff, const char *line);
 void		set_buff(t_reds *redir, char *heredoc_buff);
 int			store_line(char **heredoc_buff, char *line, int is_quoted);
 int			is_end(char *line, t_reds *redir);
+
+void		append_line(char **buff, const char *line);
+t_reds		*get_last_heredoc(t_reds *reds);
+void		connect_heredoc(char **heredoc_buff);
+void		exit_line(char *flag);
+int			heredoc_loop(t_reds *redir, char **heredoc_buff, int is_quoted);
 
 /* Parser Checks */
 
