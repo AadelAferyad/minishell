@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 14:16:21 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/21 00:25:18 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/21 19:00:18 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,27 @@ pid_t	execute_one_command(t_cmd *cmd, int n_cmd, int **pipefd, int i_cmd)
 
 void	execution_init(void)
 {
+	t_cmd	*here;
+	t_cmd	*tmp;
+	int	flag;
+
+	here = g_structs.cmd;
+	flag = 0;
+	tmp = here;
+	while (here)
+	{
+		if (here->reds && here->reds->type == R_HEREDOC)
+			tmp = here;
+		else if (here->reds)
+			flag = 1;
+		here = here->next;
+	}
+	flag++;
 	builting_exit();
-	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, SIG_IGN);
-	handle_heredocs(g_structs.cmd->reds);
+	handle_heredocs(tmp->reds);
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 	setup_types();
-	connect_heredoc();
 }
 
 static void	execute_cmd_helper(void)

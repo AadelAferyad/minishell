@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:47:28 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/18 01:30:06 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/21 19:13:49 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,37 @@ void	append_line(char **buff, const char *line)
 	*buff = new_buff;
 }
 
+t_reds	*get_last_heredoc(t_reds *reds)
+{
+	t_reds	*last;
+
+	last = NULL;
+	if (!reds)
+		return (NULL);
+	while (reds)
+	{
+		if (reds->type == R_HEREDOC)
+			last = reds;
+		reds = reds->next;
+	}
+	return (last);
+}
+
+void	connect_heredoc(char **heredoc_buff)
+{
+	int		tmp_file;
+
+	tmp_file = open("/tmp/heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	if (tmp_file == -1)
+	{
+		ft_putstr_fd(strerror(errno), 2);
+		return ;
+	}
+	if (heredoc_buff &&heredoc_buff[0])
+		write(tmp_file, *heredoc_buff, ft_strlen(*heredoc_buff));
+	close(tmp_file);
+}
+
 static int	heredoc_loop(t_reds *redir, char **heredoc_buff, int is_quoted)
 {
 	char	*line;
@@ -52,11 +83,12 @@ static int	heredoc_loop(t_reds *redir, char **heredoc_buff, int is_quoted)
 			break ;
 		if (is_end(line, redir))
 		{
-			free_collector_one(line);
+			free(line);
+			connect_heredoc(heredoc_buff);
 			break ;
 		}
 		status = store_line(heredoc_buff, line, is_quoted);
-		free_collector_one(line);
+		free(line);
 		if (status == -1)
 			return (-1);
 	}
@@ -81,16 +113,39 @@ int	read_heredoc(t_reds *redir)
 int	handle_heredocs(t_reds *reds)
 {
 	t_reds	*current;
+	int	status;
+	pid_t	pid;
 
+	pid = fork();
+	signal(SIGINT, SIG_DFL);
 	current = reds;
-	while (current)
+	if (pid == 0)
 	{
-		if (current->type == R_HEREDOC)
+		while (current)
 		{
-			if (read_heredoc(current) == -1)
-				return (-1);
+			if (current->type == R_HEREDOC)
+			{
+				if (read_heredoc(current) == -1)
+				{
+					free_collector_all(0);
+					exit(0);
+				}
+			}
+			current = current->next;
 		}
-		current = current->next;
+		free_collector_all(0);
+		exit(0);
+	}
+	else
+	{
+		signal(SIGINT, SIG_IGN);
+		waitpid(pid, &status, 0);
+		current = get_last_heredoc(current);
+		if (current)
+		{
+			current->type = R_IN;
+			current->flag = "/tmp/heredoc";
+		}
 	}
 	return (0);
 }
