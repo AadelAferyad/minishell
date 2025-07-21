@@ -6,7 +6,7 @@
 /*   By: aaferyad <aaferyad@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 19:18:39 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/20 19:55:32 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/20 23:35:34 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	change_env_list(t_env **head, t_env *tmp, char *buff, t_env *prev)
 	}
 }
 
-static void	change_pwd_helper(t_env **head, char *s, int len)
+static int	change_pwd_helper(t_env **head, char *s, int len)
 {
 	char	*buff;
 	t_env	*prev;
@@ -38,26 +38,32 @@ static void	change_pwd_helper(t_env **head, char *s, int len)
 	tmp = *head;
 	prev = tmp;
 	buff = getcwd(NULL, 0);
+	if (!buff)
+		return (ft_putstr_fd("cd: error retrieving current directory:\
+				getcwd : cannot access parent directories:\
+	       			No such file or directory\n", 2),
+			g_structs.exit_status = 1, chdir("/home/aaferyad/"), 0);
 	while (tmp)
 	{
 		if (!ft_strncmp(tmp->key, s, len))
 		{
 			change_env_list(head, tmp, buff, prev);
 			free_node(tmp, buff);
-			return ;
+			return (1);
 		}
 		prev = tmp;
 		tmp = tmp->next;
 	}
 	create_pwd(s, head, buff);
+	return (1);
 }
 
-static void	change_pwd(char *s, int len)
+static int	change_pwd(char *s, int len)
 {
 	t_env	**head;
 
 	head = get_env();
-	change_pwd_helper(head, s, len);
+	return (change_pwd_helper(head, s, len));
 }
 
 static int	cd_helper(char **args, char *path)
@@ -73,19 +79,17 @@ static int	cd_helper(char **args, char *path)
 	{
 		stat(path, &st);
 		if (S_ISDIR(st.st_mode))
-			change_pwd("OLDPWD", 6);
-		else
 		{
-			ft_putstr_fd("No such file or directory\n", 2);
-			return (g_structs.exit_status = 1, 0);
+			if (!change_pwd("OLDPWD", 6))
+				return (0);
 		}
+		else
+			return (ft_putstr_fd("No such file or directory\n", 2),
+				g_structs.exit_status = 1, 0);
 	}
 	else
-	{
-		g_structs.exit_status = 1;
-		ft_putstr_fd("No such file or directory", 2);
-		return (0);
-	}
+		return (ft_putstr_fd("No such file or directory\n", 2),
+			g_structs.exit_status = 1, 0);
 	return (1);
 }
 

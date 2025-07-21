@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 14:03:54 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/19 16:05:13 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/20 22:42:16 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	handle_assignment(char *input, int *i, t_tokens **tokens)
 
 	start = *i;
 	name_end = start;
+	(void) tokens;
 	while (input[name_end] && is_valid_char(input[name_end]))
 		name_end++;
 	if (input[name_end] == '=')

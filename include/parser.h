@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 16:19:07 by imellali          #+#    #+#             */
-/*   Updated: 2025/07/19 16:05:07 by imellali         ###   ########.fr       */
+/*   Updated: 2025/07/20 22:17:28 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ int			handle_quoted(char *input, int *i, t_segment **segments,
 void		handle_unquoted(char *input, int *i, t_segment **segments);
 int			handle_assignment(char *input, int *i, t_tokens **tokens);
 int			handle_export_and_word(char *input, int *i, t_tokens **tokens,
-	int *heredoc);
+				int *heredoc);
 int			handle_export_quoted(char *input, int *i, int start,
-		t_tokens **tokens);
+				t_tokens **tokens);
 int			handle_export_unquoted(char *input, int *i, int start,
-		t_tokens **tokens);
+				t_tokens **tokens);
 int			lexer_helper_op(char *input, int *i, t_tokens **tokens);
 int			update_heredoc_flag(t_tokens *tokens);
 

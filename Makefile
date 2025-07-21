@@ -30,6 +30,9 @@ SRCS = main.c \
 	execution/normal_func.c \
 	execution/execution.c \
 	execution/env.c \
+	execution/execute_cmd.c \
+	execution/execute_multiple_cmd.c \
+	execution/pipeline.c \
 	execution/execution_func.c \
 	execution/execution_path.c \
 	execution/redirection.c \

@@ -6,21 +6,11 @@
 /*   By: imellali <imellali@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 11:35:02 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/09 13:03:44 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/20 22:22:08 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-t_collector	*create_node()
-{
-	return (malloc(sizeof(t_collector)));
-}
-
-/*
- * add_node - add new node the the collector to keep track of the allocated memory
- * @add: void pointer holds address of memory to be added to the collector
- * */
 
 t_collector	*add_node(void *add)
 {
@@ -28,7 +18,7 @@ t_collector	*add_node(void *add)
 
 	if (!add)
 		return (NULL);
-	node = create_node();
+	node = malloc(sizeof(t_collector));
 	if (!node)
 		return (NULL);
 	node->next = g_structs.collector;
@@ -36,12 +26,6 @@ t_collector	*add_node(void *add)
 	g_structs.collector = node;
 	return (node);
 }
-
-/*
- * safe_mallloc - allocate size of bytes and keep track of all the allocated memory on linked list
- * @size: size of bytes to be allocated
- * Return: returns allocated address generic pointer
- * */
 
 void	*safe_malloc(unsigned int size)
 {
@@ -115,11 +99,7 @@ void	free_env(void)
 	head = NULL;
 }
 
-/*
- * free_collector_all - frees all the noode and data that holeds
- * */
-
-void	free_collector_all(int	flaged)
+void	free_collector_all(int flaged)
 {
 	t_collector	*tmp;
 	t_collector	*head;

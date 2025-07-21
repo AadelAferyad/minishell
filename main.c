@@ -6,7 +6,7 @@
 /*   By: imellali <imellali@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 12:15:46 by aaferyad          #+#    #+#             */
-/*   Updated: 2025/07/19 18:09:50 by aaferyad         ###   ########.fr       */
+/*   Updated: 2025/07/20 22:50:56 by aaferyad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,26 @@ void	signal_handler(int sig)
 	g_structs.exit_status = 130;
 }
 
-int	main(int ac, char **av, char **env)
+static char	*minishell_init(char **env)
 {
-	char	*buff;
-	t_tokens	*lex;
-
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 	g_structs.collector = NULL;
 	g_structs.cmd = NULL;
 	g_structs.exit_status = 0;
+	create_env(env);
+	return (readline("Koyo: "));
+}
+
+int	main(int ac, char **av, char **env)
+{
+	char		*buff;
+	t_tokens	*lex;
+
 	(void) ac;
 	(void) av;
-	create_env(env);
-	while ((buff = readline("lgzara: ")))
+	buff = minishell_init(env);
+	while (buff)
 	{
 		if (ft_strlen(buff) != 0)
 			add_history(buff);
@@ -48,10 +54,12 @@ int	main(int ac, char **av, char **env)
 		if (!lex)
 		{
 			free_collector_all(1);
+			buff = readline("Koyo: ");
 			continue ;
 		}
-		g_structs.cmd = parse_tokens(lex);	
+		g_structs.cmd = parse_tokens(lex);
 		execution();
+		buff = readline("Koyo: ");
 		free_collector_all(1);
 	}
 	free_collector_all(0);
